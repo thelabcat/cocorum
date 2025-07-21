@@ -425,7 +425,107 @@ class HTMLVideo(HTMLObj):
         """The time that the video was uploaded, in seconds since epoch"""
         return utils.parse_timestamp(self._elem.find("time", attrs={"class": "videostream__data--subitem videostream__time"}).get("datetime"))
 
+class HTMLVideoSettings(HTMLObj):
+    """Video settings from preparing to edit them"""
+    
+    def __init__(self, elem, servicephp):
+        """Video on a user or channel page as extracted from the page's HTML.
 
+    Args:
+        elem (bs4.Tag): The returned HTML from the request.
+        servicephp (cocorum.servicephp.ServicePHP): We may not need this. TODO.
+        """
+
+        super().__init__(elem, servicephp)
+
+        # The binary data of our thumbnail
+        self.__thumbnail = None
+    
+    @property
+    def thumbnail_url(self):
+        """The URL to the thumbnail of the video"""
+        label = self._elem.find(lambda tag: tag.name == "label" and "Thumbnail" in tag.text)
+        for tag in label.next_siblings:
+            if tag.name == "img":
+                break
+        assert tag.name == "img", "Could not find thumbnail image tag"
+        
+        return tag["src"]
+
+    @property
+    def thumbnail(self):
+        """The video thumbnail as a binary string"""
+        if not self.__thumbnail:  # We never queried the thumbnail before
+            response = requests.get(self.thumbnail_url, timeout=static.Delays.request_timeout)
+            assert response.status_code == 200, "Status code " + str(response.status_code)
+    
+            self.__thumbnail = response.content
+    
+        return self.__thumbnail
+    
+    @property
+    def title(self):
+        """The video title"""
+        return self._elem.find(name = "input", id = "title")["value"]
+    
+    @property
+    def description(self):
+        """The video description"""
+        return self._elem.find(name = "textarea", id = "description").text
+    
+    @property
+    def tags(self):
+        """The video tags"""
+        return self._elem.find("input", id = "tags")["value"].split(static.Misc.tag_split)
+    
+    @property
+    def youtube_url(self):
+        """The URL of the video on YouTube"""
+        return self._elem.find(name = "input", id = "youtube-url")["value"]
+    
+    @property
+    def category_primary(self):
+        """The name and numeric ID of the video's primary category"""
+        tag = self._elem.find(name = "select", id = "siteChannelId").find("option", selected = True)
+        return tag.text.strip(), int(tag.value)
+        
+        
+    @property
+    def category_secondary(self):
+        """The name and numeric ID of the video's secondary category"""
+        tag = self._elem.find(name = "select", id = "mediaChannelId").find("option", selected = True)
+        if tag:
+            return tag.text.strip(), int(tag.value)
+        # No secondary channel was selected
+        return None, 0
+    
+    @property
+    def channel(self):
+        """The name and numeric ID of the channel the video was posted to"""
+        tag = self._elem.find(name = "select", id = "channelId").find("option", selected = True)
+        if tag:
+            return tag.text.strip(), int(tag.value)
+        
+        # No channel was selected, video is posted under user account
+        return None, 0
+    
+    @property
+    def channel_featured(self):
+        """Wether this video is featured on the top of the channel"""
+        return bool(self._elem.find("input", type = "checkbox", id = "featured_for_channel").checked)
+    
+    @property
+    def profile_featured(self):
+        """Wether this video is featured on the top of the profile"""
+        return bool(self._elem.find("input", type = "checkbox", id = "featured_for_user").checked)
+    
+    @property
+    def visibility(self):
+        """The video's visibility setting"""
+        return self._elem.find("input", attrs = {"name": "visibility"}, checked = True)["value"]
+
+    # TODO support placeholder video for livestreams
+        
 class Scraper:
     """Scraper for general information"""
 
@@ -615,3 +715,12 @@ class Scraper:
         categories2 = {e.string.strip(): int(e.attrs["data-value"]) for e in options_elems2}
 
         return categories1, categories2
+    
+    def get_acc_apikey(self):
+        """Get the apiKey used for some account-related operations.
+        
+        Returns:
+            apiKey (string): Said key, meant to be passed as a parameter in requests"""
+            
+        soup = self.soup_request(static.URI.account_page)
+        return static.Misc.find_acc_apikey.findall(soup.prettify())[0]

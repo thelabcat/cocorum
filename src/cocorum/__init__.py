@@ -82,7 +82,7 @@ import warnings
 import requests
 
 # Make all submodules available from base name
-from . import chatapi, servicephp, uploadphp, scraping, jsonhandles, utils, static
+from . import chatapi, servicephp, uploadphp, scraping, accountapi, jsonhandles, utils, static
 
 from .jsonhandles import JSONObj, JSONUserAction
 

@@ -15,6 +15,8 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 S.D.G."""
 
+import re
+
 class RequestHeaders:
     """Headers for various HTTPrequests"""
 
@@ -65,9 +67,12 @@ class URI:
 
     # The logged-in user's playlist page
     playlists_page = rumble_base + "/my-library/playlists"
+    
+    # Account page
+    account_page = rumble_base + "/account"
 
     # The Service.PHP API
-    servicephp = "https://rumble.com/service.php"
+    servicephp = rumble_base + "/service.php"
 
     # The video upload PHP
     uploadphp = "https://web18.rumble.com/upload.php"
@@ -153,6 +158,16 @@ class Misc:
 
     # Key of the session token within the session cookie dict
     session_token_key = "u_s"
+    
+    # RegEx to find the account API key in the https://rumble.com/account page source
+    # It looks like this: var $a = new Account("AccountContent","##########");
+    find_acc_apikey = re.compile('(?<=var \$a = new Account\("AccountOverview",").*(?="\);)')
+    
+    # Characters that tags are separated by
+    tag_split = ", "
+
+    # Message upon successful video edit
+    video_edit_success = "Your changes have been saved!<br>Please allow up to 30 seconds for them to take effect."
 
     class ContentTypes:
         """Types of content that can be rumbled on"""
