@@ -487,7 +487,7 @@ class HTMLVideoSettings(HTMLObj):
     def category_primary(self):
         """The name and numeric ID of the video's primary category"""
         tag = self._elem.find(name = "select", id = "siteChannelId").find("option", selected = True)
-        return tag.text.strip(), int(tag.value)
+        return tag.text.strip(), int(tag["value"])
         
         
     @property
@@ -495,7 +495,7 @@ class HTMLVideoSettings(HTMLObj):
         """The name and numeric ID of the video's secondary category"""
         tag = self._elem.find(name = "select", id = "mediaChannelId").find("option", selected = True)
         if tag:
-            return tag.text.strip(), int(tag.value)
+            return tag.text.strip(), int(tag["value"])
         # No secondary channel was selected
         return None, 0
     
@@ -503,8 +503,8 @@ class HTMLVideoSettings(HTMLObj):
     def channel(self):
         """The name and numeric ID of the channel the video was posted to"""
         tag = self._elem.find(name = "select", id = "channelId").find("option", selected = True)
-        if tag:
-            return tag.text.strip(), int(tag.value)
+        if tag["value"]:
+            return tag.text.strip(), int(tag["value"])
         
         # No channel was selected, video is posted under user account
         return None, 0
