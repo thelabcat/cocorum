@@ -222,7 +222,7 @@ class UploadPHP:
 
         uploaded_fn = r.text
 
-        assert len(uploaded_fn) < 100, "Uploaded filename too long to be correct" # TODO
+        assert len(uploaded_fn) < 100, "Uploaded filename too long to be correct" # TODO issue #24
 
         print("Video file on server is", uploaded_fn)
         return uploaded_fn
@@ -297,7 +297,7 @@ class UploadPHP:
         self.__cur_upload_id = f"{start_time}-{random.randrange(1000000) :06}"
 
         # Is the file large enough that it needs to be chunked
-        # TODO: This is a very dumb fix for #24
+        # TODO: This is a very dumb fix for issue #24
         if True: # self.__cur_file_size > static.Upload.chunksz:
             # Number of chunks we will need to do, rounded up
             self.__cur_num_chunks = self.__cur_file_size // static.Upload.chunksz + 1
@@ -308,8 +308,6 @@ class UploadPHP:
         end_time = int(time.time() * 1000)
 
         # Get the uploaded duration
-        with open("/home/wilbur/Desktop/thing.txt", "w") as f:
-            f.write(server_filename)
         r = self.uphp_request({"duration": server_filename})
         checked_duration = float(r.text)
         print("Server says video duration is", checked_duration)

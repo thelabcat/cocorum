@@ -19,25 +19,25 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 S.D.G."""
 
-NotImplemented
-
 import requests
 import bs4
 from . import static, scraping
+
+NotImplemented
 
 class AccountAPI:
     """Do things that involve apiKey"""
     def __init__(self, scraper):
         """Do things that involve apiKey
-        
+
         Args:
             scraper (cocorum.scraping.Scraper): A scraper instance
         """
-        
+
         self.scraper = scraper
         self.apikey = scraper.get_acc_apikey()
         self.servicephp = self.scraper.servicephp
-    
+
     # def upload_closed_captions(self)
     # def edit_channel(self)
     # def set_channel_restrictions(self)
@@ -48,10 +48,10 @@ class AccountAPI:
     # def sget_license_autorenew(self)
     # def open_license_description(self)
     # def add_syndication_account(self)
-    
+
     def keyed_request(self, endpoint: str, action: str, params = {}, data = {}, method = "GET"):
         """Make a Rumble API request with the apiKey
-        
+
         Args:
             endpoint (str): The URL path within Rumble to access, for example "/account".
             action (str): The "a" parameter to use.
@@ -61,13 +61,13 @@ class AccountAPI:
                 Defaults to nothing.
             method (str): The type of request to make.
                 Defaults to "GET".
-        
+
         Returns:
             request (requests.Request): The result."""
-        
+
         params_all = {"apiKey": self.apikey, "a": action}
         params_all.update(params)
-        
+
         r = requests.request(
             method,
             static.URI.rumble_base + endpoint,
@@ -81,16 +81,16 @@ class AccountAPI:
         assert r.status_code == 200, f"Keyed request failed with status {r.status_code}:\n" + \
             r.text
         return r
-    
+
     def get_video_info_settings(self, video_id):
         """Get the information and settings for a video we uploaded
-        
+
         Args:
             video_id (int): The numeric ID of the video in base 10
-        
+
         Returns:
             settings (cocorum.scraping.HTMLVideoSettings): The data"""
-        
+
         r = self.keyed_request("/account/content", "edit", {"id": video_id}, method = "POST")
         soup = bs4.BeautifulSoup(r.text, features="html.parser")
         return scraping.HTMLVideoSettings(soup, self.servicephp)
@@ -190,10 +190,10 @@ class AccountAPI:
         r = self.keyed_request(endpoint = "/account/content", action = "edit", params = {"id": video_id, "sid": 8}, data = data, method = "POST")
 
         assert r.text.strip() == static.Misc.video_edit_success, str(r.content)
-    
+
     def get_closed_captions(self, video_id: int, lang = "en"):
         """Get the closed captions for a video
-        
+
         Args:
             video_id (int): The numeric ID of the video in base 10.
             lang (str): The language of captions to check, in two-character code.
