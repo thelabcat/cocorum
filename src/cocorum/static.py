@@ -75,7 +75,7 @@ class URI:
     servicephp = rumble_base + "/service.php"
 
     # The video upload PHP
-    uploadphp = "https://web18.rumble.com/upload.php"
+    uploadphp = "https://web5.rumble.com/upload.php"
 
     class ChatAPI:
         """URIs of the chat API"""

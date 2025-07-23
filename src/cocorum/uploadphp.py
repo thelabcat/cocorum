@@ -120,7 +120,6 @@ class UploadPHP:
                 timeout = timeout,
                 )
         assert r.status_code == 200, f"Upload.PHP request failed: {r}\n{r.text}"
-        # If the request json has a data -> success value, make sure it is True
 
         return r
 
@@ -199,6 +198,7 @@ class UploadPHP:
 
     def _unchunked_vidfile_upload(self, file_path):
         """Upload a video file to Rumble all at once
+        WARNING: This does not currently work. Use _chunked_vidfile_upload() instead.
 
     Args:
         file_path (str): A valid, complete path to the video file for upload.
@@ -206,21 +206,24 @@ class UploadPHP:
     Returns:
         Filename (str): The filename of the video on the server after upload.
         """
-
+        NotImplemented
         print("Uploading video")
 
         with open(file_path, "rb") as f:
             # Get permission to upload the file
             assert utils.options_check(
                 static.URI.uploadphp,
-                "PUT",
+                "POST",
                 cookies = self.session_cookie,
                 params = {"api": static.Upload.api_ver},
                 ), "File upload failed at OPTIONS request."
             # Upload the file
-            r = self.uphp_request({}, data = f.read(), timeout = 300) # Set static? TODO
+            r = self.uphp_request({}, data = f.read(), timeout = 300, method = "POST") # Set static? TODO
 
         uploaded_fn = r.text
+
+        assert len(uploaded_fn) < 100, "Uploaded filename too long to be correct" # TODO
+
         print("Video file on server is", uploaded_fn)
         return uploaded_fn
 
@@ -294,7 +297,8 @@ class UploadPHP:
         self.__cur_upload_id = f"{start_time}-{random.randrange(1000000) :06}"
 
         # Is the file large enough that it needs to be chunked
-        if self.__cur_file_size > static.Upload.chunksz:
+        # TODO: This is a very dumb fix for #24
+        if True: # self.__cur_file_size > static.Upload.chunksz:
             # Number of chunks we will need to do, rounded up
             self.__cur_num_chunks = self.__cur_file_size // static.Upload.chunksz + 1
             server_filename = self._chunked_vidfile_upload(file_path)
@@ -304,6 +308,8 @@ class UploadPHP:
         end_time = int(time.time() * 1000)
 
         # Get the uploaded duration
+        with open("/home/wilbur/Desktop/thing.txt", "w") as f:
+            f.write(server_filename)
         r = self.uphp_request({"duration": server_filename})
         checked_duration = float(r.text)
         print("Server says video duration is", checked_duration)
