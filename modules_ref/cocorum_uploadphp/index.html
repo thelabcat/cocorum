@@ -1223,7 +1223,11 @@ All other classes are supporting sub-classes.</p>
 <span class="normal">391</span>
 <span class="normal">392</span>
 <span class="normal">393</span>
-<span class="normal">394</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">UploadPHP</span><span class="p">:</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">UploadPHP</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Upload videos to Rumble&quot;&quot;&quot;</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">servicephp</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Upload videos to Rumble.</span>
@@ -1280,7 +1284,6 @@ All other classes are supporting sub-classes.</p>
                 <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span><span class="p">,</span>
                 <span class="p">)</span>
         <span class="k">assert</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Upload.PHP request failed: </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="c1"># If the request json has a data -&gt; success value, make sure it is True</span>
 
         <span class="k">return</span> <span class="n">r</span>
 
@@ -1359,6 +1362,7 @@ All other classes are supporting sub-classes.</p>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_unchunked_vidfile_upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Upload a video file to Rumble all at once</span>
+<span class="sd">        WARNING: This does not currently work. Use _chunked_vidfile_upload() instead.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        file_path (str): A valid, complete path to the video file for upload.</span>
@@ -1366,21 +1370,24 @@ All other classes are supporting sub-classes.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        Filename (str): The filename of the video on the server after upload.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
+        <span class="bp">NotImplemented</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Uploading video&quot;</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="c1"># Get permission to upload the file</span>
             <span class="k">assert</span> <span class="n">utils</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
                 <span class="n">static</span><span class="o">.</span><span class="n">URI</span><span class="o">.</span><span class="n">uploadphp</span><span class="p">,</span>
-                <span class="s2">&quot;PUT&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
                 <span class="n">cookies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span>
                 <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="n">static</span><span class="o">.</span><span class="n">Upload</span><span class="o">.</span><span class="n">api_ver</span><span class="p">},</span>
                 <span class="p">),</span> <span class="s2">&quot;File upload failed at OPTIONS request.&quot;</span>
             <span class="c1"># Upload the file</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uphp_request</span><span class="p">({},</span> <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">300</span><span class="p">)</span> <span class="c1"># Set static? TODO</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uphp_request</span><span class="p">({},</span> <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;POST&quot;</span><span class="p">)</span> <span class="c1"># Set static? TODO</span>
 
         <span class="n">uploaded_fn</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">uploaded_fn</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;Uploaded filename too long to be correct&quot;</span> <span class="c1"># TODO issue #24</span>
+
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Video file on server is&quot;</span><span class="p">,</span> <span class="n">uploaded_fn</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">uploaded_fn</span>
 
@@ -1454,7 +1461,8 @@ All other classes are supporting sub-classes.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">__cur_upload_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start_time</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span><span class="w"> </span><span class="si">:</span><span class="s2">06</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="c1"># Is the file large enough that it needs to be chunked</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">&gt;</span> <span class="n">static</span><span class="o">.</span><span class="n">Upload</span><span class="o">.</span><span class="n">chunksz</span><span class="p">:</span>
+        <span class="c1"># TODO: This is a very dumb fix for issue #24</span>
+        <span class="k">if</span> <span class="kc">True</span><span class="p">:</span> <span class="c1"># self.__cur_file_size &gt; static.Upload.chunksz:</span>
             <span class="c1"># Number of chunks we will need to do, rounded up</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__cur_num_chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">//</span> <span class="n">static</span><span class="o">.</span><span class="n">Upload</span><span class="o">.</span><span class="n">chunksz</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">server_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chunked_vidfile_upload</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
@@ -1750,7 +1758,8 @@ All other classes are supporting sub-classes.</p>
 
             <details class="quote">
               <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">127</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">126</span>
+<span class="normal">127</span>
 <span class="normal">128</span>
 <span class="normal">129</span>
 <span class="normal">130</span>
@@ -1769,8 +1778,7 @@ All other classes are supporting sub-classes.</p>
 <span class="normal">143</span>
 <span class="normal">144</span>
 <span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">ensure_valid_channel_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">):</span>
+<span class="normal">146</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">ensure_valid_channel_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensure a channel ID is numeric and a valid channel, or None</span>
 
 <span class="sd">Args:</span>
@@ -1946,8 +1954,7 @@ Defaults to static.Delays.request_timeout</p>
 <span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">uphp_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">):</span>
+<span class="normal">124</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">uphp_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">additional_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Make a request to Upload.PHP with common settings.</span>
 
 <span class="sd">Args:</span>
@@ -1975,7 +1982,6 @@ Defaults to static.Delays.request_timeout</p>
             <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span><span class="p">,</span>
             <span class="p">)</span>
     <span class="k">assert</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Upload.PHP request failed: </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="c1"># If the request json has a data -&gt; success value, make sure it is True</span>
 
     <span class="k">return</span> <span class="n">r</span>
 </code></pre></div></td></tr></table></div>
@@ -2288,10 +2294,7 @@ Defaults to 0, first auto thumbnail.</p>
 
             <details class="quote">
               <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">249</span>
-<span class="normal">250</span>
-<span class="normal">251</span>
-<span class="normal">252</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">252</span>
 <span class="normal">253</span>
 <span class="normal">254</span>
 <span class="normal">255</span>
@@ -2433,7 +2436,11 @@ Defaults to 0, first auto thumbnail.</p>
 <span class="normal">391</span>
 <span class="normal">392</span>
 <span class="normal">393</span>
-<span class="normal">394</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">upload_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">upload_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Upload a video to Rumble</span>
 
 <span class="sd">Args:</span>
@@ -2481,7 +2488,8 @@ Defaults to 0, first auto thumbnail.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">__cur_upload_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start_time</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span><span class="w"> </span><span class="si">:</span><span class="s2">06</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="c1"># Is the file large enough that it needs to be chunked</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">&gt;</span> <span class="n">static</span><span class="o">.</span><span class="n">Upload</span><span class="o">.</span><span class="n">chunksz</span><span class="p">:</span>
+    <span class="c1"># TODO: This is a very dumb fix for issue #24</span>
+    <span class="k">if</span> <span class="kc">True</span><span class="p">:</span> <span class="c1"># self.__cur_file_size &gt; static.Upload.chunksz:</span>
         <span class="c1"># Number of chunks we will need to do, rounded up</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__cur_num_chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">//</span> <span class="n">static</span><span class="o">.</span><span class="n">Upload</span><span class="o">.</span><span class="n">chunksz</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">server_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chunked_vidfile_upload</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
