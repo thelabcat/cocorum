@@ -3,6 +3,10 @@
 
 Provides operations that involve apiKey.
 
+WARNING: This does not currently work reliably. It's only in the module because
+I was working on it and a critical fix for .uploadphp at the same time, and I
+don't want to figure out how to Git that. Sorry!
+
 Copyright 2025 Wilbur Jaywright.
 
 This file is part of Cocorum.
@@ -14,6 +18,8 @@ Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY WARRA
 You should have received a copy of the GNU Lesser General Public License along with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
+
+NotImplemented
 
 import requests
 import bs4
@@ -143,7 +149,6 @@ class AccountAPI:
 
         # base data with blank stubs for unsupported keys
         data = {
-            "Filedata": None,
             "liveStreamingUnlistReplay": 0,
             "liveStreamingSourcePassthrough": 0,
             "closed_captions": {"uploads":{},"removals":{}},
@@ -182,7 +187,7 @@ class AccountAPI:
 
         print(data)
 
-        r = self.keyed_request(endpoint = "/account/content", action = "edit", params = {"id": video_id}, data = data, method = "POST")
+        r = self.keyed_request(endpoint = "/account/content", action = "edit", params = {"id": video_id, "sid": 8}, data = data, method = "POST")
 
         assert r.text.strip() == static.Misc.video_edit_success, str(r.content)
     
