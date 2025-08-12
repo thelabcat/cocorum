@@ -424,6 +424,11 @@ class LiveChat():
     @property
     def latest_message(self):
         """The latest chat message"""
+        # This endpoint does not exist in the RUM Live Alerts LS API
+        if self.api._rumbot_mode:
+            print("ERROR: RUM Live Alerts does not pass full chat in its LS API.")
+            return None
+
         if not self["latest_message"]:
             return None # No-one has chatted on this stream yet
         return ChatMessage(self["latest_message"])
@@ -431,14 +436,24 @@ class LiveChat():
     @property
     def recent_messages(self):
         """Recent chat messages"""
+        # This endpoint does not exist in the RUM Live Alerts LS API
+        if self.api._rumbot_mode:
+            print("ERROR: RUM Live Alerts does not pass full chat in its LS API.")
+            return []
+
         data = self["recent_messages"].copy()
         return [ChatMessage(jsondata_block) for jsondata_block in data]
 
     @property
     def new_messages(self):
         """Chat messages that are newer than the last time this was referenced"""
+        # This endpoint does not exist in the RUM Live Alerts LS API
+        if self.api._rumbot_mode:
+            print("ERROR: RUM Live Alerts does not pass full chat in its LS API.")
+            return []
+
         rem = self.recent_messages.copy()
-        rem.sort(key = lambda x: x.created_on) # Sort the messages so the newest ones are last
+        rem.sort(key=lambda x: x.created_on) # Sort the messages so the newest ones are last
 
         # There are no recent messages, or all messages are older than the last time we checked
         if not rem or rem[-1].created_on < self.last_newmessage_time:
@@ -549,18 +564,25 @@ class GiftedSub(JSONObj):
         """The username of who purchased this gift"""
         return self["purchased_by"]
 
+
 class RumbleAPI():
     """Rumble Live Stream API wrapper"""
-    def __init__(self, api_url, refresh_rate = static.Delays.api_refresh_default):
+
+    def __init__(self, api_url, refresh_rate = static.Delays.api_refresh_default, rumbot: bool = False):
         """Rumble Live Stream API wrapper
 
     Args:
         api_url (str): The Rumble API URL, with the key.
         refresh_rate (int, float): How long to reuse queried data before refreshing.
             Defaults to static.Delays.api_refresh_default.
+        rumbot (bool): The api_url points to an instance of RUM Live Alerts.
+            The API URL for this would usually be http://localhost:9843/api/ls
+            Useful to avoid rate limits, but some data is not passed through.
+            Defaults to False.
         """
 
         self.refresh_rate = refresh_rate
+        self._rumbot_mode = rumbot
         self.last_refresh_time = 0
         self.last_newfollower_time = time.time()
         self.last_newsubscriber_time = time.time()
@@ -616,6 +638,10 @@ class RumbleAPI():
 
         self._jsondata = response.json()
 
+        # If we are in RUM Live Alerts mode, remove padding
+        if self._rumbot_mode:
+            self.__unpad_jsondata()
+
         # Remove livestream references that are no longer listed
         listed_ids = [jsondata["id"] for jsondata in self._jsondata["livestreams"]]
         for stream_id in self.__livestreams.copy():
@@ -631,6 +657,39 @@ class RumbleAPI():
 
             except KeyError: # The livestream has not been stored yet
                 self.__livestreams[jsondata["id"]] = Livestream(jsondata, self)
+
+    def __unpad_jsondata(self):
+        """Remove padding from JSON data we retrieved from RUM Live Alerts"""
+
+        # Nullify blank latest follower
+        if not self._jsondata["followers"]["latest_follower"]["username"]:
+            self._jsondata["followers"]["latest_follower"] = None
+
+        # Remove blank recent followers
+        self._jsondata["followers"]["recent_followers"] =\
+            [f for f in self._jsondata["followers"]["recent_followers"] if f["username"]]
+
+        # Nullify blank latest subscriber
+        if not self._jsondata["subscribers"]["latest_subscriber"]["username"]:
+            self._jsondata["subscribers"]["latest_subscriber"] = None
+
+        # Remove blank recent subscribers
+        self._jsondata["subscribers"]["recent_subscribers"] =\
+            [f for f in self._jsondata["subscribers"]["recent_subscribers"] if f["username"]]
+
+        # Remove blank livestreams
+        self._jsondata["livestreams"] =\
+            [l for l in self._jsondata["livestreams"] if l["id"]]
+
+        # For each real Livestream
+        for l in self._jsondata["livestreams"]:
+            # Nullify blank latest Rant
+            if not l["chat"]["latest_rant"]["username"]:
+                l["chat"]["latest_rant"] = None
+
+            # Remove blank recent rants
+            l["chat"]["recent_rants"] =\
+                [r for r in l["chat"]["recent_rants"] if r["username"]]
 
     @property
     def data_timestamp(self):
@@ -760,10 +819,20 @@ class RumbleAPI():
     def latest_gifted_sub(self):
         """The latest subscriptions gift sent on the user or channel.
     WARNING: This is shallow! I have no way to reliably ID particular gifts to update the GiftedSub data."""
+        # This endpoint does not exist in the RUM Live Alerts LS API
+        if self._rumbot_mode:
+            print("ERROR: RUM Live Alerts does not pass this in its LS API.")
+            return None
+
         return GiftedSub(self["latest_gifted_sub"])
 
     @property
     def recent_gifted_subs(self):
         """The most recent subscriptions gifts sent on the user or channel.
     WARNING: This is shallow! I have no way to reliably ID particular gifts to update the GiftedSub data."""
+        # This endpoint does not exist in the RUM Live Alerts LS API
+        if self._rumbot_mode:
+            print("ERROR: RUM Live Alerts does not pass this in its LS API.")
+            return []
+
         return [GiftedSub(jsondata) for jsondata in self["recent_gifted_subs"]]
