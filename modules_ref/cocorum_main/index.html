@@ -1009,6 +1009,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cocorum.RumbleAPI.__unpad_jsondata" class="md-nav__link">
+    <span class="md-ellipsis">
+      __unpad_jsondata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cocorum.RumbleAPI.check_refresh" class="md-nav__link">
     <span class="md-ellipsis">
       check_refresh
@@ -2085,6 +2094,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cocorum.RumbleAPI.__unpad_jsondata" class="md-nav__link">
+    <span class="md-ellipsis">
+      __unpad_jsondata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cocorum.RumbleAPI.check_refresh" class="md-nav__link">
     <span class="md-ellipsis">
       check_refresh
@@ -2784,22 +2802,7 @@ if livestream:
 
               <details class="quote">
                 <summary>Source code in <code>cocorum/__init__.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">486</span>
-<span class="normal">487</span>
-<span class="normal">488</span>
-<span class="normal">489</span>
-<span class="normal">490</span>
-<span class="normal">491</span>
-<span class="normal">492</span>
-<span class="normal">493</span>
-<span class="normal">494</span>
-<span class="normal">495</span>
-<span class="normal">496</span>
-<span class="normal">497</span>
-<span class="normal">498</span>
-<span class="normal">499</span>
-<span class="normal">500</span>
-<span class="normal">501</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">501</span>
 <span class="normal">502</span>
 <span class="normal">503</span>
 <span class="normal">504</span>
@@ -2848,7 +2851,22 @@ if livestream:
 <span class="normal">547</span>
 <span class="normal">548</span>
 <span class="normal">549</span>
-<span class="normal">550</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GiftedSub</span><span class="p">(</span><span class="n">JSONObj</span><span class="p">):</span>
+<span class="normal">550</span>
+<span class="normal">551</span>
+<span class="normal">552</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span>
+<span class="normal">557</span>
+<span class="normal">558</span>
+<span class="normal">559</span>
+<span class="normal">560</span>
+<span class="normal">561</span>
+<span class="normal">562</span>
+<span class="normal">563</span>
+<span class="normal">564</span>
+<span class="normal">565</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GiftedSub</span><span class="p">(</span><span class="n">JSONObj</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A single gift containing one or more subscriptions&quot;&quot;&quot;</span>
 <span class="c1">#     def __init__(self, jsondata, api):</span>
 <span class="c1">#         &quot;&quot;&quot;A single gift containing one or more subscriptions</span>
@@ -3185,7 +3203,22 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
 <span class="normal">481</span>
 <span class="normal">482</span>
 <span class="normal">483</span>
-<span class="normal">484</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">LiveChat</span><span class="p">():</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span>
+<span class="normal">498</span>
+<span class="normal">499</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">LiveChat</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference for chat of a Rumble livestream&quot;&quot;&quot;</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reference for chat of a Rumble livestream</span>
@@ -3206,6 +3239,11 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">latest_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The latest chat message&quot;&quot;&quot;</span>
+        <span class="c1"># This endpoint does not exist in the RUM Live Alerts LS API</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">_rumbot_mode</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: RUM Live Alerts does not pass full chat in its LS API.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;latest_message&quot;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="kc">None</span> <span class="c1"># No-one has chatted on this stream yet</span>
         <span class="k">return</span> <span class="n">ChatMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;latest_message&quot;</span><span class="p">])</span>
@@ -3213,14 +3251,24 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">recent_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Recent chat messages&quot;&quot;&quot;</span>
+        <span class="c1"># This endpoint does not exist in the RUM Live Alerts LS API</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">_rumbot_mode</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: RUM Live Alerts does not pass full chat in its LS API.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;recent_messages&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">ChatMessage</span><span class="p">(</span><span class="n">jsondata_block</span><span class="p">)</span> <span class="k">for</span> <span class="n">jsondata_block</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">new_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Chat messages that are newer than the last time this was referenced&quot;&quot;&quot;</span>
+        <span class="c1"># This endpoint does not exist in the RUM Live Alerts LS API</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">_rumbot_mode</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: RUM Live Alerts does not pass full chat in its LS API.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
         <span class="n">rem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recent_messages</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">rem</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">created_on</span><span class="p">)</span> <span class="c1"># Sort the messages so the newest ones are last</span>
+        <span class="n">rem</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">created_on</span><span class="p">)</span> <span class="c1"># Sort the messages so the newest ones are last</span>
 
         <span class="c1"># There are no recent messages, or all messages are older than the last time we checked</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">rem</span> <span class="ow">or</span> <span class="n">rem</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">created_on</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_newmessage_time</span><span class="p">:</span>
@@ -4773,23 +4821,7 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
 
               <details class="quote">
                 <summary>Source code in <code>cocorum/__init__.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">552</span>
-<span class="normal">553</span>
-<span class="normal">554</span>
-<span class="normal">555</span>
-<span class="normal">556</span>
-<span class="normal">557</span>
-<span class="normal">558</span>
-<span class="normal">559</span>
-<span class="normal">560</span>
-<span class="normal">561</span>
-<span class="normal">562</span>
-<span class="normal">563</span>
-<span class="normal">564</span>
-<span class="normal">565</span>
-<span class="normal">566</span>
-<span class="normal">567</span>
-<span class="normal">568</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">568</span>
 <span class="normal">569</span>
 <span class="normal">570</span>
 <span class="normal">571</span>
@@ -4990,18 +5022,93 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
 <span class="normal">766</span>
 <span class="normal">767</span>
 <span class="normal">768</span>
-<span class="normal">769</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RumbleAPI</span><span class="p">():</span>
+<span class="normal">769</span>
+<span class="normal">770</span>
+<span class="normal">771</span>
+<span class="normal">772</span>
+<span class="normal">773</span>
+<span class="normal">774</span>
+<span class="normal">775</span>
+<span class="normal">776</span>
+<span class="normal">777</span>
+<span class="normal">778</span>
+<span class="normal">779</span>
+<span class="normal">780</span>
+<span class="normal">781</span>
+<span class="normal">782</span>
+<span class="normal">783</span>
+<span class="normal">784</span>
+<span class="normal">785</span>
+<span class="normal">786</span>
+<span class="normal">787</span>
+<span class="normal">788</span>
+<span class="normal">789</span>
+<span class="normal">790</span>
+<span class="normal">791</span>
+<span class="normal">792</span>
+<span class="normal">793</span>
+<span class="normal">794</span>
+<span class="normal">795</span>
+<span class="normal">796</span>
+<span class="normal">797</span>
+<span class="normal">798</span>
+<span class="normal">799</span>
+<span class="normal">800</span>
+<span class="normal">801</span>
+<span class="normal">802</span>
+<span class="normal">803</span>
+<span class="normal">804</span>
+<span class="normal">805</span>
+<span class="normal">806</span>
+<span class="normal">807</span>
+<span class="normal">808</span>
+<span class="normal">809</span>
+<span class="normal">810</span>
+<span class="normal">811</span>
+<span class="normal">812</span>
+<span class="normal">813</span>
+<span class="normal">814</span>
+<span class="normal">815</span>
+<span class="normal">816</span>
+<span class="normal">817</span>
+<span class="normal">818</span>
+<span class="normal">819</span>
+<span class="normal">820</span>
+<span class="normal">821</span>
+<span class="normal">822</span>
+<span class="normal">823</span>
+<span class="normal">824</span>
+<span class="normal">825</span>
+<span class="normal">826</span>
+<span class="normal">827</span>
+<span class="normal">828</span>
+<span class="normal">829</span>
+<span class="normal">830</span>
+<span class="normal">831</span>
+<span class="normal">832</span>
+<span class="normal">833</span>
+<span class="normal">834</span>
+<span class="normal">835</span>
+<span class="normal">836</span>
+<span class="normal">837</span>
+<span class="normal">838</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RumbleAPI</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Rumble Live Stream API wrapper&quot;&quot;&quot;</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_url</span><span class="p">,</span> <span class="n">refresh_rate</span> <span class="o">=</span> <span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">api_refresh_default</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_url</span><span class="p">,</span> <span class="n">refresh_rate</span> <span class="o">=</span> <span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">api_refresh_default</span><span class="p">,</span> <span class="n">rumbot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Rumble Live Stream API wrapper</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        api_url (str): The Rumble API URL, with the key.</span>
 <span class="sd">        refresh_rate (int, float): How long to reuse queried data before refreshing.</span>
 <span class="sd">            Defaults to static.Delays.api_refresh_default.</span>
+<span class="sd">        rumbot (bool): The api_url points to an instance of RUM Live Alerts.</span>
+<span class="sd">            The API URL for this would usually be http://localhost:9843/api/ls</span>
+<span class="sd">            Useful to avoid rate limits, but some data is not passed through.</span>
+<span class="sd">            Defaults to False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">refresh_rate</span> <span class="o">=</span> <span class="n">refresh_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rumbot_mode</span> <span class="o">=</span> <span class="n">rumbot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_refresh_time</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_newfollower_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_newsubscriber_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -5057,6 +5164,10 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
 
+        <span class="c1"># If we are in RUM Live Alerts mode, remove padding</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rumbot_mode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__unpad_jsondata</span><span class="p">()</span>
+
         <span class="c1"># Remove livestream references that are no longer listed</span>
         <span class="n">listed_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">jsondata</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">jsondata</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;livestreams&quot;</span><span class="p">]]</span>
         <span class="k">for</span> <span class="n">stream_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__livestreams</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
@@ -5072,6 +5183,39 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
 
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span> <span class="c1"># The livestream has not been stored yet</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__livestreams</span><span class="p">[</span><span class="n">jsondata</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Livestream</span><span class="p">(</span><span class="n">jsondata</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__unpad_jsondata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove padding from JSON data we retrieved from RUM Live Alerts&quot;&quot;&quot;</span>
+
+        <span class="c1"># Nullify blank latest follower</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;followers&quot;</span><span class="p">][</span><span class="s2">&quot;latest_follower&quot;</span><span class="p">][</span><span class="s2">&quot;username&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;followers&quot;</span><span class="p">][</span><span class="s2">&quot;latest_follower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Remove blank recent followers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;followers&quot;</span><span class="p">][</span><span class="s2">&quot;recent_followers&quot;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;followers&quot;</span><span class="p">][</span><span class="s2">&quot;recent_followers&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]]</span>
+
+        <span class="c1"># Nullify blank latest subscriber</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;subscribers&quot;</span><span class="p">][</span><span class="s2">&quot;latest_subscriber&quot;</span><span class="p">][</span><span class="s2">&quot;username&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;subscribers&quot;</span><span class="p">][</span><span class="s2">&quot;latest_subscriber&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Remove blank recent subscribers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;subscribers&quot;</span><span class="p">][</span><span class="s2">&quot;recent_subscribers&quot;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;subscribers&quot;</span><span class="p">][</span><span class="s2">&quot;recent_subscribers&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]]</span>
+
+        <span class="c1"># Remove blank livestreams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;livestreams&quot;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="p">[</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;livestreams&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span>
+
+        <span class="c1"># For each real Livestream</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;livestreams&quot;</span><span class="p">]:</span>
+            <span class="c1"># Nullify blank latest Rant</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">l</span><span class="p">[</span><span class="s2">&quot;chat&quot;</span><span class="p">][</span><span class="s2">&quot;latest_rant&quot;</span><span class="p">][</span><span class="s2">&quot;username&quot;</span><span class="p">]:</span>
+                <span class="n">l</span><span class="p">[</span><span class="s2">&quot;chat&quot;</span><span class="p">][</span><span class="s2">&quot;latest_rant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># Remove blank recent rants</span>
+            <span class="n">l</span><span class="p">[</span><span class="s2">&quot;chat&quot;</span><span class="p">][</span><span class="s2">&quot;recent_rants&quot;</span><span class="p">]</span> <span class="o">=</span>\
+                <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">l</span><span class="p">[</span><span class="s2">&quot;chat&quot;</span><span class="p">][</span><span class="s2">&quot;recent_rants&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">data_timestamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -5201,12 +5345,22 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
     <span class="k">def</span><span class="w"> </span><span class="nf">latest_gifted_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The latest subscriptions gift sent on the user or channel.</span>
 <span class="sd">    WARNING: This is shallow! I have no way to reliably ID particular gifts to update the GiftedSub data.&quot;&quot;&quot;</span>
+        <span class="c1"># This endpoint does not exist in the RUM Live Alerts LS API</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rumbot_mode</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: RUM Live Alerts does not pass this in its LS API.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
         <span class="k">return</span> <span class="n">GiftedSub</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;latest_gifted_sub&quot;</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">recent_gifted_subs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The most recent subscriptions gifts sent on the user or channel.</span>
 <span class="sd">    WARNING: This is shallow! I have no way to reliably ID particular gifts to update the GiftedSub data.&quot;&quot;&quot;</span>
+        <span class="c1"># This endpoint does not exist in the RUM Live Alerts LS API</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rumbot_mode</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: RUM Live Alerts does not pass this in its LS API.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
         <span class="k">return</span> <span class="p">[</span><span class="n">GiftedSub</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="k">for</span> <span class="n">jsondata</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;recent_gifted_subs&quot;</span><span class="p">]]</span>
 </code></pre></div></td></tr></table></div>
               </details>
@@ -5755,18 +5909,18 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
 
             <details class="quote">
               <summary>Source code in <code>cocorum/__init__.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">593</span>
-<span class="normal">594</span>
-<span class="normal">595</span>
-<span class="normal">596</span>
-<span class="normal">597</span>
-<span class="normal">598</span>
-<span class="normal">599</span>
-<span class="normal">600</span>
-<span class="normal">601</span>
-<span class="normal">602</span>
-<span class="normal">603</span>
-<span class="normal">604</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">615</span>
+<span class="normal">616</span>
+<span class="normal">617</span>
+<span class="normal">618</span>
+<span class="normal">619</span>
+<span class="normal">620</span>
+<span class="normal">621</span>
+<span class="normal">622</span>
+<span class="normal">623</span>
+<span class="normal">624</span>
+<span class="normal">625</span>
+<span class="normal">626</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a key from the JSON, refreshing if necessary</span>
 
 <span class="sd">Args:</span>
@@ -5788,7 +5942,7 @@ WARNING: This is shallow! I have no way to reliably ID particular gifts to updat
 
 
 <h3 id="cocorum.RumbleAPI.__init__" class="doc doc-heading">
-            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">api_url</span><span class="p">,</span> <span class="n">refresh_rate</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">api_refresh_default</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">api_url</span><span class="p">,</span> <span class="n">refresh_rate</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">api_refresh_default</span><span class="p">,</span> <span class="n">rumbot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 </h3>
 
@@ -5842,42 +5996,71 @@ Defaults to static.Delays.api_refresh_default.</p>
                   <code><span title="cocorum.static.Delays.api_refresh_default">api_refresh_default</span></code>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>rumbot</code>
+            </td>
+            <td>
+                  <code>bool</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The api_url points to an instance of RUM Live Alerts.
+The API URL for this would usually be http://localhost:9843/api/ls
+Useful to avoid rate limits, but some data is not passed through.
+Defaults to False.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
       </tbody>
     </table>
 
             <details class="quote">
               <summary>Source code in <code>cocorum/__init__.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">554</span>
-<span class="normal">555</span>
-<span class="normal">556</span>
-<span class="normal">557</span>
-<span class="normal">558</span>
-<span class="normal">559</span>
-<span class="normal">560</span>
-<span class="normal">561</span>
-<span class="normal">562</span>
-<span class="normal">563</span>
-<span class="normal">564</span>
-<span class="normal">565</span>
-<span class="normal">566</span>
-<span class="normal">567</span>
-<span class="normal">568</span>
-<span class="normal">569</span>
-<span class="normal">570</span>
-<span class="normal">571</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">571</span>
 <span class="normal">572</span>
 <span class="normal">573</span>
 <span class="normal">574</span>
-<span class="normal">575</span></pre></div></td><td class="code"><div><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_url</span><span class="p">,</span> <span class="n">refresh_rate</span> <span class="o">=</span> <span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">api_refresh_default</span><span class="p">):</span>
+<span class="normal">575</span>
+<span class="normal">576</span>
+<span class="normal">577</span>
+<span class="normal">578</span>
+<span class="normal">579</span>
+<span class="normal">580</span>
+<span class="normal">581</span>
+<span class="normal">582</span>
+<span class="normal">583</span>
+<span class="normal">584</span>
+<span class="normal">585</span>
+<span class="normal">586</span>
+<span class="normal">587</span>
+<span class="normal">588</span>
+<span class="normal">589</span>
+<span class="normal">590</span>
+<span class="normal">591</span>
+<span class="normal">592</span>
+<span class="normal">593</span>
+<span class="normal">594</span>
+<span class="normal">595</span>
+<span class="normal">596</span>
+<span class="normal">597</span></pre></div></td><td class="code"><div><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_url</span><span class="p">,</span> <span class="n">refresh_rate</span> <span class="o">=</span> <span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">api_refresh_default</span><span class="p">,</span> <span class="n">rumbot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Rumble Live Stream API wrapper</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        api_url (str): The Rumble API URL, with the key.</span>
 <span class="sd">        refresh_rate (int, float): How long to reuse queried data before refreshing.</span>
 <span class="sd">            Defaults to static.Delays.api_refresh_default.</span>
+<span class="sd">        rumbot (bool): The api_url points to an instance of RUM Live Alerts.</span>
+<span class="sd">            The API URL for this would usually be http://localhost:9843/api/ls</span>
+<span class="sd">            Useful to avoid rate limits, but some data is not passed through.</span>
+<span class="sd">            Defaults to False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">refresh_rate</span> <span class="o">=</span> <span class="n">refresh_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rumbot_mode</span> <span class="o">=</span> <span class="n">rumbot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_refresh_time</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_newfollower_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_newsubscriber_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -5899,6 +6082,90 @@ Defaults to static.Delays.api_refresh_default.</p>
 <div class="doc doc-object doc-function">
 
 
+<h3 id="cocorum.RumbleAPI.__unpad_jsondata" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">__unpad_jsondata</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Remove padding from JSON data we retrieved from RUM Live Alerts</p>
+
+            <details class="quote">
+              <summary>Source code in <code>cocorum/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">661</span>
+<span class="normal">662</span>
+<span class="normal">663</span>
+<span class="normal">664</span>
+<span class="normal">665</span>
+<span class="normal">666</span>
+<span class="normal">667</span>
+<span class="normal">668</span>
+<span class="normal">669</span>
+<span class="normal">670</span>
+<span class="normal">671</span>
+<span class="normal">672</span>
+<span class="normal">673</span>
+<span class="normal">674</span>
+<span class="normal">675</span>
+<span class="normal">676</span>
+<span class="normal">677</span>
+<span class="normal">678</span>
+<span class="normal">679</span>
+<span class="normal">680</span>
+<span class="normal">681</span>
+<span class="normal">682</span>
+<span class="normal">683</span>
+<span class="normal">684</span>
+<span class="normal">685</span>
+<span class="normal">686</span>
+<span class="normal">687</span>
+<span class="normal">688</span>
+<span class="normal">689</span>
+<span class="normal">690</span>
+<span class="normal">691</span>
+<span class="normal">692</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__unpad_jsondata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove padding from JSON data we retrieved from RUM Live Alerts&quot;&quot;&quot;</span>
+
+    <span class="c1"># Nullify blank latest follower</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;followers&quot;</span><span class="p">][</span><span class="s2">&quot;latest_follower&quot;</span><span class="p">][</span><span class="s2">&quot;username&quot;</span><span class="p">]:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;followers&quot;</span><span class="p">][</span><span class="s2">&quot;latest_follower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Remove blank recent followers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;followers&quot;</span><span class="p">][</span><span class="s2">&quot;recent_followers&quot;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;followers&quot;</span><span class="p">][</span><span class="s2">&quot;recent_followers&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]]</span>
+
+    <span class="c1"># Nullify blank latest subscriber</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;subscribers&quot;</span><span class="p">][</span><span class="s2">&quot;latest_subscriber&quot;</span><span class="p">][</span><span class="s2">&quot;username&quot;</span><span class="p">]:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;subscribers&quot;</span><span class="p">][</span><span class="s2">&quot;latest_subscriber&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Remove blank recent subscribers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;subscribers&quot;</span><span class="p">][</span><span class="s2">&quot;recent_subscribers&quot;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;subscribers&quot;</span><span class="p">][</span><span class="s2">&quot;recent_subscribers&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]]</span>
+
+    <span class="c1"># Remove blank livestreams</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;livestreams&quot;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;livestreams&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span>
+
+    <span class="c1"># For each real Livestream</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;livestreams&quot;</span><span class="p">]:</span>
+        <span class="c1"># Nullify blank latest Rant</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">l</span><span class="p">[</span><span class="s2">&quot;chat&quot;</span><span class="p">][</span><span class="s2">&quot;latest_rant&quot;</span><span class="p">][</span><span class="s2">&quot;username&quot;</span><span class="p">]:</span>
+            <span class="n">l</span><span class="p">[</span><span class="s2">&quot;chat&quot;</span><span class="p">][</span><span class="s2">&quot;latest_rant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Remove blank recent rants</span>
+        <span class="n">l</span><span class="p">[</span><span class="s2">&quot;chat&quot;</span><span class="p">][</span><span class="s2">&quot;recent_rants&quot;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">l</span><span class="p">[</span><span class="s2">&quot;chat&quot;</span><span class="p">][</span><span class="s2">&quot;recent_rants&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h3 id="cocorum.RumbleAPI.check_refresh" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">check_refresh</span><span class="p">()</span></code>
 
@@ -5911,10 +6178,10 @@ Defaults to static.Delays.api_refresh_default.</p>
 
             <details class="quote">
               <summary>Source code in <code>cocorum/__init__.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">606</span>
-<span class="normal">607</span>
-<span class="normal">608</span>
-<span class="normal">609</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">check_refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">628</span>
+<span class="normal">629</span>
+<span class="normal">630</span>
+<span class="normal">631</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">check_refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Refresh only if we are past the refresh rate&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_refresh_time</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh_rate</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
@@ -5939,35 +6206,43 @@ Defaults to static.Delays.api_refresh_default.</p>
 
             <details class="quote">
               <summary>Source code in <code>cocorum/__init__.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">611</span>
-<span class="normal">612</span>
-<span class="normal">613</span>
-<span class="normal">614</span>
-<span class="normal">615</span>
-<span class="normal">616</span>
-<span class="normal">617</span>
-<span class="normal">618</span>
-<span class="normal">619</span>
-<span class="normal">620</span>
-<span class="normal">621</span>
-<span class="normal">622</span>
-<span class="normal">623</span>
-<span class="normal">624</span>
-<span class="normal">625</span>
-<span class="normal">626</span>
-<span class="normal">627</span>
-<span class="normal">628</span>
-<span class="normal">629</span>
-<span class="normal">630</span>
-<span class="normal">631</span>
-<span class="normal">632</span>
-<span class="normal">633</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">633</span>
+<span class="normal">634</span>
+<span class="normal">635</span>
+<span class="normal">636</span>
+<span class="normal">637</span>
+<span class="normal">638</span>
+<span class="normal">639</span>
+<span class="normal">640</span>
+<span class="normal">641</span>
+<span class="normal">642</span>
+<span class="normal">643</span>
+<span class="normal">644</span>
+<span class="normal">645</span>
+<span class="normal">646</span>
+<span class="normal">647</span>
+<span class="normal">648</span>
+<span class="normal">649</span>
+<span class="normal">650</span>
+<span class="normal">651</span>
+<span class="normal">652</span>
+<span class="normal">653</span>
+<span class="normal">654</span>
+<span class="normal">655</span>
+<span class="normal">656</span>
+<span class="normal">657</span>
+<span class="normal">658</span>
+<span class="normal">659</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reload data from the API&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">last_refresh_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">static</span><span class="o">.</span><span class="n">RequestHeaders</span><span class="o">.</span><span class="n">user_agent</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="s2">&quot;Status code &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="c1"># If we are in RUM Live Alerts mode, remove padding</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rumbot_mode</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__unpad_jsondata</span><span class="p">()</span>
 
     <span class="c1"># Remove livestream references that are no longer listed</span>
     <span class="n">listed_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">jsondata</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">jsondata</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsondata</span><span class="p">[</span><span class="s2">&quot;livestreams&quot;</span><span class="p">]]</span>
