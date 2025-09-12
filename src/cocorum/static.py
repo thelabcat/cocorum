@@ -17,30 +17,32 @@ S.D.G."""
 
 import re
 
+
 class RequestHeaders:
     """Headers for various HTTPrequests"""
 
     # Header with a fake user-agent string
-    user_agent = {"User-Agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"}
+    user_agent = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
+    }
 
     # Headers for the SSE chat API
-    sse_api = {'Accept': 'text/event-stream'}
+    sse_api = {"Accept": "text/event-stream"}
+
 
 class StaticAPIEndpoints:
     """API endpoints that don't change and shouldn't trigger a refresh"""
+
     # Endpoints of the main API
     main = [
         "user_id",
         "username",
         "channel_id",
         "channel_name",
-        ]
+    ]
 
     # Endpoints of the stream subobject
-    stream = [
-        "id",
-        "created_on"
-        ]
+    stream = ["id", "created_on"]
 
     # # Endpoints of the subscriptions gift object
     # gifted_subs = [
@@ -49,6 +51,7 @@ class StaticAPIEndpoints:
     #     "video_id",
     #     "purchased_by",
     #     ]
+
 
 class URI:
     """URIs to various Rumble services"""
@@ -76,6 +79,9 @@ class URI:
 
     # The video upload PHP
     uploadphp = "https://web5.rumble.com/upload.php"
+
+    # RumBot passthrough API ending
+    rumbot_suffix = "/api/ls"
 
     class ChatAPI:
         """URIs of the chat API"""
@@ -105,6 +111,7 @@ class Delays:
     # Minimum refresh rate for the main API, as defined by Rumble
     api_refresh_minimum = 5
 
+
 class Message:
     """For chat messages"""
 
@@ -117,8 +124,10 @@ class Message:
     # Prefix Rumble uses for native command
     command_prefix = "/"
 
+
 class Upload:
     """Data relating to uploading videos"""
+
     # Size of upload chunks, not sure if this can be changed
     chunksz = 10000000
 
@@ -126,26 +135,28 @@ class Upload:
     api_ver = "1.3"
 
     # Maximum upload size is 15GB as stated by Rumble
-    max_filesize = 15 * (1000 ** 3)
+    max_filesize = 15 * (1000**3)
+
 
 class Misc:
     """No idea where else to put this data"""
+
     # Numerical base that the stream ID is in
     base36 = "0123456789abcdefghijklmnopqrstuvwxyz"
 
     # Dictionary of badge slugs mapped to UTF-8 glyphs
     badges_as_glyphs = {
-        "verified" : "✅",
-        "admin" : "👑",
-        "moderator" : "🛡",
-        "premium" : "🗲",
-        "locals" : "♖",
-        "recurring_subscription" : "♖",
-        "locals_supporter" : "⛋",
-        "whale-grey" : "🐳",
-        "whale-yellow" : "🐳",
-        "whale-blue" : "🐳",
-        }
+        "verified": "✅",
+        "admin": "👑",
+        "moderator": "🛡",
+        "premium": "🗲",
+        "locals": "♖",
+        "recurring_subscription": "♖",
+        "locals_supporter": "⛋",
+        "whale-grey": "🐳",
+        "whale-yellow": "🐳",
+        "whale-blue": "🐳",
+    }
 
     # Encoding for all text-bytes conversions
     text_encoding = "utf-8"
@@ -161,7 +172,9 @@ class Misc:
 
     # RegEx to find the account API key in the https://rumble.com/account page source
     # It looks like this: var $a = new Account("AccountContent","##########");
-    find_acc_apikey = re.compile(r'(?<=var \$a = new Account\("AccountOverview",").*(?="\);)')
+    find_acc_apikey = re.compile(
+        r'(?<=var \$a = new Account\("AccountOverview",").*(?="\);)'
+    )
 
     # Characters that tags are separated by
     tag_split = ", "
