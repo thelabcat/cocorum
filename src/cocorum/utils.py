@@ -287,13 +287,50 @@ def options_check(url: str, method: str, origin = static.URI.rumble_base, cookie
 
     r = requests.options(
         url,
-        headers = {
-            'Access-Control-Request-Method' : method.upper(),
-            'Access-Control-Request-Headers' : 'content-type',
-            'Origin' : origin,
+        headers={
+            'Access-Control-Request-Method': method.upper(),
+            'Access-Control-Request-Headers': 'content-type',
+            'Origin': origin,
             },
-        cookies = cookies,
-        params = params,
-        timeout = static.Delays.request_timeout,
+        cookies=cookies,
+        params=params,
+        timeout=static.Delays.request_timeout,
         )
     return r.status_code == 200
+
+
+def multiple_choice(title: str, options: tuple[str] | list[str]) -> str:
+    """Allow the user to choose between multiple options
+
+    Args:
+        title (str): The question at hand.
+        options (tuple[str] | list[str]): A subscriptable of option strings.
+
+    Returns:
+        choice (str): The chosen option."""
+
+    assert len(options) > 0, "Too few options."
+
+    entry = None
+    choice_width = len(max(options, key=len))
+    num_width = len(str(len(options)))
+    while True:
+        print(title)
+        for i, o in enumerate(options):
+            print(f"{i + 1:0{num_width}d}--{o:->{choice_width}}")
+        entry = input("Choice: ")
+
+        # Option was typed directly
+        if entry in options:
+            return entry
+
+        # Number was typed
+        if entry.isnumeric():
+            try:
+                return options[int(entry) - 1]
+            except IndexError:
+                print("Entry value too high.")
+
+        # Something was typed but it was invalid
+        if entry:
+            print("Invalid entry. Please type a number or the option itself.")

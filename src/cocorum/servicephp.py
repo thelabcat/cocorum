@@ -25,6 +25,7 @@ from .jsonhandles import JSONObj
 
 class APIUserBadge(JSONObj, BaseUserBadge):
     """A badge of a user as returned by the API"""
+
     def __init__(self, slug, jsondata):
         """A badge of a user as returned by the API.
 
@@ -34,7 +35,7 @@ class APIUserBadge(JSONObj, BaseUserBadge):
         """
 
         JSONObj.__init__(self, jsondata)
-        self.slug = slug # The unique identification for this badge
+        self.slug = slug  # The unique identification for this badge
         self.__icon = None
 
     @property
@@ -47,8 +48,10 @@ class APIUserBadge(JSONObj, BaseUserBadge):
         """The URL of the badge's icon"""
         return static.URI.rumble_base + self["icons"][static.Misc.badge_icon_size]
 
+
 class APIComment(JSONObj, BaseComment):
     """A comment on a video as returned by a successful attempt to make it"""
+
     def __init__(self, jsondata, servicephp):
         """A comment on a video as returned by a successful attempt to make it
 
@@ -62,7 +65,7 @@ class APIComment(JSONObj, BaseComment):
 
         # Badges of the user who commented if we have them
         if self.get("comment_user_badges"):
-            self.user_badges = {slug : APIUserBadge(slug, data) for slug, data in self["comment_user_badges"].items()}
+            self.user_badges = {slug: APIUserBadge(slug, data) for slug, data in self["comment_user_badges"].items()}
 
     @property
     def comment_id(self):
@@ -83,6 +86,7 @@ class APIComment(JSONObj, BaseComment):
     def tree_size(self):
         """TODO"""
         return self["comment_tree_size"]
+
 
 class APIContentVotes(JSONObj, BaseContentVotes):
     """Votes made on content"""
@@ -138,8 +142,10 @@ class APIContentVotes(JSONObj, BaseContentVotes):
         """The numerical ID of the content being voted on"""
         return self["content_id"]
 
+
 class APIUser(JSONObj, BaseUser):
     """User data as returned by the API"""
+
     def __init__(self, jsondata, servicephp):
         """User data as returned by the API.
 
@@ -182,11 +188,11 @@ class APIUser(JSONObj, BaseUser):
     @property
     def picture(self):
         """The user's profile picture as a bytes string"""
-        if not self.picture_url: # The profile picture is blank
+        if not self.picture_url:  # The profile picture is blank
             return b''
 
-        if not self.__picture: # We never queried the profile pic before
-            response = requests.get(self.picture_url, timeout = static.Delays.request_timeout)
+        if not self.__picture:  # We never queried the profile pic before
+            response = requests.get(self.picture_url, timeout=static.Delays.request_timeout)
             assert response.status_code == 200, "Status code " + str(response.status_code)
 
             self.__picture = response.content
@@ -208,8 +214,10 @@ class APIUser(JSONObj, BaseUser):
         """TODO -> Bool"""
         return self["followed"]
 
+
 class APIPlaylist(JSONObj, BasePlaylist):
     """Playlist as returned by the API"""
+
     def __init__(self, jsondata, servicephp):
         """Playlist as returned by the API.
 
@@ -287,8 +295,86 @@ class APIPlaylist(JSONObj, BasePlaylist):
         """TODO -> None, unknown"""
         return self["extra"]
 
+
+class TwoFacAuth(JSONObj):
+    """Handle and use the resposne data from the 2FA request"""
+
+    def __init__(self, jsondata, servicephp):
+        """Handle and use the resposne data from the 2FA request.
+
+    Args:
+        jsondata (dict): The JSON data block of the 2FA first step data.
+        servicephp (ServicePHP): The ServicePHP object that spawned us.
+        """
+
+        JSONObj.__init__(self, jsondata)
+        self.servicephp = servicephp
+
+    @property
+    def totp_id(self):
+        """TODO"""
+        return self["totp_id"]
+
+    @property
+    def user_key(self):
+        """TODO"""
+        return self["user_key"]
+
+    @property
+    def options(self) -> tuple:
+        """The options we have for 2FA"""
+        return tuple(
+            option for option, available in self["options"].items()
+            if available
+            )
+
+    def get_2fa_code(self):
+        """Use a 2FA method to get a code, and prompt the user to enter it"""
+        if not self.options:
+            print("2FA seems to be disabled.")
+            return
+
+        if len(self.options) == 1:
+            choice = self.options[0]
+
+        else:
+            choice = utils.multiple_choice("Choose 2FA method:", self.options)
+
+        if choice == "email":
+            print("Email authentication chosen.")
+            self.servicephp.sphp_request(
+                "user.2fa.request_email_code",
+                data={
+                    "totp_id": self.totp_id,
+                    "user_key": self.user_key,
+                    },
+                )
+            print("Email sent.")
+
+        elif choice == "phone":
+            print("Phone number based authentication chosen.")
+            self.servicephp.sphp_request(
+                "user.2fa.request_phone_code", #TODO guessed
+                data={
+                    "totp_id": self.totp_id,
+                    "user_key": self.user_key,
+                    },
+                )
+            print("Text sent.")
+
+        elif choice == "authenticator":
+            print("Authenticator app chosen.")
+            print("Your app generates new codes continuously.")
+
+        else:
+            raise NotImplementedError(f"Cocorum does not support option '{choice}' for 2FA.")
+
+        return input("Enter the 2FA code: ")
+
+
 class ServicePHP:
     """Interact with Rumble's service.php API"""
+
     def __init__(self, username: str, password: str = None, session = None):
         """Interact with Rumble's service.php API.
 
@@ -302,6 +388,9 @@ class ServicePHP:
 
         # Save the username
         self.username = username
+
+        # Attribute must exist before login attempt
+        self.session_cookie = None
 
         # Session is the token directly
         if isinstance(session, str):
@@ -336,7 +425,7 @@ class ServicePHP:
         if self.__user_id is None:
             j = self.sphp_request(
                 "user.has_unread_notifications",
-                method = "GET",
+                method="GET",
                 ).json()
             self.__user_id = utils.base_36_to_10(j["user"]["id"].removeprefix("_"))
 
@@ -352,22 +441,22 @@ class ServicePHP:
         """The numeric ID of the logged in user in base 36"""
         return utils.base_10_to_36(self.user_id)
 
-    def sphp_request(self, service_name: str, data: dict = {}, additional_params: dict = {}, logged_in = True, method = "POST"):
+    def sphp_request(self, service_name: str, data: dict = {}, additional_params: dict = {}, logged_in=True, method="POST"):
         """Make a request to Service.PHP with common settings
         service_name: The name parameter of the specific PHP service
         data: Form data
         additional_params: Any additional query string parameters
         logged_in: The request should use the session cookie"""
-        params = {"name" : service_name}
+        params = {"name": service_name}
         params.update(additional_params)
         r = requests.request(
                 method,
                 static.URI.servicephp,
-                params = params,
-                data = data,
-                headers = static.RequestHeaders.user_agent,
-                cookies = self.session_cookie if logged_in else None,
-                timeout = static.Delays.request_timeout,
+                params=params,
+                data=data,
+                headers=static.RequestHeaders.user_agent,
+                cookies=self.session_cookie if logged_in else None,
+                timeout=static.Delays.request_timeout,
                 )
         assert r.status_code == 200, f"Service.PHP request for {service_name} failed: {r}\n{r.text}"
         # If the request json has a data -> success value, make sure it is True
@@ -393,23 +482,63 @@ class ServicePHP:
 
         # Get salts
         r = self.sphp_request(
-                "user.get_salts",
-                data = {"username": username},
-                logged_in = False,
-                )
+            "user.get_salts",
+            data={"username": username},
+            logged_in=False,
+            additional_params={"response_type": "session"}  # TODO
+            )
         salts = r.json()["data"]["salts"]
 
-        # Get session token
+        password_hashes = ",".join(utils.calc_password_hashes(password, salts))
+
+        # Do 2FA
+        r = self.sphp_request(
+            "user.2fa.first_step",
+            data={
+                "legacy_password": 1,  # TODO
+                "login": username,
+                "password": password_hashes,
+                "redirect_url": static.URI.rumble_base,
+                },
+            logged_in=False
+            )
+
+        # Wrap the 2FA data and have the user choose among their options
+        two_fac_auth = TwoFacAuth(r.json()["data"], self)
+
+        # 2FA is enabled TODO have not tested on non 2FA account
+        if two_fac_auth.options:
+            # Verify the 2FA
+            # If this fails, sphp_request will raise AssertionError
+            r = self.sphp_request(
+                "user.2fa.verify_totp",
+                data={
+                    "code": two_fac_auth.get_2fa_code(),
+                    "redirect_url": static.URI.rumble_base,
+                    "totp_id": two_fac_auth.totp_id,
+                    "user_key": two_fac_auth.user_key,
+                    },
+                logged_in=False,
+                )
+
+            cookie_start = static.Misc.session_token_key + "="
+            for cookie_piece in r.headers["Set-Cookie"].split():
+                if cookie_piece.startswith(cookie_start):
+                    return {static.Misc.session_token_key: cookie_piece.removeprefix(cookie_start).removesuffix(";")}
+            raise ValueError("Login failed: Did not find session token in 2FA response headers.")
+
+        # Get session token for non-2FA
         r = self.sphp_request(
                 "user.login",
-                data = {
+                data={
                     "username": username,
 
                     # Hash the password using the salts
-                    "password_hashes": ",".join(utils.calc_password_hashes(password, salts)),
+                    "password_hashes": password_hashes,
                     },
-                logged_in = False,
+                logged_in=False,
                 )
+
         j = r.json()
         session_token = j["data"]["session"]
         assert session_token, f"Login failed: No token returned\n{r.json()}"
@@ -427,7 +556,7 @@ class ServicePHP:
 
         self.sphp_request(
             f"chat.message.{"un" * unpin}pin",
-            data = {
+            data={
                 "video_id": utils.ensure_b10(stream_id),
                 "message_id": int(message),
                 },
@@ -449,7 +578,7 @@ class ServicePHP:
 
         self.sphp_request(
             "moderation.mute",
-            data = {
+            data={
                 "user_to_mute": username,
                 "entity_type": ("user", "channel")[is_channel],
                 "video": int(video),
@@ -467,8 +596,8 @@ class ServicePHP:
 
         self.sphp_request(
             "moderation.unmute",
-            data = {
-                "record_id" : record_id,
+            data={
+                "record_id": record_id,
                 }
             )
 
@@ -496,12 +625,12 @@ class ServicePHP:
 
         r = self.sphp_request(
             "comment.list",
-            additional_params = {
-                "video" : utils.ensure_b36(video_id),
+            additional_params={
+                "video": utils.ensure_b36(video_id),
                 },
-            method = "GET",
+            method="GET",
             )
-        soup = bs4.BeautifulSoup(r.json()["html"], features = "html.parser")
+        soup = bs4.BeautifulSoup(r.json()["html"], features="html.parser")
         comment_elems = soup.find_all(self._is_comment_elem)
         return [scraping.HTMLComment(e, self) for e in comment_elems]
 
@@ -520,7 +649,7 @@ class ServicePHP:
 
         r = self.sphp_request(
                 "comment.add",
-                data = {
+                data={
                     "video": int(utils.ensure_b10(video_id)),
                     "reply_id": int(reply_id),
                     "comment": str(comment),
@@ -539,7 +668,7 @@ class ServicePHP:
 
         self.sphp_request(
             f"comment.{"un" * unpin}pin",
-            data = {"comment_id": int(comment_id)},
+            data={"comment_id": int(comment_id)},
             )
 
     def comment_delete(self, comment_id: int):
@@ -551,7 +680,7 @@ class ServicePHP:
 
         self.sphp_request(
             "comment.delete",
-            data = {"comment_id": int(comment_id)},
+            data={"comment_id": int(comment_id)},
             )
 
     def comment_restore(self, comment_id: int):
@@ -563,7 +692,7 @@ class ServicePHP:
 
         r = self.sphp_request(
             "comment.restore",
-            data = {"comment_id": int(comment_id)},
+            data={"comment_id": int(comment_id)},
             )
         return APIComment(r.json()["data"], self)
 
@@ -578,10 +707,10 @@ class ServicePHP:
 
         r = self.sphp_request(
             "user.rumbles",
-            data = {
-                "type" : int(item_type),
-                "id" : utils.ensure_b10(item_id),
-                "vote" : int(vote),
+            data={
+                "type": int(item_type),
+                "id": utils.ensure_b10(item_id),
+                "vote": int(vote),
                 },
             )
         return APIContentVotes(r.json()["data"])
@@ -598,14 +727,14 @@ class ServicePHP:
 
         r = self.sphp_request(
             "media.share",
-            additional_params = {
-                "video" : utils.ensure_b36(video_id),
-                "start" : 0,
+            additional_params={
+                "video": utils.ensure_b36(video_id),
+                "start": 0,
                 },
-            method = "GET",
+            method="GET",
             )
-        soup = bs4.BeautifulSoup(r.json()["html"], features = "html.parser")
-        elem = soup.find("div", attrs = {"class" : "fb-share-button share-fb"})
+        soup = bs4.BeautifulSoup(r.json()["html"], features="html.parser")
+        elem = soup.find("div", attrs={"class": "fb-share-button share-fb"})
         return elem.attrs["data-url"]
 
     def playlist_add_video(self, playlist_id: str, video_id):
@@ -618,7 +747,7 @@ class ServicePHP:
 
         print(self.sphp_request(
             "playlist.add_video",
-            data = {
+            data={
                 "playlist_id": str(playlist_id),
                 "video_id": utils.ensure_b10(video_id),
                 }
@@ -634,13 +763,13 @@ class ServicePHP:
 
         print(self.sphp_request(
             "playlist.delete_video",
-            data = {
+            data={
                 "playlist_id": str(playlist_id),
                 "video_id": utils.ensure_b10(video_id),
                 }
             ).text)
 
-    def playlist_add(self, title: str, description: str = "", visibility: str = "public", channel_id = None):
+    def playlist_add(self, title: str, description: str = "", visibility: str = "public", channel_id=None):
         """Create a new playlist.
 
     Args:
@@ -667,7 +796,7 @@ class ServicePHP:
         )
         return APIPlaylist(r.json()["data"], self)
 
-    def playlist_edit(self, playlist_id: str, title: str, description: str = "", visibility: str = "public", channel_id = None):
+    def playlist_edit(self, playlist_id: str, title: str, description: str = "", visibility: str = "public", channel_id=None):
         """Edit the details of an existing playlist
 
     Args:
@@ -705,7 +834,7 @@ class ServicePHP:
 
         print(self.sphp_request(
             "playlist.delete",
-            data = {"playlist_id" : str(playlist_id)},
+            data={"playlist_id": str(playlist_id)},
             ).text)
 
     def raid_confirm(self, stream_id):
@@ -717,5 +846,5 @@ class ServicePHP:
 
         self.sphp_request(
             "raid.confirm",
-            data = {"video_id" : utils.ensure_b10(stream_id)},
+            data={"video_id": utils.ensure_b10(stream_id)},
             )
