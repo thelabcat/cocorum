@@ -7,11 +7,17 @@ Copyright 2025 Wilbur Jaywright.
 
 This file is part of Cocorum.
 
-Cocorum is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Cocorum is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
 
-Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with Cocorum. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Lesser General Public License along
+with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
@@ -22,6 +28,7 @@ from . import static
 from . import utils
 from .basehandles import *
 from .jsonhandles import JSONObj
+
 
 class APIUserBadge(JSONObj, BaseUserBadge):
     """A badge of a user as returned by the API"""
@@ -312,84 +319,86 @@ class TwoFacAuth(JSONObj):
 
     @property
     def totp_id(self):
-        """TODO"""
+        """Is None when 2FA is disabled"""
         return self["totp_id"]
 
     @property
     def user_key(self):
-        """TODO"""
-        return self["user_key"]
+        """Returns None when 2FA is disabled"""
+        return self.get("user_key")
 
     @property
     def options(self) -> tuple:
         """The options we have for 2FA"""
+        # 2FA is disabled it totp_id is None, so we have no options
+        if not self.totp_id:
+            return tuple()
+
         return tuple(
             option for option, available in self["options"].items()
             if available
             )
 
-    def get_2fa_code(self):
-        """Use a 2FA method to get a code, and prompt the user to enter it"""
-        if not self.options:
-            print("2FA seems to be disabled.")
-            return
+    def request_2fa_code(self, option: str = "authenticator"):
+        """Tell Rumble to send the user a 2FA code
 
-        if len(self.options) == 1:
-            choice = self.options[0]
+        Args:
+            option (str): The 2FA option to use. Must be in self.options.
+                Defaults to "authenticator" app.
 
-        else:
-            choice = utils.multiple_choice("Choose 2FA method:", self.options)
+        Returns:
+            sent_to (str | None): The code destination, semi-censored.
+                If 'authenticator' was used, returns None, as such apps
+                generate the 2FA codes on demand."""
 
-        if choice == "email":
-            print("Email authentication chosen.")
-            self.servicephp.sphp_request(
+        assert self.options, "2FA is not enabled on this account"
+
+        assert option in self.options, \
+            f"Option '{option}' is not enabled on this account for 2FA"
+
+        if option == "email":
+            r = self.servicephp.sphp_request(
                 "user.2fa.request_email_code",
                 data={
                     "totp_id": self.totp_id,
                     "user_key": self.user_key,
                     },
                 )
-            print("Email sent.")
+            return r.json()["data"]["sent_to"]
 
-        elif choice == "phone":
-            print("Phone number based authentication chosen.")
-            self.servicephp.sphp_request(
-                "user.2fa.request_phone_code", #TODO guessed
+        if option == "phone":
+            r = self.servicephp.sphp_request(
+                "user.2fa.request_sms_code",
                 data={
                     "totp_id": self.totp_id,
                     "user_key": self.user_key,
                     },
                 )
-            print("Text sent.")
+            return r.json()["data"]["sent_to"]
 
-        elif choice == "authenticator":
-            print("Authenticator app chosen.")
-            print("Your app generates new codes continuously.")
+        if option == "authenticator":
+            # Nothing for us to do
+            return None
 
-        else:
-            raise NotImplementedError(f"Cocorum does not support option '{choice}' for 2FA.")
-
-        return input("Enter the 2FA code: ")
+        raise NotImplementedError(
+            f"Cocorum does not support option '{option}' for 2FA."
+            )
 
 
 class ServicePHP:
     """Interact with Rumble's service.php API"""
 
-    def __init__(self, username: str, password: str = None, session = None):
+    def __init__(self, username: str, session: (str | dict) = None):
         """Interact with Rumble's service.php API.
 
     Args:
-        username (str): The username we will be under.
-        password (str): The password to use at login.
-            Defaults to using the session token/cookie instead.
-        session (str, dict): The session token or cookie dict to authenticate with.
-            Defaults to using the password instead.
+        username (str): The username we will be working under.
+        session (str | dict): A pre-existing session token.
+            Defaults to None, await login.
             """
 
-        # Save the username
+        # Set up initial auth data variables
         self.username = username
-
-        # Attribute must exist before login attempt
         self.session_cookie = None
 
         # Session is the token directly
@@ -405,15 +414,10 @@ class ServicePHP:
         elif session is not None:
             raise ValueError(f"Session must be a token str or cookie dict, got {type(session)}")
 
-        # Session was not passed, but credentials were
-        elif username and password:
-            self.session_cookie = self.login(username, password)
-
-        # Neither session nor credentials were passed:
-        else:
-            raise ValueError("Must pass either userame and password, or a session token")
-
-        assert utils.test_session_cookie(self.session_cookie), "Session cookie is invalid."
+        # If a session cookie was passed, test it
+        assert not self.session_cookie\
+            or utils.test_session_cookie(self.session_cookie), \
+            "Session cookie is invalid."
 
         # Stored ID of the logged in user
         self.__user_id = None
@@ -447,6 +451,8 @@ class ServicePHP:
         data: Form data
         additional_params: Any additional query string parameters
         logged_in: The request should use the session cookie"""
+        assert self.session_cookie or not logged_in, "Not logged in yet."
+
         params = {"name": service_name}
         params.update(additional_params)
         r = requests.request(
@@ -469,72 +475,80 @@ class ServicePHP:
 
         return r
 
-    def login(self, username: str, password: str):
-        """Log in to Rumble
+    def get_hashed_password(self, password: str):
+        """Use Rumble's salts to hash a pasword for login
 
     Args:
-        username (str): Username to sign in with.
-        password (str): Password to sign in with.
+        password (str): The password to hash with the salts.
 
     Returns:
-        Cookie (dict): Cookie dict to be passed with requests, which authenticates them.
+        hashed (str): The hashed password to use in the rest of the login.
         """
 
         # Get salts
         r = self.sphp_request(
             "user.get_salts",
-            data={"username": username},
+            data={"username": self.username},
             logged_in=False,
-            additional_params={"response_type": "session"}  # TODO
+            additional_params={"response_type": "session"}
             )
         salts = r.json()["data"]["salts"]
 
-        password_hashes = ",".join(utils.calc_password_hashes(password, salts))
+        return ",".join(utils.calc_password_hashes(password, salts))
 
-        # Do 2FA
+    def get_2fa_first_step(self, password_hashes: str) -> TwoFacAuth:
+        """Get 2FA info on our account as a first 2FA step
+
+        Args:
+            password_hashes (str): The hashed password.
+
+        Returns:
+            info (TwoFacAuth): Information on 2FA."""
+
         r = self.sphp_request(
             "user.2fa.first_step",
             data={
                 "legacy_password": 1,  # TODO
-                "login": username,
+                "login": self.username,
                 "password": password_hashes,
                 "redirect_url": static.URI.rumble_base,
                 },
             logged_in=False
             )
 
-        # Wrap the 2FA data and have the user choose among their options
-        two_fac_auth = TwoFacAuth(r.json()["data"], self)
+        return TwoFacAuth(r.json()["data"], self)
 
-        # 2FA is enabled TODO have not tested on non 2FA account
-        if two_fac_auth.options:
-            # Verify the 2FA
-            # If this fails, sphp_request will raise AssertionError
-            r = self.sphp_request(
-                "user.2fa.verify_totp",
-                data={
-                    "code": two_fac_auth.get_2fa_code(),
-                    "redirect_url": static.URI.rumble_base,
-                    "totp_id": two_fac_auth.totp_id,
-                    "user_key": two_fac_auth.user_key,
-                    },
-                logged_in=False,
-                )
+    def login_basic(self, password: str):
+        """Perform a basic password authentication as the first step of login.
+            If successful, sets our session token and returns None.
+            If incomplete, returns TwoFacAuth() for next step.
 
-            cookie_start = static.Misc.session_token_key + "="
-            for cookie_piece in r.headers["Set-Cookie"].split():
-                if cookie_piece.startswith(cookie_start):
-                    return {static.Misc.session_token_key: cookie_piece.removeprefix(cookie_start).removesuffix(";")}
-            raise ValueError("Login failed: Did not find session token in 2FA response headers.")
+        Args:
+            password (str): The password to login with.
+
+        Returns:
+            result (TwoFacAuth | None): The result of the first login step.
+                None means login is complete.
+            """
+
+        # Get the password hash to start off
+        ph = self.get_hashed_password(password)
+
+        # Check for 2FA
+        two_fac_info = self.get_2fa_first_step(ph)
+
+        # 2FA is enabled
+        if two_fac_info.totp_id:  # two_fac_auth.options:
+            return two_fac_info
 
         # Get session token for non-2FA
         r = self.sphp_request(
                 "user.login",
                 data={
-                    "username": username,
+                    "username": self.username,
 
                     # Hash the password using the salts
-                    "password_hashes": password_hashes,
+                    "password_hashes": ph,
                     },
                 logged_in=False,
                 )
@@ -543,7 +557,34 @@ class ServicePHP:
         session_token = j["data"]["session"]
         assert session_token, f"Login failed: No token returned\n{r.json()}"
 
-        return {static.Misc.session_token_key: session_token}
+        self.session_cookie = {static.Misc.session_token_key: session_token}
+        return True
+
+    def login_second_factor(self, two_fac_auth: TwoFacAuth, code: str) -> dict:
+        """Complete login with a 2FA code.
+
+        Args:
+            two_fac_auth (TwoFacAuth): 2FA information on this account.
+            code (str): The code to enter."""
+
+        # If this fails, sphp_request will raise AssertionError
+        r = self.sphp_request(
+            "user.2fa.verify_totp",
+            data={
+                "code": code,
+                "redirect_url": static.URI.rumble_base,
+                "totp_id": two_fac_auth.totp_id,
+                "user_key": two_fac_auth.user_key,
+                },
+            logged_in=False,
+            )
+
+        cookie_start = static.Misc.session_token_key + "="
+        for piece in r.headers["Set-Cookie"].split():
+            if piece.startswith(cookie_start):
+                self.session_cookie = {static.Misc.session_token_key: piece.removeprefix(cookie_start).removesuffix(";")}
+                return
+        raise ValueError("Login failed: Did not find session token in 2FA response headers.")
 
     def chat_pin(self, stream_id, message, unpin: bool = False):
         """Pin or unpin a message in a chat.

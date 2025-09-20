@@ -7,11 +7,17 @@ Copyright 2025 Wilbur Jaywright.
 
 This file is part of Cocorum.
 
-Cocorum is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Cocorum is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
 
-Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with Cocorum. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Lesser General Public License along
+with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
@@ -22,6 +28,7 @@ import time
 import uuid
 import requests
 from . import static
+
 
 class MD5Ex:
     """MD5 extended hashing utilities"""
@@ -68,6 +75,7 @@ class MD5Ex:
 
         return current
 
+
 def parse_timestamp(timestamp: str) -> float:
     """Parse a Rumble timestamp.
 
@@ -81,6 +89,7 @@ def parse_timestamp(timestamp: str) -> float:
     # Trims off the 6 TODO characters at the end
     return calendar.timegm(time.strptime(timestamp[:-6], static.Misc.timestamp_format))
 
+
 def form_timestamp(seconds: float, suffix = "+00:00") -> str:
     """Form a Rumble timestamp.
 
@@ -92,6 +101,7 @@ def form_timestamp(seconds: float, suffix = "+00:00") -> str:
         """
 
     return time.strftime(static.Misc.timestamp_format, time.gmtime(seconds)) + suffix
+
 
 def base_10_to_36(b10) -> str:
     """Convert a base 10 number to base 36.
@@ -112,6 +122,7 @@ def base_10_to_36(b10) -> str:
 
     return b36
 
+
 def base_36_to_10(b36) -> int:
     """Convert a base 36 number to base 10.
 
@@ -123,6 +134,7 @@ def base_36_to_10(b36) -> int:
         """
 
     return int(str(b36), 36)
+
 
 def ensure_b36(num, assume_10 = False) -> str:
     """No matter wether a number is base 36 or 10, return 36.
@@ -151,6 +163,7 @@ def ensure_b36(num, assume_10 = False) -> str:
     # It is base 36:
     return num
 
+
 def ensure_b10(num, assume_10 = False) -> int:
     """No matter wether a number is base 36 or 10, return 10.
 
@@ -178,6 +191,7 @@ def ensure_b10(num, assume_10 = False) -> int:
     # It is base 36:
     return base_36_to_10(num)
 
+
 def base_36_and_10(num, assume_10 = False):
     """Take a base 36 or base 10 number, and return both base 36 and 10.
 
@@ -192,6 +206,7 @@ def base_36_and_10(num, assume_10 = False):
         """
 
     return ensure_b36(num, assume_10), ensure_b10(num, assume_10)
+
 
 def badges_to_glyph_string(badges) -> str:
     """Convert a list of badges into a string of glyphs.
@@ -211,6 +226,7 @@ def badges_to_glyph_string(badges) -> str:
         else:
             out += "?"
     return out
+
 
 def calc_password_hashes(password: str, salts):
     """Hash a password for Rumble authentication.
@@ -234,6 +250,7 @@ def calc_password_hashes(password: str, salts):
 
     return final_hash1, stretched2, salts[1]
 
+
 def generate_request_id() -> str:
     """Generate a UUID for API requests
 
@@ -244,6 +261,7 @@ def generate_request_id() -> str:
     random_uuid = uuid.uuid4().bytes + uuid.uuid4().bytes
     b64_encoded = base64.b64encode(random_uuid).decode(static.Misc.text_encoding)
     return b64_encoded.rstrip('=')[:43]
+
 
 def test_session_cookie(session_cookie: dict) -> bool:
     """Test if a session cookie dict is valid.
@@ -256,9 +274,9 @@ def test_session_cookie(session_cookie: dict) -> bool:
         """
 
     r = requests.get(static.URI.login_test,
-            cookies = session_cookie,
-            headers = static.RequestHeaders.user_agent,
-            timeout = static.Delays.request_timeout,
+            cookies=session_cookie,
+            headers=static.RequestHeaders.user_agent,
+            timeout=static.Delays.request_timeout,
         )
 
     assert r.status_code == 200, f"Testing session token failed: {r}"
@@ -267,6 +285,7 @@ def test_session_cookie(session_cookie: dict) -> bool:
 
     # If the session token is invalid, it won't log us in and "Login" will still be shown
     return "Login" not in title
+
 
 def options_check(url: str, method: str, origin = static.URI.rumble_base, cookies: dict = {}, params: dict = {}) -> bool:
     """Check of we are allowed to do method on url via an options request
@@ -297,40 +316,3 @@ def options_check(url: str, method: str, origin = static.URI.rumble_base, cookie
         timeout=static.Delays.request_timeout,
         )
     return r.status_code == 200
-
-
-def multiple_choice(title: str, options: tuple[str] | list[str]) -> str:
-    """Allow the user to choose between multiple options
-
-    Args:
-        title (str): The question at hand.
-        options (tuple[str] | list[str]): A subscriptable of option strings.
-
-    Returns:
-        choice (str): The chosen option."""
-
-    assert len(options) > 0, "Too few options."
-
-    entry = None
-    choice_width = len(max(options, key=len))
-    num_width = len(str(len(options)))
-    while True:
-        print(title)
-        for i, o in enumerate(options):
-            print(f"{i + 1:0{num_width}d}--{o:->{choice_width}}")
-        entry = input("Choice: ")
-
-        # Option was typed directly
-        if entry in options:
-            return entry
-
-        # Number was typed
-        if entry.isnumeric():
-            try:
-                return options[int(entry) - 1]
-            except IndexError:
-                print("Entry value too high.")
-
-        # Something was typed but it was invalid
-        if entry:
-            print("Invalid entry. Please type a number or the option itself.")
