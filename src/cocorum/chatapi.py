@@ -26,6 +26,7 @@ from . import scraping
 from . import static
 from . import utils
 
+
 class ChatAPIObj(JSONObj):
     """Object in the internal chat API"""
     def __init__(self, jsondata, chat):
@@ -38,6 +39,7 @@ class ChatAPIObj(JSONObj):
 
         JSONObj.__init__(self, jsondata)
         self.chat = chat
+
 
 class Chatter(JSONUserAction, ChatAPIObj):
     """A user or channel in the internal chat API (abstract)"""
@@ -55,6 +57,7 @@ class Chatter(JSONUserAction, ChatAPIObj):
     def link(self):
         """The user's subpage of Rumble.com"""
         return self["link"]
+
 
 class User(Chatter, BaseUser):
     """User in the internal chat API"""
@@ -88,7 +91,7 @@ class User(Chatter, BaseUser):
         except KeyError:
             new = self._set_channel_id
 
-        if new not in self.previous_channel_ids: # Record the appearance of a new chanel appearance, including None
+        if new not in self.previous_channel_ids:  # Record the appearance of a new chanel appearance, including None
             self.previous_channel_ids.append(new)
         return new
 
@@ -112,7 +115,7 @@ class User(Chatter, BaseUser):
     @property
     def color(self):
         """The color of our username (RGB tuple)"""
-        return tuple(int(self["color"][i : i + 2], 16) for i in range(0, 6, 2))
+        return tuple(int(self["color"][i: i + 2], 16) for i in range(0, 6, 2))
 
     @property
     def badges(self):
@@ -124,8 +127,10 @@ class User(Chatter, BaseUser):
         except KeyError:
             return []
 
+
 class Channel(Chatter):
     """A channel in the SSE chat"""
+
     def __init__(self, jsondata, chat):
         """A channel in the internal chat API
 
@@ -145,7 +150,7 @@ class Channel(Chatter):
     @property
     def is_appearing(self):
         """Is the user of this channel still appearing as it?"""
-        return self.user.channel_id == self.channel_id # The user channel_id still matches our own
+        return self.user.channel_id == self.channel_id  # The user channel_id still matches our own
 
     @property
     def channel_id(self):
@@ -177,8 +182,10 @@ class Channel(Chatter):
         """The numeric ID of the user of this channel in base 10"""
         return self.user.user_id_b10
 
+
 class UserBadge(ChatAPIObj, BaseUserBadge):
     """A badge of a user"""
+
     def __init__(self, slug, jsondata, chat):
         """A user badge in the internal chat API
 
@@ -188,7 +195,7 @@ class UserBadge(ChatAPIObj, BaseUserBadge):
         """
 
         ChatAPIObj.__init__(self, jsondata, chat)
-        self.slug = slug # The unique identification for this badge
+        self.slug = slug  # The unique identification for this badge
         self.__icon = None
 
     @property
@@ -201,8 +208,10 @@ class UserBadge(ChatAPIObj, BaseUserBadge):
         """The URL of the badge's icon"""
         return static.URI.rumble_base + self["icons"][static.Misc.badge_icon_size]
 
+
 class GiftPurchaseNotification(ChatAPIObj):
     """A subscription gift under a message"""
+
     def __init__(self, jsondata, message):
         """A subscription gift under a message
 
@@ -274,8 +283,10 @@ class GiftPurchaseNotification(ChatAPIObj):
         """The numeric ID of the channel whose stream this gift was given on, in base 36 (can be zero)"""
         return utils.base_10_to_36(self.creator_channel_id)
 
+
 class Message(ChatAPIObj):
     """A single chat message in the internal chat API"""
+
     def __init__(self, jsondata, chat):
         """A single chat message in the internal chat API
 
@@ -376,7 +387,7 @@ class Message(ChatAPIObj):
         try:
             # Note: For some reason, channel IDs in messages alone show up as integers in the SSE events
             return int(self["channel_id"])
-        except KeyError: # This user is not appearing as a channel and so has no channel ID
+        except KeyError:  # This user is not appearing as a channel and so has no channel ID
             return None
 
     @property
@@ -467,9 +478,11 @@ class Message(ChatAPIObj):
         """Unpin this message if it was pinned"""
         return self.chat.unpin_message(self)
 
+
 class ChatAPI():
     """The Rumble internal chat API"""
-    def __init__(self, stream_id, username: str = None, password: str = None, session = None, history_len = 1000):
+
+    def __init__(self, stream_id, servicephp: ServicePHP = None, history_len=1000):
         """The Rumble internal chat API
 
     Args:
@@ -477,24 +490,20 @@ class ChatAPI():
             WARNING: If a str is passed, this WILL ASSUME BASE 36
             even if only digits are present! Convert to int before passing
             if it is base 10.
-        username (str): Username to login with.
-            Defaults to no login.
-        password (str): Password to log in with.
-            Defaults to no login.
-        session (str, dict): Session token or cookie dict to authenticate with.
-            Defaults to getting new session with username and password.
+        servicephp (ServicePHP): A logged in Service.PHP agent for two-way.
+            Defaults to None, view chat as a guest.
         history_len (int): Length of message history to store.
             Defaults to 1000.
             """
 
         self.stream_id = utils.ensure_b36(stream_id)
 
-        self.__mailbox = []  #  A mailbox if you will
-        self.__history = []  #  Chat history
-        self.history_len = history_len  #  How many messages to store in history
-        self.pinned_message = None  #  If a message is pinned, it is assigned to this
-        self.users = {}  #  Dictionary of users by user ID
-        self.channels = {}  #  Dictionary of channels by channel ID
+        self.__mailbox = []  # A mailbox if you will
+        self.__history = []  # Chat history
+        self.history_len = history_len  # How many messages to store in history
+        self.pinned_message = None  # If a message is pinned, it is assigned to this
+        self.users = {}  # Dictionary of users by user ID
+        self.channels = {}  # Dictionary of channels by channel ID
         self.badges = {}
 
         # Generate our URLs
@@ -509,12 +518,12 @@ class ChatAPI():
         self.event_generator = self.client.events()
         self.chat_running = True
 
-        #  If we have session login, use them
-        if (username and password) or session:
-            self.servicephp = ServicePHP(username, password, session)
+        #  If we have session login, use it
+        self.servicephp = servicephp
+        if self.servicephp:
             self.scraper = scraping.Scraper(self.servicephp)
         else:
-            self.servicephp = None
+            self.scraper = None
 
         #  Parse the init data for the stream (must do AFTER we have servicephp)
         self.parse_init_data(self.__next_event_json())
