@@ -26,7 +26,7 @@ from .basehandles import *
 class HTMLObj:
     """Abstract object scraped from bs4 HTML"""
 
-    def __init__(self, elem, sphp = None):
+    def __init__(self, elem, sphp=None):
         """Abstract object scraped from bs4 HTML
 
     Args:
@@ -72,6 +72,7 @@ class HTMLUserBadge(HTMLObj, BaseUserBadge):
     def icon_url(self):
         """The URL of the badge's icon"""
         return static.URI.rumble_base + self["src"]
+
 
 class HTMLComment(HTMLObj, BaseComment):
     """A comment on a video as returned by service.php comment.list"""
@@ -141,6 +142,7 @@ class HTMLComment(HTMLObj, BaseComment):
     def get_rumbles(self):
         """The votes on this comment"""
         return HTMLContentVotes(self._elem.find("div", attrs={"class": "rumbles-vote"}))
+
 
 class HTMLContentVotes(HTMLObj, BaseContentVotes):
     """Votes made on content"""
@@ -265,6 +267,7 @@ class HTMLPlaylist(HTMLObj, BasePlaylist):
         """The number of items in the playlist"""
         # TODO: This is doable but I just don't care right now.
         raise NotImplementedError("This is doable but I just don't care right now.")
+
 
 class HTMLChannel(HTMLObj):
     """Channel under a user as extracted from their channels page"""
@@ -425,6 +428,7 @@ class HTMLVideo(HTMLObj):
         """The time that the video was uploaded, in seconds since epoch"""
         return utils.parse_timestamp(self._elem.find("time", attrs={"class": "videostream__data--subitem videostream__time"}).get("datetime"))
 
+
 class HTMLVideoSettings(HTMLObj):
     """Video settings from preparing to edit them"""
 
@@ -466,34 +470,34 @@ class HTMLVideoSettings(HTMLObj):
     @property
     def title(self):
         """The video title"""
-        return self._elem.find(name = "input", id = "title")["value"]
+        return self._elem.find(name="input", id="title")["value"]
 
     @property
     def description(self):
         """The video description"""
-        return self._elem.find(name = "textarea", id = "description").text
+        return self._elem.find(name="textarea", id="description").text
 
     @property
     def tags(self):
         """The video tags"""
-        return self._elem.find("input", id = "tags")["value"].split(static.Misc.tag_split)
+        return self._elem.find("input", id="tags")["value"].split(static.Misc.tag_split)
 
     @property
     def youtube_url(self):
         """The URL of the video on YouTube"""
-        return self._elem.find(name = "input", id = "youtube-url")["value"]
+        return self._elem.find(name="input", id="youtube-url")["value"]
 
     @property
     def category_primary(self):
         """The name and numeric ID of the video's primary category"""
-        tag = self._elem.find(name = "select", id = "siteChannelId").find("option", selected = True)
+        tag = self._elem.find(name="select", id="siteChannelId").find("option", selected=True)
         return tag.text.strip(), int(tag["value"])
 
 
     @property
     def category_secondary(self):
         """The name and numeric ID of the video's secondary category"""
-        tag = self._elem.find(name = "select", id = "mediaChannelId").find("option", selected = True)
+        tag = self._elem.find(name="select", id="mediaChannelId").find("option", selected=True)
         if tag:
             return tag.text.strip(), int(tag["value"])
         # No secondary channel was selected
@@ -502,7 +506,7 @@ class HTMLVideoSettings(HTMLObj):
     @property
     def channel(self):
         """The name and numeric ID of the channel the video was posted to"""
-        tag = self._elem.find(name = "select", id = "channelId").find("option", selected = True)
+        tag = self._elem.find(name="select", id="channelId").find("option", selected=True)
         if tag["value"]:
             return tag.text.strip(), int(tag["value"])
 
@@ -512,19 +516,20 @@ class HTMLVideoSettings(HTMLObj):
     @property
     def channel_featured(self):
         """Wether this video is featured on the top of the channel"""
-        return bool(self._elem.find("input", type = "checkbox", id = "featured_for_channel").checked)
+        return bool(self._elem.find("input", type="checkbox", id="featured_for_channel").checked)
 
     @property
     def profile_featured(self):
         """Wether this video is featured on the top of the profile"""
-        return bool(self._elem.find("input", type = "checkbox", id = "featured_for_user").checked)
+        return bool(self._elem.find("input", type="checkbox", id="featured_for_user").checked)
 
     @property
     def visibility(self):
         """The video's visibility setting"""
-        return self._elem.find("input", attrs = {"name": "visibility"}, checked = True)["value"]
+        return self._elem.find("input", attrs={"name": "visibility"}, checked=True)["value"]
 
     # TODO support placeholder video for livestreams
+
 
 class Scraper:
     """Scraper for general information"""
@@ -647,7 +652,8 @@ class Scraper:
         is_channel (bool): Is this a channel instead of a userpage?
             Defaults to False.
         max_num (int): The maximum number of videos to retrieve, starting from
-            the newest.
+            the newest. WARNING: You will likely hit a 503 error if max_num is
+            None or too high.
             Defaults to None, return all videos.
             Note, rounded up to the nearest page.
 
