@@ -273,7 +273,8 @@ def test_session_cookie(session_cookie: dict) -> bool:
         Result (bool): Is the cookie dict valid?
         """
 
-    r = requests.get(static.URI.login_test,
+    r = requests.get(
+            static.URI.login_test,
             cookies=session_cookie,
             headers=static.RequestHeaders.user_agent,
             timeout=static.Delays.request_timeout,
@@ -287,7 +288,7 @@ def test_session_cookie(session_cookie: dict) -> bool:
     return "Login" not in title
 
 
-def options_check(url: str, method: str, origin = static.URI.rumble_base, cookies: dict = {}, params: dict = {}) -> bool:
+def options_check(url: str, method: str, origin=static.URI.rumble_base, cookies: dict = {}, params: dict = {}) -> bool:
     """Check of we are allowed to do method on url via an options request
 
     Args:
