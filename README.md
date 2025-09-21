@@ -70,7 +70,6 @@ Example usage of `cocorum.chatapi`:
 ```
 from cocorum import chatapi
 
-# Additionally pass username and password for to-chat interactions
 chat = chatapi.ChatAPI(stream_id = STREAM_ID) # Stream ID can be base 10 or 36
 chat.clear_mailbox() # Erase messages that were still visible before we connected
 
