@@ -92,6 +92,10 @@ class HTMLComment(HTMLObj, BaseComment):
 
         self.user_badges = {badge.slug: badge for badge in badges_unkeyed}
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(username='{self.username}', text=\"{self.text}\")"
+
     @property
     def is_first(self):
         """Is this comment the first one?"""
@@ -276,6 +280,10 @@ class HTMLChannel(HTMLObj):
         """The channel as a string (its slug)"""
         return self.slug
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(title=\"{self.title}\", channel_id={self.channel_id})"
+
     def __int__(self):
         """The channel as an integer (its numeric ID)"""
         return self.channel_id_b10
@@ -354,6 +362,10 @@ class HTMLVideo(HTMLObj):
     def __str__(self):
         """The video as a string (it's ID in base 36)"""
         return self.video_id_b36
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(title=\"{self.title}\", video_id={self.video_id})"
 
     def __eq__(self, other):
         """Determine if this video is equal to another.
@@ -444,6 +456,10 @@ class HTMLVideoSettings(HTMLObj):
 
         # The binary data of our thumbnail
         self.__thumbnail = None
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(title=\"{self.title}\")"
 
     @property
     def thumbnail_url(self):
@@ -542,6 +558,10 @@ class Scraper:
         """
 
         self.servicephp = servicephp
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(<{self.servicephp.username}>)"
 
     @property
     def session_cookie(self):

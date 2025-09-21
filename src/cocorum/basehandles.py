@@ -7,11 +7,17 @@ Copyright 2025 Wilbur Jaywright.
 
 This file is part of Cocorum.
 
-Cocorum is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Cocorum is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
 
-Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with Cocorum. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Lesser General Public License along
+with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
@@ -19,8 +25,10 @@ import requests
 from . import static
 from . import utils
 
+
 class BaseUserBadge:
     """A badge on a username"""
+
     def __eq__(self, other):
         """Check if this badge is equal to another.
 
@@ -45,6 +53,10 @@ class BaseUserBadge:
         """The chat user badge in string form"""
         return self.slug
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(slug='{self.slug}')"
+
     @property
     def icon(self):
         """The badge's icon as a bytestring"""
@@ -57,8 +69,10 @@ class BaseUserBadge:
 
         return self.__icon
 
+
 class BaseComment:
     """A comment on a Rumble video"""
+
     def __int__(self):
         """The comment in integer form (its ID)"""
         return self.comment_id
@@ -131,8 +145,13 @@ class BaseComment:
 
         return self.servicephp.rumbles(vote, self, item_type = 2)
 
+
 class BaseContentVotes:
     """Likes and dislikes on a video or comment"""
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(content_id={self.content_id}, score={self.score})"
 
     def __int__(self):
         """The integer form of the content votes"""
@@ -164,6 +183,7 @@ class BaseContentVotes:
 
         return False
 
+
 class BaseUser:
     """A Rumble user"""
 
@@ -181,17 +201,17 @@ class BaseUser:
         Comparison (bool, None): Did it fit the criteria?
         """
 
-        #Check for direct matches first
+        # Check for direct matches first
         if isinstance(other, int):
             return self.user_id_b10 == other
         if isinstance(other, str):
             return str(other) in (self.user_id_b36, self.username)
 
-        #Check for object attributes to match to
+        # Check for object attributes to match to
         if hasattr(other, "user_id"):
             return self.user_id_b10 == utils.ensure_b10(other.user_id)
 
-        #Check conversion to integer last, in case another ID or something happens to match
+        # Check conversion to integer last, in case another ID or something happens to match
         if hasattr(other, "__int__"):
             return self.user_id_b10 == int(other)
 
@@ -223,6 +243,7 @@ class BaseUser:
         """Unmute this user."""
         self.servicephp.unmute(self.username)
 
+
 class BasePlaylist:
     """A playlist of Rumble videos"""
 
@@ -233,6 +254,10 @@ class BasePlaylist:
     def __str__(self):
         """The playlist as a string (it's ID in base 64)"""
         return self.playlist_id_b64
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(playlist_id={self.playlist_id}, title=\"{self.title}\")"
 
     def __eq__(self, other):
         """Determine if this playlist is equal to another.
@@ -269,7 +294,7 @@ class BasePlaylist:
     def playlist_id_b10(self):
         """The numeric ID of the playlist in base 10"""
         raise NotImplementedError("See Cocorum issue #22")
-        # return utils.base_36_to_10(self.playlist_id)
+        # return utils.base_64_to_10(self.playlist_id)
 
     def add_video(self, video_id):
         """Add a video to this playlist
@@ -289,7 +314,7 @@ class BasePlaylist:
 
         self.servicephp.playlist_delete_video(self.playlist_id, video_id)
 
-    def edit(self, title: str = None, description: str = None, visibility: str = None, channel_id = None):
+    def edit(self, title: str = None, description: str = None, visibility: str = None, channel_id=None):
         """Edit the details of this playlist. WARNING: The original object will probably be stale after this operation.
 
     Args:

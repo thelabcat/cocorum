@@ -11,11 +11,17 @@ Copyright 2025 Wilbur Jaywright.
 
 This file is part of Cocorum.
 
-Cocorum is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Cocorum is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
 
-Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with Cocorum. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Lesser General Public License along
+with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
@@ -25,8 +31,10 @@ from . import static, scraping
 
 NotImplemented
 
+
 class AccountAPI:
     """Do things that involve apiKey"""
+
     def __init__(self, scraper):
         """Do things that involve apiKey
 
@@ -37,6 +45,10 @@ class AccountAPI:
         self.scraper = scraper
         self.apikey = scraper.get_acc_apikey()
         self.servicephp = self.scraper.servicephp
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(<working as '{self.servicephp.username}'>)"
 
     # def upload_closed_captions(self)
     # def edit_channel(self)
@@ -49,7 +61,7 @@ class AccountAPI:
     # def open_license_description(self)
     # def add_syndication_account(self)
 
-    def keyed_request(self, endpoint: str, action: str, params = {}, data = {}, method = "GET"):
+    def keyed_request(self, endpoint: str, action: str, params={}, data={}, method="GET"):
         """Make a Rumble API request with the apiKey
 
         Args:
@@ -71,11 +83,11 @@ class AccountAPI:
         r = requests.request(
             method,
             static.URI.rumble_base + endpoint,
-            params = params_all,
-            data = data,
-            headers = static.RequestHeaders.user_agent,
-            cookies = self.servicephp.session_cookie,
-            timeout = static.Delays.request_timeout,
+            params=params_all,
+            data=data,
+            headers=static.RequestHeaders.user_agent,
+            cookies=self.servicephp.session_cookie,
+            timeout=static.Delays.request_timeout,
             )
 
         assert r.status_code == 200, f"Keyed request failed with status {r.status_code}:\n" + \
@@ -91,7 +103,7 @@ class AccountAPI:
         Returns:
             settings (cocorum.scraping.HTMLVideoSettings): The data"""
 
-        r = self.keyed_request("/account/content", "edit", {"id": video_id}, method = "POST")
+        r = self.keyed_request("/account/content", "edit", {"id": video_id}, method="POST")
         soup = bs4.BeautifulSoup(r.text, features="html.parser")
         return scraping.HTMLVideoSettings(soup, self.servicephp)
 
@@ -168,8 +180,8 @@ class AccountAPI:
                 "title": old_data.title,
                 "description": old_data.description,
                 "tags": static.Misc.tag_split.join(old_data.tags),
-                "is_featured_for_channel": "0", # str(old_data.channel_featured), TODO
-                "is_featured_for_user": "0", # str(old_data.profile_featured), TODO
+                "is_featured_for_channel": "0",  # str(old_data.channel_featured), TODO
+                "is_featured_for_user": "0",  # str(old_data.profile_featured), TODO
                 "visibility": old_data.visibility,
                 "channelId": str(old_data.channel[1]),
                 "siteChannelId": str(old_data.category_primary[1]),
@@ -187,11 +199,11 @@ class AccountAPI:
 
         print(data)
 
-        r = self.keyed_request(endpoint = "/account/content", action = "edit", params = {"id": video_id, "sid": 8}, data = data, method = "POST")
+        r = self.keyed_request(endpoint="/account/content", action="edit", params={"id": video_id, "sid": 8}, data=data, method="POST")
 
         assert r.text.strip() == static.Misc.video_edit_success, str(r.content)
 
-    def get_closed_captions(self, video_id: int, lang = "en"):
+    def get_closed_captions(self, video_id: int, lang="en"):
         """Get the closed captions for a video
 
         Args:
@@ -204,7 +216,7 @@ class AccountAPI:
                 or None if they do not exist in this language.
         """
 
-        v = self.keyed_request("/api/Media/GetClosedCaptions", params = {
+        v = self.keyed_request("/api/Media/GetClosedCaptions", params={
             "mid": video_id,
             "language": lang,
             }).json()["return"]

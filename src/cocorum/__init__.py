@@ -99,6 +99,10 @@ from .jsonhandles import JSONObj, JSONUserAction
 class Follower(JSONUserAction):
     """Rumble follower"""
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(username='{self.username}', followed_on='{self.followed_on}')"
+
     @property
     def followed_on(self):
         """When the follower followed, in seconds since Epoch UTC"""
@@ -107,6 +111,10 @@ class Follower(JSONUserAction):
 
 class Subscriber(JSONUserAction):
     """Rumble subscriber"""
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(username='{self.username}', subscribed_on='{self.subscribed_on}', <for ${self.amount_cents / 100:.02f}>)"
 
     def __eq__(self, other):
         """Is this subscriber equal to another?
@@ -191,6 +199,10 @@ class StreamCategory(JSONObj):
         """The category in string form"""
         return self.title
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(slug='{self.slug}')"
+
 
 class Livestream:
     """Rumble livestream"""
@@ -235,8 +247,12 @@ class Livestream:
             return self.stream_id_b10 == other.stream_id_b10
 
     def __str__(self):
-        """The livestream in string form (it's ID in base 36)"""
+        """The livestream in string form (its ID in base 36)"""
         return self.stream_id
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(title=\"{self.title}\", stream_id={self.stream_id})"
 
     def __getitem__(self, key):
         """Return a key from the JSON, refreshing if necessary
@@ -361,6 +377,10 @@ class ChatMessage(JSONUserAction):
         """Message as a string (its content)"""
         return self.text
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(username='{self.username}', text=\"{self.text}\")"
+
     @property
     def text(self):
         """The message text"""
@@ -416,6 +436,10 @@ class Rant(ChatMessage):
             # Other object had no username attribute
             return self.text == other.text
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(username='{self.username}', text=\"{self.text}\", <for ${self.amount_cents / 100:.02f}>)"
+
     @property
     def expires_on(self):
         """When the rant will expire, in seconds since the Epoch UTC"""
@@ -446,6 +470,10 @@ class LiveChat:
         self.api = stream.api
         self.last_newmessage_time = 0  # Last time we were checked for "new" messages
         self.last_newrant_time = 0  # Last time we were checked for "new" rants
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(<for stream {self.stream.stream_id_b10}>)"
 
     def __getitem__(self, key):
         """Return a key from the stream's chat JSON"""
@@ -564,6 +592,10 @@ class GiftedSub(JSONObj):
     #
     #         return self._jsondata[key]
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(purchased_by='{self.purchased_by}')"
+
     @property
     def total_gifts(self) -> int:
         """The number of subscriptions in this gift"""
@@ -624,7 +656,7 @@ class RumbleAPI:
 
         self.refresh_rate = refresh_rate
         if rumbot_mode is None:
-            self._rumbot_mode = api_url.endswith(static.URL.rumbot_suffix)
+            self._rumbot_mode = api_url.endswith(static.URI.rumbot_suffix)
         else:
             self._rumbot_mode = rumbot_mode
 
@@ -642,6 +674,10 @@ class RumbleAPI:
                 f"Cocorum set to over-refresh, rate of {self.refresh_rate} seconds (less than {static.Delays.api_refresh_minimum})."
                 + "Superscript must self-limit or Rumble will reject queries!"
             )
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(username='{self.username}', channel_name='{self.channel_name}')"
 
     @property
     def api_url(self):

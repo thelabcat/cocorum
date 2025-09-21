@@ -7,17 +7,23 @@ Copyright 2025 Wilbur Jaywright.
 
 This file is part of Cocorum.
 
-Cocorum is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Cocorum is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
 
-Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with Cocorum. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Lesser General Public License along
+with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
 import time
 import requests
-import json5 as json # For parsing SSE message data
+import json5 as json  # For parsing SSE message data
 import sseclient
 from .basehandles import *
 from .jsonhandles import JSONObj, JSONUserAction
@@ -29,6 +35,7 @@ from . import utils
 
 class ChatAPIObj(JSONObj):
     """Object in the internal chat API"""
+
     def __init__(self, jsondata, chat):
         """Object in the internal chat API
 
@@ -43,6 +50,7 @@ class ChatAPIObj(JSONObj):
 
 class Chatter(JSONUserAction, ChatAPIObj):
     """A user or channel in the internal chat API (abstract)"""
+
     def __init__(self, jsondata, chat):
         """A user or channel in the internal chat API (abstract)
 
@@ -53,6 +61,10 @@ class Chatter(JSONUserAction, ChatAPIObj):
         ChatAPIObj.__init__(self, jsondata, chat)
         JSONUserAction.__init__(self, jsondata)
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(username=\"{self.username}\", user_id={self.user_id}, channel_id={self.channel_id})"
+
     @property
     def link(self):
         """The user's subpage of Rumble.com"""
@@ -61,6 +73,7 @@ class Chatter(JSONUserAction, ChatAPIObj):
 
 class User(Chatter, BaseUser):
     """User in the internal chat API"""
+
     def __init__(self, jsondata, chat):
         """A user in the internal chat API
 
@@ -70,8 +83,8 @@ class User(Chatter, BaseUser):
         """
 
         Chatter.__init__(self, jsondata, chat)
-        self.previous_channel_ids = [] # List of channels the user has appeared as, including the current one
-        self._set_channel_id = None # Channel ID set from message
+        self.previous_channel_ids = []  # List of channels the user has appeared as, including the current one
+        self._set_channel_id = None  # Channel ID set from message
         self.servicephp = self.chat.servicephp
 
     @property
@@ -223,6 +236,10 @@ class GiftPurchaseNotification(ChatAPIObj):
         super().__init__(jsondata, message.chat)
         self.message = message
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(purchased_by='{self.purchased_by}', <for ${self.message.amount_cents / 100:.02f}>)"
+
     @property
     def total_gifts(self) -> int:
         """The number of subscriptions in this gift"""
@@ -341,6 +358,10 @@ class Message(ChatAPIObj):
     def __str__(self):
         """The chat message in string form"""
         return self.text
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(<from '{self.user.username}'>, text=\"{self.text}\")"
 
     def __int__(self):
         """The chat message in integer (ID) form"""
@@ -509,11 +530,11 @@ class ChatAPI():
         # Generate our URLs
         self.sse_url = static.URI.ChatAPI.sse_stream.format(stream_id_b10 = self.stream_id_b10)
         print("SSE stream URL:", self.sse_url)
-        self.message_api_url = static.URI.ChatAPI.message.format(stream_id_b10 = self.stream_id_b10)
+        self.message_api_url = static.URI.ChatAPI.message.format(stream_id_b10=self.stream_id_b10)
 
         #  Connect to SSE stream
         #  Note: We do NOT want this request to have a timeout
-        self.response = requests.get(self.sse_url, stream = True, headers = static.RequestHeaders.sse_api)
+        self.response = requests.get(self.sse_url, stream=True, headers=static.RequestHeaders.sse_api)
         self.client = sseclient.SSEClient(self.response)
         self.event_generator = self.client.events()
         self.chat_running = True
@@ -530,6 +551,10 @@ class ChatAPI():
 
         #  The last time we sent a message
         self.last_send_time = 0
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(stream_id={self.stream_id})"
 
     def close(self):
         """Close the chat connection"""

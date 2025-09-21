@@ -7,11 +7,17 @@ Copyright 2025 Wilbur Jaywright.
 
 This file is part of Cocorum.
 
-Cocorum is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Cocorum is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
 
-Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with Cocorum. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Lesser General Public License along
+with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
@@ -26,8 +32,14 @@ from . import scraping
 from . import static
 from . import utils
 
+
 class UploadResponse(JSONObj):
     """Response to a successful video upload"""
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(fid={self.fid}, title=\"{self.title}\")"
+
     @property
     def url(self):
         """The video viewing URL"""
@@ -63,8 +75,14 @@ class UploadResponse(JSONObj):
         """HTML to use for embedding the video with monetization"""
         return self["embedMonetize"]
 
+
 class UploadPHP:
     """Upload videos to Rumble"""
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(<{self.servicephp.username}>)"
+
     def __init__(self, servicephp):
         """Upload videos to Rumble.
 
@@ -294,11 +312,11 @@ class UploadPHP:
         start_time = int(time.time() * 1000)
 
         # IDK if the second half of this is correct, TODO
-        self.__cur_upload_id = f"{start_time}-{random.randrange(1000000) :06}"
+        self.__cur_upload_id = f"{start_time}-{random.randrange(1000000):06}"
 
         # Is the file large enough that it needs to be chunked
         # TODO: This is a very dumb fix for issue #24
-        if True: # self.__cur_file_size > static.Upload.chunksz:
+        if True:  # self.__cur_file_size > static.Upload.chunksz:
             # Number of chunks we will need to do, rounded up
             self.__cur_num_chunks = self.__cur_file_size // static.Upload.chunksz + 1
             server_filename = self._chunked_vidfile_upload(file_path)
@@ -355,7 +373,7 @@ class UploadPHP:
             "title": title,
             "description": kwargs.get("description", ""),
             "video[]": server_filename,
-            "featured": "6", # Never seems to change
+            "featured": "6",  # Never seems to change
             "rights": "1",
             "terms": "1",
             "facebookUpload": "",
@@ -369,19 +387,19 @@ class UploadPHP:
             "siteChannelId": str(category1),
             "mediaChannelId": str(category2),
             "isGamblingRelated": "false",
-            "set_default_channel_id": "0", # Set to 1 to "Set this channel as default" on Rumble
+            "set_default_channel_id": "0",  # Set to 1 to "Set this channel as default" on Rumble
             # Scheduled visibility takes precedent over visibility setting
             "visibility": kwargs.get("visibility", "public") if not kwargs.get("scheduled_publish") else "private",
             "availability": kwargs.get("availability", "free"),
             "file_meta": {
-                "name": os.path.basename(file_path), # File name
-                "modified": int(os.path.getmtime(file_path) * 1000), # Timestamp file was modified, miliseconds
-                "size": self.__cur_file_size, # Exact length of entire MP4 file in bytes
+                "name": os.path.basename(file_path),  # File name
+                "modified": int(os.path.getmtime(file_path) * 1000),  # Timestamp file was modified, miliseconds
+                "size": self.__cur_file_size,  # Exact length of entire MP4 file in bytes
                 "type": mimetypes.guess_file_type(file_path)[0],
-                "time_start": start_time, # Timestamp file started uploading, miliseconds
+                "time_start": start_time,  # Timestamp file started uploading, miliseconds
                 "speed": int(self.__cur_file_size / (end_time - start_time) * 1000),
                 "num_chunks": self.__cur_num_chunks,
-                "time_end": end_time, # Timestamp we finished uploading, miliseconds
+                "time_end": end_time,  # Timestamp we finished uploading, miliseconds
                 },
             "schedulerDatetime": utils.form_timestamp(kwargs.get("scheduled_publish")) if kwargs.get("scheduled_publish") else "",
             "thumb": str(thumbnail),

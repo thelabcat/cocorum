@@ -74,6 +74,10 @@ class APIComment(JSONObj, BaseComment):
         if self.get("comment_user_badges"):
             self.user_badges = {slug: APIUserBadge(slug, data) for slug, data in self["comment_user_badges"].items()}
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(user_display='{self.user_display}', text=\"{self.text}\")"
+
     @property
     def comment_id(self):
         """The numeric ID of the comment"""
@@ -166,6 +170,10 @@ class APIUser(JSONObj, BaseUser):
 
         # Our profile picture data
         self.__picture = None
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(username='{self.username}', user_id={self.user_id})"
 
     @property
     def user_id(self):
@@ -317,6 +325,10 @@ class TwoFacAuth(JSONObj):
         JSONObj.__init__(self, jsondata)
         self.servicephp = servicephp
 
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(<{self.servicephp.username}>)"
+
     @property
     def totp_id(self):
         """Is None when 2FA is disabled"""
@@ -421,6 +433,10 @@ class ServicePHP:
 
         # Stored ID of the logged in user
         self.__user_id = None
+
+    def __repr__(self):
+        """String to represent this object"""
+        return f"{type(self).__name__}(username={self.username}, <{'not ' * bool(self.session_cookie)}logged in>)"
 
     @property
     def user_id(self):
