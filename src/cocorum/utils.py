@@ -86,11 +86,10 @@ def parse_timestamp(timestamp: str) -> float:
         Timestamp (float): The same timestamp value, in seconds since Epoch, UTC.
         """
 
-    # Trims off the 6 TODO characters at the end
-    return calendar.timegm(time.strptime(timestamp[:-6], static.Misc.timestamp_format))
+    return calendar.timegm(time.strptime(timestamp, static.Misc.timestamp_format))
 
 
-def form_timestamp(seconds: float, suffix = "+00:00") -> str:
+def form_timestamp(seconds: float) -> str:
     """Form a Rumble timestamp.
 
     Args:
@@ -100,7 +99,7 @@ def form_timestamp(seconds: float, suffix = "+00:00") -> str:
         Timestamp (str): The same timestamp value, in Rumble's API format.
         """
 
-    return time.strftime(static.Misc.timestamp_format, time.gmtime(seconds)) + suffix
+    return time.strftime(static.Misc.timestamp_format, time.gmtime(seconds))
 
 
 def base_10_to_36(b10) -> str:
