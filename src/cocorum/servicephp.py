@@ -574,7 +574,7 @@ class ServicePHP:
         assert session_token, f"Login failed: No token returned\n{r.json()}"
 
         self.session_cookie = {static.Misc.session_token_key: session_token}
-        return True
+        return None
 
     def login_second_factor(self, two_fac_auth: TwoFacAuth, code: str) -> dict:
         """Complete login with a 2FA code.
