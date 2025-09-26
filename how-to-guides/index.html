@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.6f8fc17f.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.e53b48f4.min.css">
       
       
 
@@ -157,8 +157,10 @@
       <a href=".." class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Home
+    
   </span>
   
 
@@ -177,8 +179,10 @@
       <a href="../tutorials/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Tutorials
+    
   </span>
   
 
@@ -206,8 +210,10 @@
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
+  
   <span class="md-ellipsis">
     How-To Guides
+    
   </span>
   
 
@@ -217,8 +223,10 @@
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
+  
   <span class="md-ellipsis">
     How-To Guides
+    
   </span>
   
 
@@ -266,6 +274,7 @@
     
     
     
+    
     <li class="md-nav__item md-nav__item--nested">
       
         
@@ -276,8 +285,10 @@
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
+  
   <span class="md-ellipsis">
     Reference
+    
   </span>
   
 
@@ -301,8 +312,10 @@
       <a href="../modules_ref/cocorum_main/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum
+    
   </span>
   
 
@@ -322,8 +335,10 @@
       <a href="../modules_ref/cocorum_chatapi/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.chatapi
+    
   </span>
   
 
@@ -343,8 +358,10 @@
       <a href="../modules_ref/cocorum_servicephp/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.servicephp
+    
   </span>
   
 
@@ -364,8 +381,10 @@
       <a href="../modules_ref/cocorum_uploadphp/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.uploadphp
+    
   </span>
   
 
@@ -385,8 +404,10 @@
       <a href="../modules_ref/cocorum_scraping/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.scraping
+    
   </span>
   
 
@@ -406,8 +427,10 @@
       <a href="../modules_ref/cocorum_jsonhandles/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.jsonhandles
+    
   </span>
   
 
@@ -427,8 +450,10 @@
       <a href="../modules_ref/cocorum_basehandles/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.basehandles
+    
   </span>
   
 
@@ -448,8 +473,10 @@
       <a href="../modules_ref/cocorum_utils/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.utils
+    
   </span>
   
 
@@ -469,8 +496,10 @@
       <a href="../modules_ref/cocorum_static/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.static
+    
   </span>
   
 
@@ -497,8 +526,10 @@
       <a href="../explanation/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Explanation
+    
   </span>
   
 
@@ -557,6 +588,7 @@
                   
 
 
+
 <h1 id="how-to-guides">How-To Guides</h1>
 <h2 id="iterate-through-all-comments-under-all-videos-and-mute-spam-bots-based-on-your-custom-detection-algorithm">Iterate through all comments under all videos, and mute spam bots based on your custom detection algorithm</h2>
 <pre><code>#!/usr/bin/env python3
@@ -570,7 +602,11 @@ S.D.G.&quot;&quot;&quot;
 import getpass
 from cocorum import servicephp, scraping
 
-USERNAME, PASSWORD = input(&quot;Username: &quot;), getpass(&quot;Password: &quot;)
+USERNAME, PASSWORD = input(&quot;Username: &quot;), getpass.getpass(&quot;Password: &quot;)
+
+# Order of preference for 2FA options
+TWOFA_PREFERENCE = &quot;authenticator&quot;, &quot;email&quot;, &quot;phone&quot;
+
 
 def is_spam_comment(comment):
     &quot;&quot;&quot;Detect if comment is spam. DUMMY STUB.
@@ -585,42 +621,60 @@ def is_spam_comment(comment):
     NotImplemented
     return False
 
-#Log in to Rumble
+
+# Log in to Rumble
 print(&quot;Logging in...&quot;)
-sphp = servicephp.ServicePHP(USERNAME, PASSWORD)
+sphp = servicephp.ServicePHP(USERNAME)
+twoFA = sphp.login_basic(PASSWORD)
+if twoFA:
+    print(&quot;2FA enabled.&quot;)
 
-#Get all videos under user
-print(&quot;Getting all videos (slow)...&quot;)
+    # Automatically pick the most preferred 2FA method
+    opt = min(twoFA.options, key=TWOFA_PREFERENCE.index)
+    print(f&quot;Using 2FA option '{opt}'...&quot;)
+    sent_to = twoFA.request_2fa_code(opt)
+
+    if sent_to:
+        print(f&quot;2FA code sent to '{sent_to}'&quot;)
+
+    code = input(&quot;Enter the 2FA code: &quot;)
+    sphp.login_second_factor(twoFA, code)
+print(&quot;Logged in.&quot;)
+
+# Get all videos under user
+print(&quot;Getting last ten videos...&quot;)
 scraper = scraping.Scraper(sphp)
-videos = scraper.get_videos()
+videos = scraper.get_videos(max_num=10)
 
-#Record of muted users to avoid double-action
+# Record of muted users to avoid double-action
 mutes = set()
 
-#For each video, get the comments
+# For each video, get the comments
 for video in videos:
     print(f&quot;Getting comments on video #{video.video_id_b10}: '{video.title}'...&quot;)
     comments = sphp.comment_list(video.video_id_b36)
 
-    #Bit of formatting at the end to make sure the word comment is singular only when there is exactly one comment, just for niceness
+    # Bit of formatting at the end to make sure the word 'comment' is singular
+    # only when there is exactly one comment, just for niceness
     print(f&quot;Got {len(comments)} comment{'s' * (len(comments) != 1)}.&quot;)
 
-    #Do the actual filtering
+    # Do the actual filtering
     for comment in comments:
-        #Avoid duplicate action
+        # Avoid duplicate action
         if comment.username in mutes:
             print(f&quot;Another comment by previous mute '{comment.username}', skipping...&quot;)
             continue
 
-        #Comment was found guilty
+        # Comment was found guilty
         if is_spam_comment(comment):
             print(f&quot;Comment by '{comment.username}' detected as spam:\n\t{comment.text}&quot;)
 
-            #Have the user confirm, and then take action against the offender
+            # Have the user confirm, and then take action against the offender
             if &quot;y&quot; in input(&quot;Mute user (deletes all their comments)? [y/N]:&quot;).lower():
                 sphp.mute_user(comment.user, total = True)
 
 print(&quot;Done.&quot;)
+
 </code></pre>
 
 
@@ -668,10 +722,12 @@ print(&quot;Done.&quot;)
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
       
     
   </body>

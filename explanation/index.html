@@ -14,7 +14,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
     
     
       
@@ -22,7 +22,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.6f8fc17f.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.e53b48f4.min.css">
       
       
 
@@ -155,8 +155,10 @@
       <a href=".." class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Home
+    
   </span>
   
 
@@ -175,8 +177,10 @@
       <a href="../tutorials/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Tutorials
+    
   </span>
   
 
@@ -195,8 +199,10 @@
       <a href="../how-to-guides/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     How-To Guides
+    
   </span>
   
 
@@ -215,6 +221,7 @@
     
     
     
+    
     <li class="md-nav__item md-nav__item--nested">
       
         
@@ -225,8 +232,10 @@
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
+  
   <span class="md-ellipsis">
     Reference
+    
   </span>
   
 
@@ -250,8 +259,10 @@
       <a href="../modules_ref/cocorum_main/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum
+    
   </span>
   
 
@@ -271,8 +282,10 @@
       <a href="../modules_ref/cocorum_chatapi/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.chatapi
+    
   </span>
   
 
@@ -292,8 +305,10 @@
       <a href="../modules_ref/cocorum_servicephp/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.servicephp
+    
   </span>
   
 
@@ -313,8 +328,10 @@
       <a href="../modules_ref/cocorum_uploadphp/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.uploadphp
+    
   </span>
   
 
@@ -334,8 +351,10 @@
       <a href="../modules_ref/cocorum_scraping/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.scraping
+    
   </span>
   
 
@@ -355,8 +374,10 @@
       <a href="../modules_ref/cocorum_jsonhandles/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.jsonhandles
+    
   </span>
   
 
@@ -376,8 +397,10 @@
       <a href="../modules_ref/cocorum_basehandles/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.basehandles
+    
   </span>
   
 
@@ -397,8 +420,10 @@
       <a href="../modules_ref/cocorum_utils/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.utils
+    
   </span>
   
 
@@ -418,8 +443,10 @@
       <a href="../modules_ref/cocorum_static/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     cocorum.static
+    
   </span>
   
 
@@ -455,8 +482,10 @@
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
+  
   <span class="md-ellipsis">
     Explanation
+    
   </span>
   
 
@@ -466,8 +495,10 @@
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
+  
   <span class="md-ellipsis">
     Explanation
+    
   </span>
   
 
@@ -609,6 +640,7 @@
                   
 
 
+
 <h1 id="explanation">Explanation</h1>
 <h2 id="why-i-created-this-library">Why I created this library</h2>
 <p>This wrapper library started off as an idea I got while writing <a href="https://github.com/thelabcat/rumble-chat-poll">this app for taking chat polls</a>, but at first I dismissed it as overengineering. That app turned out to be kind of a mess of threading, and although that wasn't entirely the API access code's fault, it felt like a big part of it. I was used to neat wrappers, and didn't like having to go through a bunch of dictionary keys, keeping track of some while repeating others, and having to do checks to make sure they were still valid. I might've avoided some of this if I'd known about the <code>dict().get()</code> method at the time, but I'm kinda glad I didn't. Later, when I started thinking about writing another Rumble app, I realized how much of the API access code I would be reusing, especially the part where I made sure I didn't query it too frequently or too rarely to stay up-to-date. An object with a refresh timer would be useful. And so I wrote Cocorum. Later, GlobalGamer2015 helped me understand the SSE chat stream API and how to use it, and I added that as a submodule. K4nji later helped me understand the hashing algorithm that a3r0id had discovered, and helped me figure out a bunch of other endpoints, adding login and multiple other submodules. Both have continued to help me, and I thank The LORD for that. If Jesus hadn't gotten us together, this package would not exist to nearly this degree if at all.</p>
@@ -666,10 +698,12 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
       
     
   </body>
