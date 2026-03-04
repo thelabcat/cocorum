@@ -375,6 +375,7 @@ class TwoFacAuth(JSONObj):
                     "totp_id": self.totp_id,
                     "user_key": self.user_key,
                     },
+                logged_in=False,
                 )
             return r.json()["data"]["sent_to"]
 
@@ -385,6 +386,7 @@ class TwoFacAuth(JSONObj):
                     "totp_id": self.totp_id,
                     "user_key": self.user_key,
                     },
+                logged_in=False,
                 )
             return r.json()["data"]["sent_to"]
 
