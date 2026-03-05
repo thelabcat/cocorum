@@ -1,4 +1,4 @@
-<h1><img src="https://raw.githubusercontent.com/thelabcat/cocorum/main/src/docs/assets/cocorum_icon.png" alt="" width="64"/> Cocorum: Rumble Live Stream API Python Wrapper</h1>
+<h1><img src="https://raw.githubusercontent.com/thelabcat/cocorum/master/src/docs/assets/cocorum_icon.png" alt="" width="64"/> Cocorum: Rumble Live Stream API Python Wrapper</h1>
 
 A Python wrapper for the Rumble Live Stream API v1.0 (beta), with some quality of life additions, such as:
 
