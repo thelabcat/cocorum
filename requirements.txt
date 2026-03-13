@@ -1,2 +1,4 @@
 requests
 requests-sse
+json-five
+beautifulsoup4
