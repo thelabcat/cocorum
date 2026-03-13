@@ -24,7 +24,7 @@ S.D.G."""
 import time
 import requests
 import json5 as json  # For parsing SSE message data
-from requests-sse import client as ssec
+from requests_sse import client as ssec
 from .basehandles import *
 from .jsonhandles import JSONObj, JSONUserAction
 from .servicephp import ServicePHP
@@ -535,6 +535,7 @@ class ChatAPI():
         #  Connect to SSE stream
         #  Note: We do NOT want this request to have a timeout
         self.client = ssec.EventSource(self.sse_url, headers=static.RequestHeaders.sse_api)
+        self.client.connect()
         self.chat_running = True
 
         #  If we have session login, use it
