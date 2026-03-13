@@ -24,7 +24,7 @@ S.D.G."""
 import time
 import requests
 import json5 as json  # For parsing SSE message data
-import sseclient
+from requests-sse import client as ssec
 from .basehandles import *
 from .jsonhandles import JSONObj, JSONUserAction
 from .servicephp import ServicePHP
@@ -534,9 +534,7 @@ class ChatAPI():
 
         #  Connect to SSE stream
         #  Note: We do NOT want this request to have a timeout
-        self.response = requests.get(self.sse_url, stream=True, headers=static.RequestHeaders.sse_api)
-        self.client = sseclient.SSEClient(self.response)
-        self.event_generator = self.client.events()
+        self.client = ssec.EventSource(self.sse_url, headers=static.RequestHeaders.sse_api)
         self.chat_running = True
 
         #  If we have session login, use it
@@ -558,7 +556,7 @@ class ChatAPI():
 
     def close(self):
         """Close the chat connection"""
-        self.response.close()
+        self.client.close()
         self.chat_running = False
 
     @property
@@ -738,7 +736,9 @@ class ChatAPI():
             return
 
         try:
-            event = next(self.event_generator, None)
+            event = next(self.client, None)
+
+        # TODO: Will this ever happen?
         except requests.exceptions.ReadTimeout:
             print("Request read timeout.")
             event = None

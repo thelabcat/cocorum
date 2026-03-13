@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cocorum"
-version = "2.12.1"
+version = "2.13.0"
 keywords = ["rumble", "api", "wrapper", "livestream"]
 authors = [
   { name="Wilbur Jaywright", email="zargulthewizard@outlook.com" },
@@ -16,7 +16,7 @@ dependencies = [
   "beautifulsoup4",
   "json-five",
   "requests",
-  "sseclient-py", #Only for the Rumble chat SSE stream
+  "requests-sse", #Only for the Rumble chat SSE stream
   ]
 classifiers = [
     "Programming Language :: Python :: 3",
