@@ -417,7 +417,7 @@ class ServicePHP:
 
         # Session is the token directly
         if isinstance(session, str):
-            self.session_cookie = {static.Misc.session_token_key, session}
+            self.session_cookie = {static.Misc.session_token_key: session}
 
         # Session is a cookie dict
         elif isinstance(session, dict):
@@ -578,7 +578,7 @@ class ServicePHP:
         self.session_cookie = {static.Misc.session_token_key: session_token}
         return None
 
-    def login_second_factor(self, two_fac_auth: TwoFacAuth, code: str) -> dict:
+    def login_second_factor(self, two_fac_auth: TwoFacAuth, code: str):
         """Complete login with a 2FA code.
 
         Args:
@@ -603,6 +603,11 @@ class ServicePHP:
                 self.session_cookie = {static.Misc.session_token_key: piece.removeprefix(cookie_start).removesuffix(";")}
                 return
         raise ValueError("Login failed: Did not find session token in 2FA response headers.")
+
+    def logout(self):
+        """Log out this ServicePHP instance"""
+        self.sphp_request("user.logout", method="GET")
+        self.session_cookie = None
 
     def chat_pin(self, stream_id, message, unpin: bool = False):
         """Pin or unpin a message in a chat.
@@ -827,7 +832,7 @@ class ServicePHP:
 
         r = self.sphp_request(
             "playlist.add",
-            data = {
+            data={
                 "title": str(title),
                 "description": str(description),
                 "visibility": str(visibility),
@@ -855,7 +860,7 @@ class ServicePHP:
 
         r = self.sphp_request(
             "playlist.edit",
-            data = {
+            data={
                 "title": str(title),
                 "description": str(description),
                 "visibility": str(visibility),
