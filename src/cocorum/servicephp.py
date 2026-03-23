@@ -755,25 +755,6 @@ class ServicePHP:
             )
         return APIComment(r.json()["data"], self)
 
-    def rumbles(self, vote: int, item_id, item_type: int):
-        """Post a like or dislike.
-
-    Args:
-        vote (int): -1, 0, or 1 (0 means clear vote).
-        item_id (int): The numeric ID of whatever we are liking or disliking.
-        item_type (int): 1 for video, 2 for comment.
-        """
-
-        r = self.sphp_request(
-            "user.rumbles",
-            data={
-                "type": int(item_type),
-                "id": utils.ensure_b10(item_id),
-                "vote": int(vote),
-                },
-            )
-        return APIContentVotes(r.json()["data"])
-
     def get_video_url(self, video_id):
         """Get the URL of a Rumble video.
 
