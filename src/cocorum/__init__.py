@@ -217,7 +217,9 @@ class Livestream:
 
         self._jsondata = jsondata
         self.api = api
-        self.is_disappeared = False  # The livestream is in the API listing
+        self.is_disappeared: bool = False
+        """If the livestream has vanished from the main API listing. If True, that indicates livestream has ended."""
+
         self.__chat = LiveChat(self)
 
     def __eq__(self, other):
