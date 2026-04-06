@@ -183,6 +183,21 @@ while time.time() - start_time < 60 and (msg := chat.get_message()):
         print("(Hey, that was our message!)")
 ```
 
+When we are done with any `ServicePHP` instance, just to make less of an attack surface and possible confusion on the number of signed-in devices, we should do something about the still-valid session token cookie. We can do this with the `logout()` method, immediately invalidating the token:
+
+```python
+sphp.logout()
+```
+
+Or instead, we can make note of the token for later use:
+
+```python
+cookie: dict = sphp.session_cookie
+token: str = cookie[cocorum.static.Misc.session_token_key]
+```
+
+Pass either of these as the `session` parameter of `__init__()` method of a new `ServicePHP` instance to immediately log it in. This is equivalent to "Remember me" when signing in via your browser. This won't work with a token that has been logged out, though!
+
 ## Conclusion
 
 I haven't used everything these classes offer, just the basics. For example, you can save the `ServicePHP().session_cookie` attribute, and pass it to a `ServicePHP().__init__()` call next time, to avoid having to log in again. I.E., you can remember your sign-in. I recommend that you check the Reference section of this documentation.
