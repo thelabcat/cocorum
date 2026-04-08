@@ -21,15 +21,18 @@ with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
+from typing import Optional, SupportsInt, TYPE_CHECKING
 import requests
 from . import static
 from . import utils
+if TYPE_CHECKING:
+    from .servicephp import APIComment, APIPlaylist
 
 
 class BaseUserBadge:
     """A badge on a username"""
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Check if this badge is equal to another.
 
     Args:
@@ -49,21 +52,23 @@ class BaseUserBadge:
 
         return False
 
-    def __str__(self):
+    def __str__(self) -> str:
         """The chat user badge in string form"""
         return self.slug
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(slug='{self.slug}')"
 
     @property
-    def icon(self):
+    def icon(self) -> bytes:
         """The badge's icon as a bytestring"""
         if not self.__icon:  # We never queried the icon before
             # TODO make the timeout configurable
-            response = requests.get(self.icon_url, timeout = static.Delays.request_timeout)
-            assert response.status_code == 200, "Status code " + str(response.status_code)
+            response = requests.get(
+                self.icon_url, timeout=static.Delays.request_timeout)
+            assert response.status_code == 200, "Status code " + \
+                str(response.status_code)
 
             self.__icon = response.content
 
@@ -73,25 +78,27 @@ class BaseUserBadge:
 class BaseComment:
     """A comment on a Rumble video"""
 
-    def __int__(self):
+    def __int__(self) -> int:
         """The comment in integer form (its ID)"""
         return self.comment_id
 
-    def __str__(self):
+    def __str__(self) -> str:
         """The comment as a string (its text)"""
         return self.text
 
     @property
-    def comment_id_b10(self):
+    def comment_id_b10(self) -> int:
         """The base 10 ID of the comment"""
+        assert isinstance(
+            self.comment_id, int), "Contact the Cocorum developers, this is probably their mistake"
         return self.comment_id
 
     @property
-    def comment_id_b36(self):
+    def comment_id_b36(self) -> str:
         """The base 36 ID of the comment"""
         return utils.base_10_to_36(self.comment_id)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Determine if this comment is equal to another.
 
     Args:
@@ -131,37 +138,28 @@ class BaseComment:
 
         return self.servicephp.comment_delete(self)
 
-    def restore(self):
+    def restore(self) -> APIComment:
         """Un-delete this comment"""
 
         return self.servicephp.comment_restore(self)
-
-    def set_rumbles(self, vote: int):
-        """Post a like or dislike on this comment.
-
-    Args:
-        vote (int): -1, 0, or 1 (0 means clear vote).
-        """
-
-        return self.servicephp.rumbles(vote, self, item_type = 2)
 
 
 class BaseContentVotes:
     """Likes and dislikes on a video or comment"""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(content_id={self.content_id}, score={self.score})"
 
-    def __int__(self):
+    def __int__(self) -> int:
         """The integer form of the content votes"""
         return self.score
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Determine if this content votes is equal to another.
 
     Args:
-        other (int, str, HTMLContentVotes): Object to compare to.
+        other (int, str, BaseContentVotes): Object to compare to.
 
     Returns:
         Comparison (bool, None): Did it fit the criteria?
@@ -187,11 +185,11 @@ class BaseContentVotes:
 class BaseUser:
     """A Rumble user"""
 
-    def __int__(self):
+    def __int__(self) -> int:
         """The user as an integer (it's ID in base 10)"""
         return self.user_id_b10
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Determine if this user is equal to another.
 
     Args:
@@ -218,12 +216,12 @@ class BaseUser:
         return False
 
     @property
-    def user_id_b10(self):
+    def user_id_b10(self) -> int:
         """The numeric ID of the user in base 10"""
         return self.user_id
 
     @property
-    def user_id_b36(self):
+    def user_id_b36(self) -> str:
         """The numeric ID of the user in base 36"""
         return utils.base_10_to_36(self.user_id)
 
@@ -247,19 +245,19 @@ class BaseUser:
 class BasePlaylist:
     """A playlist of Rumble videos"""
 
-    def __int__(self):
+    def __int__(self) -> int:
         """The playlist as an integer (it's ID in base 10)"""
         return self.playlist_id_b10
 
-    def __str__(self):
+    def __str__(self) -> str:
         """The playlist as a string (it's ID in base 64)"""
         return self.playlist_id_b64
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(playlist_id={self.playlist_id}, title=\"{self.title}\")"
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Determine if this playlist is equal to another.
 
     Args:
@@ -286,49 +284,49 @@ class BasePlaylist:
         return False
 
     @property
-    def playlist_id_b64(self):
+    def playlist_id_b64(self) -> str:
         """The numeric ID of the playlist in base 64"""
         return self.playlist_id
 
     @property
-    def playlist_id_b10(self):
+    def playlist_id_b10(self) -> int:
         """The numeric ID of the playlist in base 10"""
         raise NotImplementedError("See Cocorum issue #22")
         # return utils.base_64_to_10(self.playlist_id)
 
-    def add_video(self, video_id):
+    def add_video(self, video_id: SupportsInt | str):
         """Add a video to this playlist
 
     Args:
-        video_id (int, str): The numeric ID of the video to add, in base 10 or 36.
+        video_id (SupportsInt | str): The numeric ID of the video to add, in base 10 or 36.
         """
 
         return self.servicephp.playlist_add_video(self.playlist_id, video_id)
 
-    def delete_video(self, video_id):
+    def delete_video(self, video_id: SupportsInt | str):
         """Remove a video from this playlist
 
     Args:
-        video_id (int, str): The numeric ID of the video to remove, in base 10 or 36.
+        video_id (SupportsInt | str): The numeric ID of the video to remove, in base 10 or 36.
         """
 
         self.servicephp.playlist_delete_video(self.playlist_id, video_id)
 
-    def edit(self, title: str = None, description: str = None, visibility: str = None, channel_id=None):
+    def edit(self, title: str = None, description: str = None, visibility: str = None, channel_id: Optional[SupportsInt | str] = None) -> APIPlaylist:
         """Edit the details of this playlist. WARNING: The original object will probably be stale after this operation.
 
-    Args:
-        title (str): The title of the playlist.
-            Defaults to staying the same.
-        description (str): Describe the playlist.
-            Defaults to staying the same.
-        visibility (str): Set to public, unlisted, or private via string.
-            Defaults to staying the same.
-        channel_id (int | str | None): The ID of the channel to have the playlist under. TODO: Cannot be retrieved!
-            Defaults to resetting to None.
+        Args:
+            title (str): The title of the playlist.
+                Defaults to staying the same.
+            description (str): Describe the playlist.
+                Defaults to staying the same.
+            visibility (str): Set to public, unlisted, or private via string.
+                Defaults to staying the same.
+            channel_id (SupportsInt | str): The ID of the channel to have the playlist under. TODO: Cannot be retrieved!
+                Defaults to resetting to None.
 
-    Returns:
-        playlist (APIPlaylist): The edit result.
+        Returns:
+            playlist (APIPlaylist): The edit result.
         """
 
         if title is None:

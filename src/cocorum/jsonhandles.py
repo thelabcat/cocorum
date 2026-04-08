@@ -28,7 +28,7 @@ from . import static
 class JSONObj():
     """Abstract class for handling a JSON data block as an object"""
 
-    def __init__(self, jsondata):
+    def __init__(self, jsondata: dict):
         """Abstract class for handling a JSON data block as an object.
 
     Args:
@@ -37,7 +37,7 @@ class JSONObj():
 
         self._jsondata = jsondata
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str):
         """Get a key from the JSON"""
         return self._jsondata[key]
 
@@ -50,7 +50,7 @@ class JSONObj():
 class JSONUserAction(JSONObj):
     """Abstract class for Rumble JSON user actions"""
 
-    def __init__(self, jsondata):
+    def __init__(self, jsondata: dict):
         """Abstract class for Rumble JSON user actions.
 
     Args:
@@ -60,7 +60,7 @@ class JSONUserAction(JSONObj):
         JSONObj.__init__(self, jsondata)
         self.__profile_pic = None
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Is this user equal to another?
 
     Args:
@@ -87,26 +87,26 @@ class JSONUserAction(JSONObj):
         if hasattr(self, "user_id_b36") and hasattr(other, "user_id_b36"):
             return self.user_id_b36 == other.user_id_b36
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Follower as a string"""
         return self.username
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(username='{self.username}')"
 
     @property
-    def username(self):
+    def username(self) -> str:
         """The username"""
         return self["username"]
 
     @property
-    def profile_pic_url(self):
+    def profile_pic_url(self) -> str:
         """The user's profile picture URL"""
         return self["profile_pic_url"]
 
     @property
-    def profile_pic(self):
+    def profile_pic(self) -> bytes:
         """The user's profile picture as a bytes string"""
         if not self.profile_pic_url:  # The profile picture is blank
             return b''

@@ -22,6 +22,7 @@ with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 S.D.G."""
 
 import time
+from typing import Optional, SupportsInt
 import requests
 import json5 as json  # For parsing SSE message data
 from requests_sse import client as ssec
@@ -36,37 +37,38 @@ from . import utils
 class ChatAPIObj(JSONObj):
     """Object in the internal chat API"""
 
-    def __init__(self, jsondata, chat):
+    def __init__(self, jsondata: dict, chat: ChatAPI):
         """Object in the internal chat API
 
     Args:
-        jsondata (dict): The JSON data block for the object.
-        chat (ChatAPI): The ChatAPI object that spawned us.
+        jsondata (dict): The JSON data block for the object
+        chat (ChatAPI): Our parent chat API wrapper
         """
 
         JSONObj.__init__(self, jsondata)
-        self.chat = chat
+        self.chat: ChatAPI = chat
+        """Our parent chat API wrapper"""
 
 
 class Chatter(JSONUserAction, ChatAPIObj):
     """A user or channel in the internal chat API (abstract)"""
 
-    def __init__(self, jsondata, chat):
+    def __init__(self, jsondata: dict, chat: ChatAPI):
         """A user or channel in the internal chat API (abstract)
 
-    Args:
-        jsondata (dict): The JSON data block for the user/channel.
-        chat (ChatAPI): The ChatAPI object that spawned us.
+        Args:
+            jsondata (dict): The JSON data block for the user/channel
+            chat (ChatAPI): Our parent chat API wrapper
         """
         ChatAPIObj.__init__(self, jsondata, chat)
         JSONUserAction.__init__(self, jsondata)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(username=\"{self.username}\", user_id={self.user_id}, channel_id={self.channel_id})"
 
     @property
-    def link(self):
+    def link(self) -> str:
         """The user's subpage of Rumble.com"""
         return self["link"]
 
@@ -74,26 +76,31 @@ class Chatter(JSONUserAction, ChatAPIObj):
 class User(Chatter, BaseUser):
     """User in the internal chat API"""
 
-    def __init__(self, jsondata, chat):
+    def __init__(self, jsondata: dict, chat: ChatAPI):
         """A user in the internal chat API
 
     Args:
-        jsondata (dict): The JSON data block for the user.
-        chat (ChatAPI): The ChatAPI object that spawned us.
+        jsondata (dict): The JSON data block for the user
+        chat (ChatAPI): Our parent chat API wrapper
         """
 
         Chatter.__init__(self, jsondata, chat)
-        self.previous_channel_ids = []  # List of channels the user has appeared as, including the current one
-        self._set_channel_id = None  # Channel ID set from message
-        self.servicephp = self.chat.servicephp
+        self.previous_channel_ids: list[int] = []
+        """A list of channels the user has appeared as, including the current one"""
+
+        self._set_channel_id: int = None
+        """Channel ID set from message"""
+
+        self.servicephp: Optional[ServicePHP] = self.chat.servicephp
+        """Our parent chat API's ServicePHP instance, if it has one"""
 
     @property
-    def user_id(self):
+    def user_id(self) -> int:
         """The numeric ID of the user in base 10"""
         return int(self["id"])
 
     @property
-    def channel_id(self):
+    def channel_id(self) -> int:
         """The numeric channel ID that the user is appearing with in base 10"""
 
         # Try to get our channel ID from our own JSON (may be deprecated)
@@ -109,29 +116,29 @@ class User(Chatter, BaseUser):
         return new
 
     @property
-    def channel_id_b10(self):
+    def channel_id_b10(self) -> int:
         """The numeric channel ID that the user is appearing with in base 10"""
         return self.channel_id
 
     @property
-    def channel_id_b36(self):
+    def channel_id_b36(self) -> str:
         """The numeric channel ID that the user is appearing with in base 36"""
         if not self.channel_id:
             return
         return utils.base_10_to_36(self.channel_id)
 
     @property
-    def is_follower(self):
+    def is_follower(self) -> bool:
         """Is this user following the livestreaming channel?"""
         return self["is_follower"]
 
     @property
-    def color(self):
+    def color(self) -> tuple[int, int, int]:
         """The color of our username (RGB tuple)"""
         return tuple(int(self["color"][i: i + 2], 16) for i in range(0, 6, 2))
 
     @property
-    def badges(self):
+    def badges(self) -> list[str]:
         """Badges the user has"""
         try:
             return [self.chat.badges[badge_slug] for badge_slug in self["badges"]]
@@ -144,54 +151,57 @@ class User(Chatter, BaseUser):
 class Channel(Chatter):
     """A channel in the SSE chat"""
 
-    def __init__(self, jsondata, chat):
+    def __init__(self, jsondata: dict, chat: ChatAPI):
         """A channel in the internal chat API
 
     Args:
-        jsondata (dict): The JSON data block for the channel.
-        chat (ChatAPI): The ChatAPI object that spawned us.
+        jsondata (dict): The JSON data block for the channel
+        chat (ChatAPI): Our parent chat API wrapper
         """
 
         super().__init__(jsondata, chat)
 
         # Find the user who has this channel
+        self.user: Optional[User] = None
+        """The user who owns this channel, if we can find them from the chat's user dict"""
+
         for user in self.chat.users.values():
             if user.channel_id == self.channel_id or self.channel_id in user.previous_channel_ids:
                 self.user = user
                 break
 
     @property
-    def is_appearing(self):
+    def is_appearing(self) -> bool:
         """Is the user of this channel still appearing as it?"""
         return self.user.channel_id == self.channel_id  # The user channel_id still matches our own
 
     @property
-    def channel_id(self):
+    def channel_id(self) -> int:
         """The ID of this channel in base 10"""
         return int(self["id"])
 
     @property
-    def channel_id_b10(self):
+    def channel_id_b10(self) -> int:
         """The ID of this channel in base 10"""
         return self.channel_id
 
     @property
-    def channel_id_b36(self):
+    def channel_id_b36(self) -> str:
         """The ID of this channel in base 36"""
         return utils.base_10_to_36(self.channel_id)
 
     @property
-    def user_id(self):
-        """The numeric ID of the user of this channel"""
+    def user_id(self) -> int:
+        """The numeric ID of the user of this channel in base 10"""
         return self.user.user_id
 
     @property
-    def user_id_b36(self):
+    def user_id_b36(self) -> str:
         """The numeric ID of the user of this channel in base 36"""
         return self.user.user_id_b36
 
     @property
-    def user_id_b10(self):
+    def user_id_b10(self) -> int:
         """The numeric ID of the user of this channel in base 10"""
         return self.user.user_id_b10
 
@@ -199,25 +209,28 @@ class Channel(Chatter):
 class UserBadge(ChatAPIObj, BaseUserBadge):
     """A badge of a user"""
 
-    def __init__(self, slug, jsondata, chat):
+    def __init__(self, slug: str, jsondata: dict, chat: ChatAPI):
         """A user badge in the internal chat API
 
     Args:
-        jsondata (dict): The JSON data block for the user badge.
-        chat (ChatAPI): The ChatAPI object that spawned us.
+        slug (str): The unique identification for this badge
+        jsondata (dict): The JSON data block for the user badge
+        chat (ChatAPI): Our parent chat API wrapper
         """
 
         ChatAPIObj.__init__(self, jsondata, chat)
-        self.slug = slug  # The unique identification for this badge
+        self.slug: str = slug
+        """The unique identification for this badge"""
+
         self.__icon = None
 
     @property
-    def label(self):
+    def label(self) -> dict[str, str]:
         """A dictionary of lang:label pairs"""
         return self["label"]
 
     @property
-    def icon_url(self):
+    def icon_url(self) -> str:
         """The URL of the badge's icon"""
         return static.URI.rumble_base + self["icons"][static.Misc.badge_icon_size]
 
@@ -225,18 +238,19 @@ class UserBadge(ChatAPIObj, BaseUserBadge):
 class GiftPurchaseNotification(ChatAPIObj):
     """A subscription gift under a message"""
 
-    def __init__(self, jsondata, message):
+    def __init__(self, jsondata: str, message: Message):
         """A subscription gift under a message
 
     Args:
         jsondata (dict): The JSON data block for the message.
-        message (Message): The ChatAPI message object we are under
+        message (Message): Our parent ChatAPI message
         """
 
         super().__init__(jsondata, message.chat)
-        self.message = message
+        self.message: Message = message
+        """Our parent ChatAPI message"""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(purchased_by='{self.purchased_by}', <for ${self.message.amount_cents / 100:.02f}>)"
 
@@ -304,12 +318,12 @@ class GiftPurchaseNotification(ChatAPIObj):
 class Message(ChatAPIObj):
     """A single chat message in the internal chat API"""
 
-    def __init__(self, jsondata, chat):
+    def __init__(self, jsondata: dict, chat: ChatAPI):
         """A single chat message in the internal chat API
 
     Args:
-        jsondata (dict): The JSON data block for the message.
-        chat (ChatAPI): The ChatAPI object that spawned us.
+        jsondata (dict): The JSON data block for the message
+        chat (ChatAPI): Our parent chat API wrapper
         """
 
         super().__init__(jsondata, chat)
@@ -318,10 +332,10 @@ class Message(ChatAPIObj):
         if self.user:
             self.user._set_channel_id = self.channel_id
 
-        # Remember if we were deleted
-        self.deleted = False
+        self.deleted: bool = False
+        """Was this message deleted?"""
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Compare this chat message with another
 
     Args:
@@ -355,56 +369,56 @@ class Message(ChatAPIObj):
             # No user identifying attributes, but the text does match
             return self.text == other.text
 
-    def __str__(self):
+    def __str__(self) -> str:
         """The chat message in string form"""
         return self.text
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(<from '{self.user.username}'>, text=\"{self.text}\")"
 
-    def __int__(self):
+    def __int__(self) -> int:
         """The chat message in integer (ID) form"""
         return self.message_id
 
     @property
-    def message_id(self):
+    def message_id(self) -> int:
         """The unique numerical ID of the chat message in base 10"""
         return int(self["id"])
 
     @property
-    def message_id_b10(self):
+    def message_id_b10(self) -> int:
         """The unique numerical ID of the chat message in base 10"""
         return self.message_id
 
     @property
-    def message_id_b36(self):
+    def message_id_b36(self) -> str:
         """The unique numerical ID of the chat message in base 36"""
         return utils.base_10_to_36(self.message_id)
 
     @property
-    def time(self):
+    def time(self) -> float:
         """The time the message was sent on, in seconds since the Epoch UTC"""
         return utils.parse_timestamp(self["time"])
 
     @property
-    def user_id(self):
+    def user_id(self) -> int:
         """The numerical ID of the user who posted the message in base 10"""
         return int(self["user_id"])
 
     @property
-    def user_id_b10(self):
+    def user_id_b10(self) -> int:
         """The numeric ID of the user in base 10"""
         return self.user_id
 
     @property
-    def user_id_b36(self):
+    def user_id_b36(self) -> str:
         """The numeric ID of the user in base 36"""
         return utils.base_10_to_36(self.user_id)
 
     @property
-    def channel_id(self):
-        """The numeric ID of the channel who posted the message, if there is one"""
+    def channel_id(self) -> int | None:
+        """The numeric ID of the channel who posted the message, if there is one, in base 10"""
         try:
             # Note: For some reason, channel IDs in messages alone show up as integers in the SSE events
             return int(self["channel_id"])
@@ -412,72 +426,67 @@ class Message(ChatAPIObj):
             return None
 
     @property
-    def channel_id_b10(self):
-        """The ID of the channel who posted the message in base 10"""
+    def channel_id_b10(self) -> int | None:
+        """The ID of the channel who posted the message, if there is one, in base 10"""
         return self.channel_id
 
     @property
-    def channel_id_b36(self):
-        """The ID of the channel who posted the message in base 36"""
-        if not self.channel_id:
-            return
-        return utils.base_10_to_36(self.channel_id)
+    def channel_id_b36(self) -> str | None:
+        """The ID of the channel who posted the message, if there is one, in base 36"""
+        return utils.base_10_to_36(self.channel_id) if self.channel_id else None
 
     @property
-    def text(self):
+    def text(self) -> str:
         """The text of the message"""
         return self["text"]
 
     @property
-    def user(self):
-        """Reference to the user who posted this message"""
-        try:
-            return self.chat.users[self.user_id]
-        except KeyError:
-            print(f"ERROR: Message {self.message_id} could not reference user {self.user_id} because chat has no records of them as of yet.")
+    def user(self) -> User | None:
+        """Reference to the user who posted this message, if we can find them"""
+        return self.chat.users.get(self.user_id)
 
     @property
-    def channel(self):
-        """Reference to the channel that posted this message, if there was one"""
+    def channel(self) -> Channel | None:
+        """Reference to the channel that posted this message, if there was one and we can find it"""
         if not self.channel_id:
             return None
 
-        return self.chat.channels[self.channel_id]
+        return self.chat.channels.get(self.channel_id)
 
     @property
-    def is_rant(self):
+    def is_rant(self) -> bool:
         """Is this message a rant?"""
         return "rant" in self._jsondata
 
     @property
-    def rant_price_cents(self):
+    def rant_price_cents(self) -> int:
         """The price of the rant, returns 0 if message is not a rant"""
         if not self.is_rant:
             return 0
         return self["rant"]["price_cents"]
 
     @property
-    def rant_duration(self):
+    def rant_duration(self) -> float:
         """The duration the rant will show for, returns 0 if message is not a rant"""
         if not self.is_rant:
             return 0
         return self["rant"]["duration"]
 
     @property
-    def rant_expires_on(self):
+    def rant_expires_on(self) -> float:
         """When the rant expires, returns message creation time if message is not a rant"""
         if not self.is_rant:
             return self.time
         return utils.parse_timestamp(self["rant"]["expires_on"])
 
     @property
-    def raid_notification(self):
+    def raid_notification(self) -> dict | False:
         """Are we a raid notification? Returns associated JSON data if yes, False if no"""
         return self.get("raid_notification", False)
 
     @property
-    def gift_purchase_notification(self):
-        """Are we a gifted subs notification? Returns associated JSON data if yes, False if no
+    def gift_purchase_notification(self) -> GiftPurchaseNotification | False:
+        """Are we a gifted subs notification? Returns JSON wrapper if yes, False if no
 
     Returns:
         Data (GiftPurchaseNotification | bool): A simple container for the data, or False"""
@@ -487,7 +496,7 @@ class Message(ChatAPIObj):
 
         return False
 
-    def delete(self):
+    def delete(self) -> bool:
         """Delete this message from the chat"""
         return self.chat.delete(self)
 
@@ -503,7 +512,7 @@ class Message(ChatAPIObj):
 class ChatAPI():
     """The Rumble internal chat API"""
 
-    def __init__(self, stream_id, servicephp: ServicePHP = None, history_len=1000):
+    def __init__(self, stream_id: SupportsInt | str, servicephp: Optional[ServicePHP] = None, history_len: int = 1000):
         """The Rumble internal chat API
 
     Args:
@@ -517,41 +526,60 @@ class ChatAPI():
             Defaults to 1000.
             """
 
-        self.stream_id = utils.ensure_b36(stream_id)
+        self.stream_id: str = utils.ensure_b36(stream_id)
+        """The stream ID in base 36"""
 
         self.__mailbox = []  # A mailbox if you will
         self.__history = []  # Chat history
-        self.history_len = history_len  # How many messages to store in history
-        self.pinned_message = None  # If a message is pinned, it is assigned to this
-        self.users = {}  # Dictionary of users by user ID
-        self.channels = {}  # Dictionary of channels by channel ID
-        self.badges = {}
+        self.history_len: int = history_len
+        """How many messages to store in history"""
+
+        self.pinned_message: Optional[Message] = None
+        """If a message is pinned, it is assigned to this"""
+
+        self.users: dict[int, User] = {}
+        """Users by user ID"""
+
+        self.channels: dict[int, Channel] = {}
+        """Channels by channel ID"""
+
+        self.badges: dict[str, UserBadge] = {}
+        """User badge types by slug"""
 
         # Generate our URLs
-        self.sse_url = static.URI.ChatAPI.sse_stream.format(stream_id_b10 = self.stream_id_b10)
-        print("SSE stream URL:", self.sse_url)
-        self.message_api_url = static.URI.ChatAPI.message.format(stream_id_b10=self.stream_id_b10)
+        self.sse_url: str = static.URI.ChatAPI.sse_stream.format(
+            stream_id_b10=self.stream_id_b10)
+        """The URL of the chat SSE stream"""
+
+        self.message_api_url = static.URI.ChatAPI.message.format(
+            stream_id_b10=self.stream_id_b10)
+        """The URL of the chat API"""
 
         #  Connect to SSE stream
         #  Note: We do NOT want this request to have a timeout
-        self.client = ssec.EventSource(self.sse_url, headers=static.RequestHeaders.sse_api)
+        self.client: ssec.EventSource = ssec.EventSource(
+            self.sse_url, headers=static.RequestHeaders.sse_api)
+        """The client for the chat SSE stream"""
+
         self.client.connect()
-        self.chat_running = True
+        self.chat_running: bool = True
+        """Status of wether the chat is still open"""
 
         #  If we have session login, use it
-        self.servicephp = servicephp
-        if self.servicephp:
-            self.scraper = scraping.Scraper(self.servicephp)
-        else:
-            self.scraper = None
+        self.servicephp: ServicePHP = servicephp
+        """The ServicePHP wrapper for two-way chat interaction"""
+
+        self.scraper: Optional[scraping.Scraper] = scraping.Scraper(
+            self.servicephp) if self.servicephp else None
+        """An HTML scraper for getting data like mute records"""
 
         #  Parse the init data for the stream (must do AFTER we have servicephp)
         self.parse_init_data(self.__next_event_json())
 
-        #  The last time we sent a message
-        self.last_send_time = 0
+        self.last_send_time: float = 0
+        """The last time we sent a message"""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(stream_id={self.stream_id})"
 
@@ -561,18 +589,16 @@ class ChatAPI():
         self.chat_running = False
 
     @property
-    def session_cookie(self):
+    def session_cookie(self) -> dict | None:
         """The session cookie we are logged in with"""
-        if self.servicephp:
-            return self.servicephp.session_cookie
-        return None
+        return self.servicephp.session_cookie if self.servicephp else None
 
     @property
-    def history(self):
+    def history(self) -> tuple[Message, ...]:
         """The chat history, trimmed to history_len"""
         return tuple(self.__history)
 
-    def send_message(self, text: str, channel_id: int = None):
+    def send_message(self, text: str, channel_id: Optional[SupportsInt] = None) -> (int, User):
         """Send a message in chat.
 
     Args:
@@ -588,24 +614,26 @@ class ChatAPI():
         assert self.session_cookie, "Not logged in, cannot send message"
         assert len(text) <= static.Message.max_len, "Mesage is too long"
         curtime = time.time()
-        assert self.last_send_time + static.Message.send_cooldown <= curtime, "Sending messages too fast"
-        assert utils.options_check(self.message_api_url, "POST"), "Rumble denied options request to post message"
+        assert self.last_send_time + \
+            static.Message.send_cooldown <= curtime, "Sending messages too fast"
+        assert utils.options_check(
+            self.message_api_url, "POST"), "Rumble denied options request to post message"
         r = requests.post(
             self.message_api_url,
-            cookies = self.session_cookie,
-            json = {
+            cookies=self.session_cookie,
+            json={
                 "data": {
                     "request_id": utils.generate_request_id(),
                     "message": {
                         "text": text
                     },
                     "rant": None,
-                    "channel_id": channel_id
-                    }
-                },
+                    "channel_id": int(channel_id) if channel_id else None,
+                }
+            },
             #  headers = static.RequestHeaders.user_agent,
-            timeout = static.Delays.request_timeout,
-            )
+            timeout=static.Delays.request_timeout,
+        )
 
         if r.status_code != 200:
             print("Error: Sending message failed,", r, r.text)
@@ -613,7 +641,7 @@ class ChatAPI():
 
         return int(r.json()["data"]["id"]), User(r.json()["data"]["user"], self)
 
-    def command(self, command_message: str):
+    def command(self, command_message: str) -> dict:
         """Send a native chat command
 
     Args:
@@ -623,45 +651,49 @@ class ChatAPI():
         JSON (dict): The JSON returned by the command.
         """
 
-        assert command_message.startswith(static.Message.command_prefix), "Not a command message"
+        assert command_message.startswith(
+            static.Message.command_prefix), "Not a command message"
         r = requests.post(
             static.URI.ChatAPI.command,
-            data = {
-                "video_id" : self.stream_id_b10,
-                "message" : command_message,
-                },
-            cookies = self.session_cookie,
-            headers = static.RequestHeaders.user_agent,
-            timeout = static.Delays.request_timeout,
-            )
+            data={
+                "video_id": self.stream_id_b10,
+                "message": command_message,
+            },
+            cookies=self.session_cookie,
+            headers=static.RequestHeaders.user_agent,
+            timeout=static.Delays.request_timeout,
+        )
         assert r.status_code == 200, f"Command failed: {r}\n{r.text}"
         return r.json()
 
-    def delete_message(self, message):
+    def delete_message(self, message: SupportsInt) -> bool:
         """Delete a message in chat.
 
     Args:
-        message (int | Message): Object which when converted to integer is the target message ID.
+        message (SupportsInt): Object which when converted to integer is the target message ID.
 
     Returns:
         success (bool): Wether the operation succeeded or not.
             NOTE: Method will also print an error message if it failed.
         """
 
-        assert not hasattr(message, "deleted") or not message.deleted, "Message was already deleted"
+        assert not hasattr(
+            message, "deleted") or not message.deleted, "Message was already deleted"
 
         assert self.session_cookie, "Not logged in, cannot delete message"
-        assert utils.options_check(self.message_api_url + f"/{int(message)}", "DELETE"), "Rumble denied options request to delete message"
+        assert utils.options_check(
+            self.message_api_url + f"/{int(message)}", "DELETE"), "Rumble denied options request to delete message"
 
         r = requests.delete(
             self.message_api_url + f"/{int(message)}",
-            cookies = self.session_cookie,
+            cookies=self.session_cookie,
             #  headers = static.RequestHeaders.user_agent,
-            timeout = static.Delays.request_timeout,
-            )
+            timeout=static.Delays.request_timeout,
+        )
 
         if r.status_code != 200:
-            print("Error: Deleting message failed,", r, r.content.decode(static.Misc.text_encoding))
+            print("Error: Deleting message failed,", r,
+                  r.content.decode(static.Misc.text_encoding))
             return False
 
         if hasattr(message, "deleted"):
@@ -669,54 +701,55 @@ class ChatAPI():
 
         return True
 
-    def pin_message(self, message):
+    def pin_message(self, message: SupportsInt):
         """Pin a message
 
         Args:
-            message (int | Message): Converting this to int must return a chat message ID.
+            message (SupportsInt): Converting this to int must return a chat message ID.
         """
 
         assert self.session_cookie, "Not logged in, cannot pin message"
         return self.servicephp.chat_pin(self.stream_id_b10, message)
 
-    def unpin_message(self, message = None):
+    def unpin_message(self, message: Optional[SupportsInt] = None):
         """Unpin the pinned message
 
         Args:
-            message (None | int | Message): Message to unpin, defaults to known pinned message.
+            message (SupportsInt): Message to unpin.
+                Defaults to None, unpin known pinned message.
         """
 
         assert self.session_cookie, "Not logged in, cannot unpin message"
         if not message:
             message = self.pinned_message
         assert message, "No known pinned message and ID not provided"
-        return self.servicephp.chat_pin(self.stream_id_b10, message, unpin = True)
+        return self.servicephp.chat_pin(self.stream_id_b10, message, unpin=True)
 
-    def mute_user(self, user, duration: int = None, total: bool = False):
+    def mute_user(self, user: str, duration: int = None, total: bool = False):
         """Mute a user.
 
-    Args:
-        user (str): Username to mute.
-        duration (int): How long to mute the user in seconds.
-            Defaults to infinite.
-        total (bool): Wether or not they are muted across all videos.
-            Defaults to False, just this video.
-            """
+        Args:
+            user (str): Username to mute.
+            duration (int): How long to mute the user in seconds.
+                Defaults to infinite.
+            total (bool): Wether or not they are muted across all videos.
+                Defaults to False, just this video.
+        """
 
         assert self.session_cookie, "Not logged in, cannot mute user"
         return self.servicephp.mute_user(
-            username = str(user),
-            is_channel = False,
-            video = self.stream_id_b10,
-            duration = duration,
-            total = total
-            )
+            username=str(user),
+            is_channel=False,
+            video=self.stream_id_b10,
+            duration=duration,
+            total=total
+        )
 
-    def unmute_user(self, user):
+    def unmute_user(self, user: str):
         """Unmute a user.
 
-    Args:
-        user (str): Username to unmute
+        Args:
+            user (str): Username to unmute
         """
 
         assert self.session_cookie, "Not logged in, cannot unmute user"
@@ -728,11 +761,16 @@ class ChatAPI():
 
         record_id = self.scraper.get_muted_user_record(str(user))
         assert record_id, "User was not in muted records"
-        return self.servicephp.unmute_user(record_id)
+        self.servicephp.unmute_user(record_id)
 
-    def __next_event_json(self):
-        """Wait for the next event from the SSE and parse the JSON"""
-        if not self.chat_running: # Do not try to query a new event if chat is closed
+    def __next_event_json(self) -> dict:
+        """Wait for the next event from the SSE and parse the JSON
+
+        Returns:
+            json (dict): The next event
+        """
+
+        if not self.chat_running:  # Do not try to query a new event if chat is closed
             print("Chat closed, cannot retrieve new JSON data.")
             return
 
@@ -745,17 +783,17 @@ class ChatAPI():
             event = None
 
         if not event:
-            self.chat_running = False # Chat has been closed
+            self.chat_running = False  # Chat has been closed
             print("Chat has closed.")
             return
-        if not event.data: # Blank SSE event
+        if not event.data:  # Blank SSE event
             print("Blank SSE event:>", event, "<:")
             # Self recursion should work so long as we don't get dozens of blank events in a row
             return self.__next_event_json()
 
         return json.loads(event.data)
 
-    def parse_init_data(self, jsondata):
+    def parse_init_data(self, jsondata: dict):
         """Extract initial chat data from the SSE init event JSON
 
     Args:
@@ -779,7 +817,7 @@ class ChatAPI():
         # rant levels TODO
         self.message_length_max = jsondata["data"]["config"]["message_length_max"]
 
-    def update_mailbox(self, jsondata):
+    def update_mailbox(self, jsondata: dict):
         """Parse chat messages from an SSE data JSON
 
     Args:
@@ -787,13 +825,14 @@ class ChatAPI():
         """
 
         # Add new messages
-        self.__mailbox += [Message(message_json, self) for message_json in jsondata["data"].get("messages", []) if int(message_json["id"]) not in self.__mailbox]
+        self.__mailbox += [Message(message_json, self) for message_json in jsondata["data"].get(
+            "messages", []) if int(message_json["id"]) not in self.__mailbox]
 
     def clear_mailbox(self):
         """Delete anything in the mailbox"""
         self.__mailbox = []
 
-    def update_users(self, jsondata):
+    def update_users(self, jsondata: dict):
         """Update our dictionary of users from an SSE data JSON
 
     Args:
@@ -802,11 +841,12 @@ class ChatAPI():
 
         for user_json in jsondata["data"].get("users", []):
             try:
-                self.users[int(user_json["id"])]._jsondata = user_json # Update an existing user's JSON
-            except KeyError: # User is new
+                # Update an existing user's JSON
+                self.users[int(user_json["id"])]._jsondata = user_json
+            except KeyError:  # User is new
                 self.users[int(user_json["id"])] = User(user_json, self)
 
-    def update_channels(self, jsondata):
+    def update_channels(self, jsondata: dict):
         """Update our dictionary of channels from an SSE data JSON
 
     Args:
@@ -815,30 +855,33 @@ class ChatAPI():
 
         for channel_json in jsondata["data"].get("channels", []):
             try:
-                self.channels[int(channel_json["id"])]._jsondata = channel_json # Update an existing channel's JSON
-            except KeyError: # Channel is new
-                self.channels.update({int(channel_json["id"]) : Channel(channel_json, self)})
+                # Update an existing channel's JSON
+                self.channels[int(channel_json["id"])]._jsondata = channel_json
+            except KeyError:  # Channel is new
+                self.channels.update(
+                    {int(channel_json["id"]): Channel(channel_json, self)})
 
-    def load_badges(self, jsondata):
+    def load_badges(self, jsondata: dict):
         """Create our dictionary of badges from an SSE data JSON
 
     Args:
         jsondata (dict): A JSON data block from an SSE event.
         """
 
-        self.badges = {badge_slug : UserBadge(badge_slug, jsondata["data"]["config"]["badges"][badge_slug], self) for badge_slug in jsondata["data"]["config"]["badges"].keys()}
+        self.badges = {badge_slug: UserBadge(
+            badge_slug, jsondata["data"]["config"]["badges"][badge_slug], self) for badge_slug in jsondata["data"]["config"]["badges"].keys()}
 
     @property
-    def stream_id_b10(self):
+    def stream_id_b10(self) -> int:
         """The chat ID in use"""
         return utils.base_36_to_10(self.stream_id)
 
-    def get_message(self):
+    def get_message(self) -> Message | None:
         """Return the next chat message (parsing any additional data).
         Waits for it to come in, returns None if chat closed.
 
-    Returns:
-        result (Message | None): Either the next chat message or NoneType.
+        Returns:
+            result (Message | None): Either the next chat message or NoneType.
         """
 
         # We don't already have messages
@@ -856,14 +899,14 @@ class ChatAPI():
                     if message.message_id in jsondata["data"]["message_ids"]:
                         message.deleted = True
 
-
             # Re-initialize (could contain new messages)
             elif jsondata["type"] == "init":
                 self.parse_init_data(jsondata)
 
             # Pinned message
             elif jsondata["type"] == "pin_message":
-                self.pinned_message = Message(jsondata["data"]["message"], self)
+                self.pinned_message = Message(
+                    jsondata["data"]["message"], self)
 
             # New messages
             elif jsondata["type"] == "messages":
@@ -877,11 +920,11 @@ class ChatAPI():
                 print("API sent an unimplemented SSE event type")
                 print(jsondata)
 
-        m = self.__mailbox.pop(0) # Get the oldest message in the mailbox
-        self.__history.append(m) # Add the message to the history
+        m = self.__mailbox.pop(0)  # Get the oldest message in the mailbox
+        self.__history.append(m)  # Add the message to the history
 
         # Make sure the history is not too long, clipping off the oldest messages
-        del self.__history[ : max((len(self.__history) - self.history_len, 0))]
+        del self.__history[: max((len(self.__history) - self.history_len, 0))]
 
         # Return the next message from the mailbox
         return m

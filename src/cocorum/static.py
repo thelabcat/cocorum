@@ -27,28 +27,28 @@ import re
 class RequestHeaders:
     """Headers for various HTTPrequests"""
 
-    # Header with a fake user-agent string
     user_agent = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
     }
+    """Header with a fake user-agent string"""
 
-    # Headers for the SSE chat API
     sse_api = {"Accept": "text/event-stream"}
+    """Headers for the SSE chat API"""
 
 
 class StaticAPIEndpoints:
     """API endpoints that don't change and shouldn't trigger a refresh"""
 
-    # Endpoints of the main API
     main = [
         "user_id",
         "username",
         "channel_id",
         "channel_name",
     ]
+    """Endpoints of the main API"""
 
-    # Endpoints of the stream subobject
     stream = ["id", "created_on"]
+    """Endpoints of the stream subobject"""
 
     # # Endpoints of the subscriptions gift object
     # gifted_subs = [
@@ -62,95 +62,97 @@ class StaticAPIEndpoints:
 class URI:
     """URIs to various Rumble services"""
 
-    # Base URL to Rumble's website, for URLs that are relative to it
     rumble_base = "https://rumble.com"
+    """Base URL to Rumble's website, for URLs that are relative to it"""
 
-    # Test the session token by sending it here and checking the title
     login_test = rumble_base + "/login.php"
+    """Test the session token by sending it here and checking the title"""
 
-    # Webpage with all the mutes on it, format with page number
     mutes_page = rumble_base + "/account/moderation/muting?pg={page}"
+    """Webpage with all the mutes on it, format with page number"""
 
-    # Channels under a user, format with username
     channels_page = rumble_base + "/user/{username}/channels"
+    """Channels under a user, format with username"""
 
-    # The logged-in user's playlist page
     playlists_page = rumble_base + "/my-library/playlists"
+    """The logged-in user's playlist page"""
 
-    # Account page
     account_page = rumble_base + "/account"
+    """Account page"""
 
-    # The Service.PHP API
     servicephp = rumble_base + "/service.php"
+    """The Service.PHP API"""
 
-    # The video upload PHP
     uploadphp = "https://web5.rumble.com/upload.php"
+    """The video upload PHP"""
 
-    # RumBot passthrough API ending
     rumbot_suffix = "/api/ls"
+    """RumBot passthrough API ending"""
 
     class ChatAPI:
         """URIs of the chat API"""
 
-        # Rumble's internal chat URL for a stream, format this string with a stream_id_b10
         base = "https://web7.rumble.com/chat/api/chat/{stream_id_b10}"
+        """Rumble's internal chat URL for a stream, format this string with a stream_id_b10"""
 
-        # SSE stream of chat events
         sse_stream = base + "/stream"
+        """SSE stream of chat events"""
 
-        # Message actions
         message = base + "/message"
+        """Message actions"""
 
-        # Chat commands (does not use the base)
         command = "https://rumble.com/chat/command"
+        """Chat commands (does not use the base)"""
 
 
 class Delays:
     """Various times for delays and waits"""
 
-    # How long to wait before giving up on a network request, in seconds
     request_timeout = 20
+    """How long to wait before giving up on a network request, in seconds"""
 
-    # How long to reuse old data from the main API, in seconds
+    upload_request_timeout = 300
+    """How long to wait before giving up on a video chunk upload, in seconds"""
+
     api_refresh_default = 10
+    """How long to reuse old data from the main API, in seconds"""
 
-    # Minimum refresh rate for the main API, as defined by Rumble
     api_refresh_minimum = 5
+    """Minimum refresh rate for the main API, as defined by Rumble"""
 
 
 class Message:
     """For chat messages"""
 
-    # Maximum chat message length
     max_len = 200
+    """Maximum chat message length"""
 
-    # How long to wait between sending messages
     send_cooldown = 3
+    """How long to wait between sending messages"""
 
-    # Prefix Rumble uses for native command
     command_prefix = "/"
+    """Prefix Rumble uses for native command"""
 
 
 class Upload:
     """Data relating to uploading videos"""
 
-    # Size of upload chunks, not sure if this can be changed
     chunksz = 10000000
+    """Size of upload chunks in bytes, not sure if this can be changed"""
 
-    # Upload API version to use
     api_ver = "1.3"
+    """Upload API version to use"""
 
-    # Maximum upload size is 15GB as stated by Rumble
     max_filesize = 15 * (1000**3)
+    """Maximum upload size in bytes, is 15GB as stated by Rumble"""
 
 
 class Misc:
     """No idea where else to put this data"""
 
-    # Numerical base that the stream ID is in
     base36 = "0123456789abcdefghijklmnopqrstuvwxyz"
+    """Digits of the numerical base 36 that Rumble uses"""
 
-    # Dictionary of badge slugs mapped to UTF-8 glyphs
     badges_as_glyphs = {
         "verified": "✅",
         "admin": "👑",
@@ -163,36 +165,37 @@ class Misc:
         "whale-yellow": "🐳",
         "whale-blue": "🐳",
     }
+    """Dictionary of badge slugs mapped to UTF-8 glyphs, for end-user convenience"""
 
-    # Encoding for all text-bytes conversions
     text_encoding = "utf-8"
+    """Encoding for all text-bytes conversions"""
 
-    # Size of chat badge icons to retrieve, only valid one has long been the string 48
     badge_icon_size = "48"
+    """Size of chat badge icons to retrieve, only valid one has long been the string 48"""
 
-    # Rumble timestamp format
     timestamp_format = "%Y-%m-%dT%H:%M:%S%z"
+    """Rumble's timestamp format in ISO 8601 designations"""
 
-    # Key of the session token within the session cookie dict
     session_token_key = "u_s"
+    """Key of the session token within the session cookie dict"""
 
-    # RegEx to find the account API key in the https://rumble.com/account page source
-    # It looks like this: var $a = new Account("AccountContent","##########");
     find_acc_apikey = re.compile(
         r'(?<=var \$a = new Account\("AccountOverview",").*(?="\);)'
     )
+    """RegEx to find the account API key in the https://rumble.com/account page source
+    It looks like this: `var $a = new Account("AccountContent","##########");`"""
 
-    # Characters that tags are separated by
     tag_split = ", "
+    """Characters that video tags are separated by"""
 
-    # Message upon successful video edit
     video_edit_success = "Your changes have been saved!<br>Please allow up to 30 seconds for them to take effect."
+    """Message that Rumble shows (in HTML) upon successful video edit"""
 
     class ContentTypes:
         """Types of content that can be rumbled on"""
 
-        # A video or livestream
         video = 1
+        """A video or livestream"""
 
-        # A comment
         comment = 2
+        """A comment"""

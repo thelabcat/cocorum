@@ -78,6 +78,7 @@ if livestream:
 S.D.G."""
 
 import time
+from typing import Optional
 import warnings
 import requests
 
@@ -99,12 +100,12 @@ from .jsonhandles import JSONObj, JSONUserAction
 class Follower(JSONUserAction):
     """Rumble follower"""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(username='{self.username}', followed_on='{self.followed_on}')"
 
     @property
-    def followed_on(self):
+    def followed_on(self) -> float:
         """When the follower followed, in seconds since Epoch UTC"""
         return utils.parse_timestamp(self["followed_on"])
 
@@ -112,11 +113,11 @@ class Follower(JSONUserAction):
 class Subscriber(JSONUserAction):
     """Rumble subscriber"""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(username='{self.username}', subscribed_on='{self.subscribed_on}', <for ${self.amount_cents / 100:.02f}>)"
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Is this subscriber equal to another?
 
         Args:
@@ -144,22 +145,22 @@ class Subscriber(JSONUserAction):
             return self.username == other.username
 
     @property
-    def user(self):
+    def user(self) -> str:
         """AFAIK this is being deprecated, use username instead"""
         return self["user"]
 
     @property
-    def amount_cents(self):
+    def amount_cents(self) -> int:
         """The total subscription amount in cents"""
         return self["amount_cents"]
 
     @property
-    def amount_dollars(self):
+    def amount_dollars(self) -> int:
         """The subscription amount in dollars"""
         return self["amount_dollars"]
 
     @property
-    def subscribed_on(self):
+    def subscribed_on(self) -> float:
         """When the subscriber subscribed, in seconds since Epoch UTC"""
         return utils.parse_timestamp(self["subscribed_on"])
 
@@ -168,16 +169,16 @@ class StreamCategory(JSONObj):
     """Category of a Rumble stream"""
 
     @property
-    def slug(self):
+    def slug(self) -> str:
         """Return the category's slug, AKA it's ID"""
         return self["slug"]
 
     @property
-    def title(self):
+    def title(self) -> str:
         """Return the category's title"""
         return self["title"]
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Is this category equal to another?
 
         Args:
@@ -195,11 +196,11 @@ class StreamCategory(JSONObj):
         if hasattr(other, "slug"):
             return self.slug == other.slug
 
-    def __str__(self):
+    def __str__(self) -> str:
         """The category in string form"""
         return self.title
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(slug='{self.slug}')"
 
@@ -207,7 +208,7 @@ class StreamCategory(JSONObj):
 class Livestream:
     """Rumble livestream"""
 
-    def __init__(self, jsondata, api):
+    def __init__(self, jsondata: dict, api: RumbleAPI):
         """Rumble livestream
 
         Args:
@@ -215,14 +216,18 @@ class Livestream:
             api (RumbleAPI): The Rumble Live Stream API wrapper that spawned us.
         """
 
-        self._jsondata = jsondata
-        self.api = api
+        self._jsondata: dict = jsondata
+        """The saved JSON data of this live stream"""
+
+        self.api: RumbleAPI = api
+        """Our parent RLS API wrapper."""
+
         self.is_disappeared: bool = False
         """If the livestream has vanished from the main API listing. If True, that indicates livestream has ended."""
 
         self.__chat = LiveChat(self)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Is this stream equal to another?
 
         Args:
@@ -248,15 +253,15 @@ class Livestream:
         if hasattr(other, "stream_id_b10"):
             return self.stream_id_b10 == other.stream_id_b10
 
-    def __str__(self):
+    def __str__(self) -> str:
         """The livestream in string form (its ID in base 36)"""
         return self.stream_id
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(title=\"{self.title}\", stream_id={self.stream_id})"
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str):
         """Return a key from the JSON, refreshing if necessary
 
         Args:
@@ -276,72 +281,72 @@ class Livestream:
         return self._jsondata[key]
 
     @property
-    def stream_id(self):
+    def stream_id(self) -> str:
         """The livestream ID in base 36"""
         return self["id"]
 
     @property
-    def stream_id_b36(self):
+    def stream_id_b36(self) -> str:
         """The livestream ID in base 36"""
         return self.stream_id
 
     @property
-    def stream_id_b10(self):
+    def stream_id_b10(self) -> int:
         """The livestream chat ID (stream ID in base 10)"""
         return utils.base_36_to_10(self.stream_id)
 
     @property
-    def title(self):
+    def title(self) -> str:
         """The title of the livestream"""
         return self["title"]
 
     @property
-    def created_on(self):
+    def created_on(self) -> float:
         """When the livestream was created, in seconds since the Epock UTC"""
         return utils.parse_timestamp(self["created_on"])
 
     @property
-    def is_live(self):
+    def is_live(self) -> bool:
         """Is the stream live?"""
         return self["is_live"] and not self.is_disappeared
 
     @property
-    def visibility(self):
+    def visibility(self) -> str:
         """Is the stream public, unlisted, or private?"""
         return self["visibility"]
 
     @property
-    def categories(self):
+    def categories(self) -> list[StreamCategory]:
         """A list of our categories"""
         data = self["categories"].copy().values()
         return [StreamCategory(jsondata_block) for jsondata_block in data]
 
     @property
-    def likes(self):
+    def likes(self) -> int:
         """Number of likes on the stream"""
         return self["likes"]
 
     @property
-    def dislikes(self):
+    def dislikes(self) -> int:
         """Number of dislikes on the stream"""
         return self["dislikes"]
 
     @property
-    def like_ratio(self):
+    def like_ratio(self) -> float:
         """Ratio of people who liked the stream to people who reacted total"""
         try:
             return self.likes / (self.likes + self.dislikes)
 
         except ZeroDivisionError:
-            return None
+            return 0.5
 
     @property
-    def watching_now(self):
+    def watching_now(self) -> int:
         """The number of people watching now"""
         return self["watching_now"]
 
     @property
-    def chat(self):
+    def chat(self) -> LiveChat:
         """The livestream chat"""
         return self.__chat
 
@@ -349,7 +354,7 @@ class Livestream:
 class ChatMessage(JSONUserAction):
     """A single message in a Rumble livestream chat"""
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Is this message equal to another?
 
         Args:
@@ -375,26 +380,26 @@ class ChatMessage(JSONUserAction):
 
             return self.text == other.text  # the other object had no username attribute
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Message as a string (its content)"""
         return self.text
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(username='{self.username}', text=\"{self.text}\")"
 
     @property
-    def text(self):
+    def text(self) -> str:
         """The message text"""
         return self["text"]
 
     @property
-    def created_on(self):
+    def created_on(self) -> float:
         """When the message was created, in seconds since Epoch UTC"""
         return utils.parse_timestamp(self["created_on"])
 
     @property
-    def badges(self):
+    def badges(self) -> tuple[str, ...]:
         """The user's badges"""
         return tuple(self["badges"].values())
 
@@ -402,7 +407,7 @@ class ChatMessage(JSONUserAction):
 class Rant(ChatMessage):
     """A single rant in a Rumble livestream chat"""
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """Is this category equal to another?
 
         Args:
@@ -438,22 +443,22 @@ class Rant(ChatMessage):
             # Other object had no username attribute
             return self.text == other.text
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(username='{self.username}', text=\"{self.text}\", <for ${self.amount_cents / 100:.02f}>)"
 
     @property
-    def expires_on(self):
+    def expires_on(self) -> float:
         """When the rant will expire, in seconds since the Epoch UTC"""
         return self["expires_on"]
 
     @property
-    def amount_cents(self):
+    def amount_cents(self) -> int:
         """The total rant amount in cents"""
         return self["amount_cents"]
 
     @property
-    def amount_dollars(self):
+    def amount_dollars(self) -> int:
         """The rant amount in dollars"""
         return self["amount_dollars"]
 
@@ -461,28 +466,35 @@ class Rant(ChatMessage):
 class LiveChat:
     """Reference for chat of a Rumble livestream"""
 
-    def __init__(self, stream):
+    def __init__(self, stream: Livestream):
         """Reference for chat of a Rumble livestream
 
         Args:
-            stream (dict): The JSON block of a single Rumble livestream.
+            stream (Livestream): The wrapper for a single Rumble livestream.
         """
 
-        self.stream = stream
-        self.api = stream.api
-        self.last_newmessage_time = 0  # Last time we were checked for "new" messages
-        self.last_newrant_time = 0  # Last time we were checked for "new" rants
+        self.stream: Livestream = stream
+        """Our parent stream wrapper"""
 
-    def __repr__(self):
+        self.api = stream.api
+        """Our parent RLS API wrapper"""
+
+        self.last_newmessage_time: float = 0
+        """The last time we were checked for "new" messages"""
+
+        self.last_newrant_time: float = 0
+        """The last time we were checked for "new" rants"""
+
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(<for stream {self.stream.stream_id_b10}>)"
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str):
         """Return a key from the stream's chat JSON"""
         return self.stream["chat"][key]
 
     @property
-    def latest_message(self):
+    def latest_message(self) -> ChatMessage:
         """The latest chat message"""
         # This endpoint does not exist in the RUM Live Alerts LS API
         if self.api._rumbot_mode:
@@ -494,7 +506,7 @@ class LiveChat:
         return ChatMessage(self["latest_message"])
 
     @property
-    def recent_messages(self):
+    def recent_messages(self) -> list[ChatMessage]:
         """Recent chat messages"""
         # This endpoint does not exist in the RUM Live Alerts LS API
         if self.api._rumbot_mode:
@@ -505,7 +517,7 @@ class LiveChat:
         return [ChatMessage(jsondata_block) for jsondata_block in data]
 
     @property
-    def new_messages(self):
+    def new_messages(self) -> list[ChatMessage]:
         """Chat messages that are newer than the last time this was referenced"""
         # This endpoint does not exist in the RUM Live Alerts LS API
         if self.api._rumbot_mode:
@@ -530,20 +542,20 @@ class LiveChat:
         return rem[i:]
 
     @property
-    def latest_rant(self):
+    def latest_rant(self) -> Rant:
         """The latest chat rant"""
         if not self["latest_rant"]:
             return None  # No-one has ranted on this stream yet
         return Rant(self["latest_rant"])
 
     @property
-    def recent_rants(self):
+    def recent_rants(self) -> list[Rant]:
         """Recent chat rants"""
         data = self["recent_rants"].copy()
         return [Rant(jsondata_block) for jsondata_block in data]
 
     @property
-    def new_rants(self):
+    def new_rants(self) -> list[Rant]:
         """Chat rants that are newer than the last time this was referenced"""
         rera = self.recent_rants.copy()
         rera.sort(
@@ -594,7 +606,7 @@ class GiftedSub(JSONObj):
     #
     #         return self._jsondata[key]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(purchased_by='{self.purchased_by}')"
 
@@ -640,34 +652,46 @@ class RumbleAPI:
 
     def __init__(
         self,
-        api_url,
-        refresh_rate=static.Delays.api_refresh_default,
-        rumbot_mode: bool = None,
+        api_url: str,
+        refresh_rate: int | float = static.Delays.api_refresh_default,
+        rumbot_mode: Optional[bool] = None,
     ):
         """Rumble Live Stream API wrapper
 
         Args:
             api_url (str): The Rumble API URL, with the key.
-            refresh_rate (int, float): How long to reuse queried data before refreshing.
+            refresh_rate (int | float): How long to reuse queried data before refreshing.
                 Defaults to static.Delays.api_refresh_default.
-            rumbot_mode (bool|None): The api_url points to an instance of RUM Live Alerts.
+            rumbot_mode (bool): Does the api_url points to an instance of VapinGamers' RUM Live Alerts?
                 The API URL for this would usually be http://localhost:9843/api/ls
                 Useful to avoid rate limits, but some data is not passed through.
                 Defaults to None, auto-detect.
         """
 
-        self.refresh_rate = refresh_rate
-        if rumbot_mode is None:
-            self._rumbot_mode = api_url.endswith(static.URI.rumbot_suffix)
-        else:
-            self._rumbot_mode = rumbot_mode
+        self.refresh_rate: int | float = refresh_rate
+        """How long to reuse queried data before refreshing"""
 
-        self.last_refresh_time = 0
-        self.last_newfollower_time = time.time()
+        self._rumbot_mode: bool = rumbot_mode or api_url.endswith(
+            static.URI.rumbot_suffix)
+        """Does the api_url points to an instance of VapinGamers' RUM Live Alerts?"""
+
+        self.last_refresh_time: float = 0
+        """The last time that we refreshed the API JSON data"""
+
+        self.last_newfollower_time: float = time.time()
+        """The last time we were checked for "new" followers"""
+
         self.last_newsubscriber_time = time.time()
+        """The last time we were checked for "new" subscribers"""
+
         self.__livestreams = {}
         #        self.__gifted_subs = {}
-        self._jsondata = {}
+        self._jsondata: dict = {}
+        """The saved RLS API JSON data"""
+
+        self.__api_url: str = ""
+
+        # This is a property that sets the above private attribute
         self.api_url = api_url
 
         # Warn about refresh rate being below minimum
@@ -677,17 +701,17 @@ class RumbleAPI:
                 + "Superscript must self-limit or Rumble will reject queries!"
             )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(username='{self.username}', channel_name='{self.channel_name}')"
 
     @property
-    def api_url(self):
+    def api_url(self) -> str:
         """Our API URL"""
         return self.__api_url
 
     @api_url.setter
-    def api_url(self, url):
+    def api_url(self, url: str):
         """Set a new API URL, and refresh
 
         Args:
@@ -697,7 +721,7 @@ class RumbleAPI:
         self.__api_url = url
         self.refresh()
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str):
         """Return a key from the JSON, refreshing if necessary
 
         Args:
@@ -726,7 +750,8 @@ class RumbleAPI:
             headers=static.RequestHeaders.user_agent,
             timeout=static.Delays.request_timeout,
         )
-        assert response.status_code == 200, "Status code " + str(response.status_code)
+        assert response.status_code == 200, "Status code " + \
+            str(response.status_code)
 
         self._jsondata = response.json()
 
@@ -735,7 +760,8 @@ class RumbleAPI:
             self.__unpad_jsondata()
 
         # Remove livestream references that are no longer listed
-        listed_ids = [jsondata["id"] for jsondata in self._jsondata["livestreams"]]
+        listed_ids = [jsondata["id"]
+                      for jsondata in self._jsondata["livestreams"]]
         for stream_id in self.__livestreams.copy():
             if stream_id not in listed_ids:
                 self.__livestreams[stream_id].is_disappeared = True
@@ -790,71 +816,81 @@ class RumbleAPI:
             ]
 
     @property
-    def data_timestamp(self):
+    def data_timestamp(self) -> float:
         """The timestamp on the last data refresh"""
         # Definitely don't ever trigger a refresh on this
         return self._jsondata["now"]
 
     @property
-    def api_type(self):
+    def api_type(self) -> str:
         """Type of API URL in use, user or channel"""
         return self["type"]
 
     @property
-    def user_id(self):
+    def user_id(self) -> str:
         """The user ID in base 36"""
         return self["user_id"]
 
     @property
-    def user_id_b36(self):
+    def user_id_b36(self) -> str:
         """The user ID in base 36"""
         return self.user_id
 
     @property
-    def user_id_b10(self):
+    def user_id_b10(self) -> int:
         """The user ID in base 10"""
         return utils.base_36_to_10(self.user_id)
 
     @property
-    def username(self):
+    def username(self) -> str:
         """The username"""
         return self["username"]
 
     @property
-    def channel_id(self):
-        """The channel ID, if we are a channel"""
+    def channel_id(self) -> int | None:
+        """The channel ID, if we are a channel, in base 10"""
         return self["channel_id"]
 
     @property
-    def channel_name(self):
+    def channel_id_b10(self) -> int | None:
+        """The channel ID, if we are a channel, in base 10"""
+        return self.channel_id
+
+    @property
+    def channel_id_b36(self) -> int | None:
+        """The channel ID, if we are a channel, in base 36"""
+        return utils.base_10_to_36(self.channel_id) if self.channel_id else None
+
+    @property
+    def channel_name(self) -> str:
         """The channel name, if we are a channel"""
         return self["channel_name"]
 
     @property
-    def num_followers(self):
+    def num_followers(self) -> int:
         """The number of followers of this user or channel"""
         return self["followers"]["num_followers"]
 
     @property
-    def num_followers_total(self):
+    def num_followers_total(self) -> int:
         """The total number of followers of this account across all channels"""
         return self["followers"]["num_followers_total"]
 
     @property
-    def latest_follower(self):
+    def latest_follower(self) -> Follower:
         """The latest follower of this user or channel"""
         if not self["followers"]["latest_follower"]:
             return None  # No-one has followed this user or channel yet
         return Follower(self["followers"]["latest_follower"])
 
     @property
-    def recent_followers(self):
+    def recent_followers(self) -> list[Follower]:
         """A list of recent followers"""
         data = self["followers"]["recent_followers"].copy()
         return [Follower(jsondata_block) for jsondata_block in data]
 
     @property
-    def new_followers(self):
+    def new_followers(self) -> list[Follower]:
         """Followers that are newer than the last time this was checked (or newer than RumbleAPI object creation)"""
         recent_followers = self.recent_followers
 
@@ -870,30 +906,30 @@ class RumbleAPI:
         return nf
 
     @property
-    def num_subscribers(self):
+    def num_subscribers(self) -> int:
         """The number of subscribers of this user or channel"""
         return self["subscribers"]["num_subscribers"]
 
     @property
-    def num_subscribers_total(self):
+    def num_subscribers_total(self) -> int:
         """The total number of subscribers of this account across all channels"""
         return self["subscribers"]["num_subscribers_total"]
 
     @property
-    def latest_subscriber(self):
+    def latest_subscriber(self) -> Subscriber:
         """The latest subscriber of this user or channel"""
         if not self["subscribers"]["latest_subscriber"]:
             return None  # No-one has subscribed to this user or channel yet
         return Subscriber(self["subscribers"]["latest_subscriber"])
 
     @property
-    def recent_subscribers(self):
+    def recent_subscribers(self) -> list[Subscriber]:
         """A list of recent subscribers (shallow)"""
         data = self["subscribers"]["recent_subscribers"].copy()
         return [Subscriber(jsondata_block) for jsondata_block in data]
 
     @property
-    def new_subscribers(self):
+    def new_subscribers(self) -> list[Subscriber]:
         """Subscribers that are newer than the last time this was checked (or newer than RumbleAPI object creation)"""
         recent_subscribers = self.recent_subscribers
 
@@ -909,36 +945,38 @@ class RumbleAPI:
         return ns
 
     @property
-    def livestreams(self):
-        """A dictionairy of our livestreams"""
+    def livestreams(self) -> dict[str, Livestream]:
+        """A dictionairy of our livestreams by their base 36 IDs"""
         self.check_refresh()
         return self.__livestreams
 
     @property
-    def latest_livestream(self):
+    def latest_livestream(self) -> Livestream:
         """Return latest livestream to be created. Use this to get a single running livestream"""
         if not self.livestreams:
             return None  # No livestreams are running
         return max(self.livestreams.values(), key=lambda x: x.created_on)
 
     @property
-    def latest_gifted_sub(self):
+    def latest_gifted_sub(self) -> GiftedSub | None:
         """The latest subscriptions gift sent on the user or channel.
         WARNING: This is shallow! I have no way to reliably ID particular gifts to update the GiftedSub data."""
         # This endpoint does not exist in the RUM Live Alerts LS API
         if self._rumbot_mode:
-            print("ERROR: RUM Live Alerts does not pass this in its LS API.")
+            warnings.warn(
+                "RUM Live Alerts does not pass gifted subscriptions in its LS API passthrough. This will always be None.")
             return None
 
         return GiftedSub(self["latest_gifted_sub"])
 
     @property
-    def recent_gifted_subs(self):
+    def recent_gifted_subs(self) -> list[GiftedSub]:
         """The most recent subscriptions gifts sent on the user or channel.
         WARNING: This is shallow! I have no way to reliably ID particular gifts to update the GiftedSub data."""
         # This endpoint does not exist in the RUM Live Alerts LS API
         if self._rumbot_mode:
-            print("ERROR: RUM Live Alerts does not pass this in its LS API.")
+            warnings.warn(
+                "RUM Live Alerts does not pass gifted subscriptions in its LS API passthrough. This will always be an empty list.")
             return []
 
         return [GiftedSub(jsondata) for jsondata in self["recent_gifted_subs"]]
