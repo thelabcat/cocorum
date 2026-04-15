@@ -282,11 +282,9 @@ class HTMLPlaylist(HTMLObj, BasePlaylist):
         return self._pagesoup.find("span", attrs={"class": "playlist-control-panel__visibility-state"}).string.strip().lower()
 
     @property
-    def num_items(self) -> None:
-        """TODO: The number of items in the playlist"""
-        # TODO: This is doable but I just don't care right now.
-        raise NotImplementedError(
-            "This is doable but I just don't care right now.")
+    def num_items(self) -> int:
+        """The number of items in the playlist"""
+        return int(self._elem.find("span", attrs={"class": "playlist__videos"}).string.strip().removesuffix(" videos"))
 
 
 class HTMLChannel(HTMLObj):
