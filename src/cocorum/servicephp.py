@@ -407,6 +407,11 @@ class ServicePHP:
         return f"{type(self).__name__}(username={self.username}, <{'not ' * bool(self.session_cookie)}logged in>)"
 
     @property
+    def session_token(self) -> str:
+        """The token stored in our session cookie, empty if if we are not logged in"""
+        return self.session_cookie[static.Misc.session_token_key] if self.session_cookie else ""
+
+    @property
     def user_id(self) -> int:
         """The numeric ID of the logged in user in base 10"""
         # We do not have a user ID, extract it from the unread notifications response
