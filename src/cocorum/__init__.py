@@ -78,7 +78,7 @@ if livestream:
 S.D.G."""
 
 import time
-from typing import Optional
+from typing import Any, Optional
 import warnings
 import requests
 
@@ -117,14 +117,14 @@ class Subscriber(JSONUserAction):
         """String to represent this object"""
         return f"{type(self).__name__}(username='{self.username}', subscribed_on='{self.subscribed_on}', <for ${self.amount_cents / 100:.02f}>)"
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Is this subscriber equal to another?
 
         Args:
-            other (str, JSONUserAction, Subscriber): The other object to compare to.
+            other (Any): The other object to compare to.
 
         Returns:
-            Comparison (bool, None): Did it fit the criteria?
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check if the compared string is our username
@@ -143,6 +143,8 @@ class Subscriber(JSONUserAction):
 
             # Other object has no amount_cents attribute
             return self.username == other.username
+
+        return False
 
     @property
     def user(self) -> str:
@@ -178,14 +180,14 @@ class StreamCategory(JSONObj):
         """Return the category's title"""
         return self["title"]
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Is this category equal to another?
 
         Args:
-            other (str, StreamCategory): Other object to compare to.
+            other (Any): Other object to compare to.
 
         Returns:
-            Comparison (bool, None): Did it fit the criteria?
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check if the compared string is our slug or title
@@ -195,6 +197,8 @@ class StreamCategory(JSONObj):
         # Check if the compared object has the same slug, if it has one
         if hasattr(other, "slug"):
             return self.slug == other.slug
+
+        return False
 
     def __str__(self) -> str:
         """The category in string form"""
@@ -227,14 +231,14 @@ class Livestream:
 
         self.__chat = LiveChat(self)
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Is this stream equal to another?
 
         Args:
-            other (str, int, Livestream): Object to compare to.
+            other (Any): Object to compare to.
 
         Returns:
-            Comparison (bool, None): Did it fit the criteria?
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check if the compared string is our stream ID
@@ -252,6 +256,8 @@ class Livestream:
         # Check if the compared object has the same chat ID
         if hasattr(other, "stream_id_b10"):
             return self.stream_id_b10 == other.stream_id_b10
+
+        return False
 
     def __str__(self) -> str:
         """The livestream in string form (its ID in base 36)"""
@@ -354,14 +360,14 @@ class Livestream:
 class ChatMessage(JSONUserAction):
     """A single message in a Rumble livestream chat"""
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Is this message equal to another?
 
         Args:
-            other (str, ChatMessage): Object to compare to.
+            other (Any): Object to compare to.
 
         Returns:
-            Comparison (bool, None): Did it fit the criteria?
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check if the compared string is our message
@@ -379,6 +385,8 @@ class ChatMessage(JSONUserAction):
                 return (self.username, self.text) == (other.username, other.text)
 
             return self.text == other.text  # the other object had no username attribute
+
+        return False
 
     def __str__(self) -> str:
         """Message as a string (its content)"""
@@ -407,14 +415,14 @@ class ChatMessage(JSONUserAction):
 class Rant(ChatMessage):
     """A single rant in a Rumble livestream chat"""
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Is this category equal to another?
 
         Args:
-            other (str, ChatMessage): Object to compare to.
+            other (Any): Object to compare to.
 
         Returns:
-            Comparison (bool, None): Did it fit the criteria?
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check if the compared string is our message
@@ -442,6 +450,8 @@ class Rant(ChatMessage):
 
             # Other object had no username attribute
             return self.text == other.text
+
+        return False
 
     def __repr__(self) -> str:
         """String to represent this object"""

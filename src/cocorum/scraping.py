@@ -16,7 +16,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 S.D.G."""
 
-from typing import Optional, TYPE_CHECKING
+from typing import Any, Optional, TYPE_CHECKING
 import requests
 import bs4
 from . import static
@@ -304,14 +304,14 @@ class HTMLChannel(HTMLObj):
         """The channel as an integer (its numeric ID)"""
         return self.channel_id_b10
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Determine if this channel is equal to another.
 
-    Args:
-        other (int, str, HTMLChannel): Object to compare to.
+        Args:
+            other (Any): Object to compare to.
 
-    Returns:
-        Comparison (bool, None): Did it fit the criteria?
+        Returns:
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check for direct matches first
@@ -329,6 +329,8 @@ class HTMLChannel(HTMLObj):
         # Check conversion to integer last, in case an ID or something happens to match but the other is not actually a channel
         if hasattr(other, "__int__"):
             return self.channel_id_b10 == int(other)
+
+        return False
 
     @property
     def slug(self) -> str:
@@ -383,14 +385,14 @@ class HTMLVideo(HTMLObj):
         """String to represent this object"""
         return f"{type(self).__name__}(title=\"{self.title}\", video_id={self.video_id})"
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Determine if this video is equal to another.
 
-    Args:
-        other (int, str, HTMLVideo): Object to compare to.
+        Args:
+            other (Any): Object to compare to.
 
-    Returns:
-        Comparison (bool, None): Did it fit the criteria?
+        Returns:
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check for direct matches first
@@ -409,6 +411,8 @@ class HTMLVideo(HTMLObj):
         # happens to match
         if hasattr(other, "__int__"):
             return self.video_id_b10 == int(other)
+
+        return False
 
     @property
     def video_id(self) -> int:

@@ -21,6 +21,7 @@ with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
+from typing import Any
 import requests
 from . import static
 
@@ -60,14 +61,14 @@ class JSONUserAction(JSONObj):
         JSONObj.__init__(self, jsondata)
         self.__profile_pic = None
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Is this user equal to another?
 
-    Args:
-        other (str, JSONUserAction): Object to compare to.
+        Args:
+            other (Any): Object to compare to.
 
-    Returns:
-        Comparison (bool, None): Did it fit the criteria?
+        Returns:
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check if the compared string is our username, or base 36 user ID if we have one
@@ -86,6 +87,8 @@ class JSONUserAction(JSONObj):
         # Check if the compared object has a user ID in base 36 and if it matches our own, if we have one
         if hasattr(self, "user_id_b36") and hasattr(other, "user_id_b36"):
             return self.user_id_b36 == other.user_id_b36
+
+        return False
 
     def __str__(self) -> str:
         """Follower as a string"""
@@ -112,8 +115,10 @@ class JSONUserAction(JSONObj):
             return b''
 
         if not self.__profile_pic:  # We never queried the profile pic before
-            response = requests.get(self.profile_pic_url, timeout=static.Delays.request_timeout)
-            assert response.status_code == 200, "Status code " + str(response.status_code)
+            response = requests.get(
+                self.profile_pic_url, timeout=static.Delays.request_timeout)
+            assert response.status_code == 200, "Status code " + \
+                str(response.status_code)
 
             self.__profile_pic = response.content
 

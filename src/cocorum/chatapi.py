@@ -22,7 +22,7 @@ with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 S.D.G."""
 
 import time
-from typing import Optional, SupportsInt
+from typing import Any, Optional, SupportsInt
 import requests
 import json5 as json  # For parsing SSE message data
 from requests_sse import client as ssec
@@ -335,14 +335,14 @@ class Message(ChatAPIObj):
         self.deleted: bool = False
         """Was this message deleted?"""
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Compare this chat message with another
 
-    Args:
-        other (str, Message): Object to compare to.
+        Args:
+            other (Any): Object to compare to.
 
-    Returns:
-        Comparison (bool, None): Did it fit the criteria?
+        Returns:
+            Comparison (bool): Did it fit the criteria?
         """
 
         if isinstance(other, str):
@@ -368,6 +368,8 @@ class Message(ChatAPIObj):
 
             # No user identifying attributes, but the text does match
             return self.text == other.text
+
+        return False
 
     def __str__(self) -> str:
         """The chat message in string form"""

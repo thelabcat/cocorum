@@ -21,7 +21,7 @@ with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
-from typing import Optional, SupportsInt, TYPE_CHECKING
+from typing import Any, Optional, SupportsInt, TYPE_CHECKING
 import requests
 from . import static
 from . import utils
@@ -32,14 +32,14 @@ if TYPE_CHECKING:
 class BaseUserBadge:
     """A badge on a username"""
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Check if this badge is equal to another.
 
-    Args:
-        other (str, HTMLUserBadge): Object to compare to.
+        Args:
+            other (Any): Object to compare to.
 
-    Returns:
-        Comparison (bool, None): Did it fit the criteria?
+        Returns:
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check if the string is either our slug or our label in any language
@@ -98,14 +98,14 @@ class BaseComment:
         """The base 36 ID of the comment"""
         return utils.base_10_to_36(self.comment_id)
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Determine if this comment is equal to another.
 
-    Args:
-        other (int, str, HTMLComment, APIComment): Object to compare to.
+        Args:
+            other (Any): Object to compare to.
 
-    Returns:
-        Comparison (bool, None): Did it fit the criteria?
+        Returns:
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check for direct matches first
@@ -155,14 +155,14 @@ class BaseContentVotes:
         """The integer form of the content votes"""
         return self.score
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Determine if this content votes is equal to another.
 
-    Args:
-        other (int, str, BaseContentVotes): Object to compare to.
+        Args:
+            other (Any): Object to compare to.
 
-    Returns:
-        Comparison (bool, None): Did it fit the criteria?
+        Returns:
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check for direct matches first
@@ -189,14 +189,14 @@ class BaseUser:
         """The user as an integer (it's ID in base 10)"""
         return self.user_id_b10
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Determine if this user is equal to another.
 
-    Args:
-        other (int, str, APIUser): Object to compare to.
+        Args:
+            other (Any): Object to compare to.
 
-    Returns:
-        Comparison (bool, None): Did it fit the criteria?
+        Returns:
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check for direct matches first
@@ -257,14 +257,14 @@ class BasePlaylist:
         """String to represent this object"""
         return f"{type(self).__name__}(playlist_id={self.playlist_id}, title=\"{self.title}\")"
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Determine if this playlist is equal to another.
 
-    Args:
-        other (int, str, HTMLPlaylist): Object to compare to.
+        Args:
+            other (Any): Object to compare to.
 
-    Returns:
-        Comparison (bool, None): Did it fit the criteria?
+        Returns:
+            Comparison (bool): Did it fit the criteria?
         """
 
         # Check for direct matches first
