@@ -66,7 +66,10 @@ class URI:
     """Base URL to Rumble's website, for URLs that are relative to it"""
 
     login_test = rumble_base + "/login.php"
-    """Test the session token by sending it here and checking the title"""
+    """Test the session token by sending it here and checking the redirect URL"""
+
+    login_fail = "auth.rumble.com"
+    """This URL component will be in a failed session login redirect, but not a successful one"""
 
     mutes_page = rumble_base + "/account/moderation/muting?pg={page}"
     """Webpage with all the mutes on it, format with page number"""

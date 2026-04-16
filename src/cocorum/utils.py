@@ -283,10 +283,9 @@ def test_session_cookie(session_cookie: dict[str, str]) -> bool:
 
     assert r.status_code == 200, f"Testing session token failed: {r}"
 
-    title = r.text.split("<title>")[1].split("</title>")[0]
-
-    # If the session token is invalid, it won't log us in and "Login" will still be shown
-    return "Login" not in title
+    # If the token is valid, we will redirect to rumble.com base
+    # Otherwise, we will redirect to auth.rumble.com
+    return static.URI.login_fail not in r.url
 
 
 def options_check(url: str, method: str, origin=static.URI.rumble_base, cookies: dict = {}, params: dict = {}) -> bool:
