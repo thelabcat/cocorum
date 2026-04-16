@@ -2648,7 +2648,8 @@ Defaults to no parameters.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">292</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">291</span>
+<span class="normal">292</span>
 <span class="normal">293</span>
 <span class="normal">294</span>
 <span class="normal">295</span>
@@ -2675,8 +2676,7 @@ Defaults to no parameters.</p>
 <span class="normal">316</span>
 <span class="normal">317</span>
 <span class="normal">318</span>
-<span class="normal">319</span>
-<span class="normal">320</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">options_check</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">URI</span><span class="o">.</span><span class="n">rumble_base</span><span class="p">,</span> <span class="n">cookies</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="normal">319</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">options_check</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">URI</span><span class="o">.</span><span class="n">rumble_base</span><span class="p">,</span> <span class="n">cookies</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check of we are allowed to do method on url via an options request</span>
 
 <span class="sd">    Args:</span>
@@ -2899,8 +2899,7 @@ Defaults to no parameters.</p>
 <span class="normal">285</span>
 <span class="normal">286</span>
 <span class="normal">287</span>
-<span class="normal">288</span>
-<span class="normal">289</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_session_cookie</span><span class="p">(</span><span class="n">session_cookie</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="normal">288</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_session_cookie</span><span class="p">(</span><span class="n">session_cookie</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test if a session cookie dict is valid.</span>
 
 <span class="sd">    Args:</span>
@@ -2919,10 +2918,9 @@ Defaults to no parameters.</p>
 
     <span class="k">assert</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Testing session token failed: </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="n">title</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&lt;title&gt;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&lt;/title&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="c1"># If the session token is invalid, it won&#39;t log us in and &quot;Login&quot; will still be shown</span>
-    <span class="k">return</span> <span class="s2">&quot;Login&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">title</span>
+    <span class="c1"># If the token is valid, we will redirect to rumble.com base</span>
+    <span class="c1"># Otherwise, we will redirect to auth.rumble.com</span>
+    <span class="k">return</span> <span class="n">static</span><span class="o">.</span><span class="n">URI</span><span class="o">.</span><span class="n">login_fail</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">url</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
