@@ -37,7 +37,7 @@ Example usage:
 from cocorum import RumbleAPI
 
 ## API_URL is Rumble Live Stream API URL with key
-api = RumbleAPI(API_URL, refresh_rate = 10)
+api = RumbleAPI(API_URL, refresh_rate=10)
 
 print(api.username)
 ## Should display your Rumble username
@@ -275,14 +275,13 @@ class Livestream:
         """
 
         # The livestream has not disappeared from the API listing,
-        # the key requested is not a value that doesn't change,
-        # and it has been api.refresh rate since the last time we refreshed
+        # and the key requested is not a value that doesn't change,
         if (
             (not self.is_disappeared)
             and (key not in static.StaticAPIEndpoints.stream)
-            and (time.time() - self.api.last_refresh_time > self.api.refresh_rate)
         ):
-            self.api.refresh()
+            # Make sure the data is not stale
+            self.api.check_refresh()
 
         return self._jsondata[key]
 
@@ -738,12 +737,9 @@ class RumbleAPI:
             key (str): A valid JSON key.
         """
 
-        # This is not a static key, and it's time to refresh our data
-        if (
-            key not in static.StaticAPIEndpoints.main
-            and time.time() - self.last_refresh_time > self.refresh_rate
-        ):
-            self.refresh()
+        # This is not a static key, so make sure the data isn't stale
+        if key not in static.StaticAPIEndpoints.main:
+            self.check_refresh()
 
         return self._jsondata[key]
 
