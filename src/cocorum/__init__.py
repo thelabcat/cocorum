@@ -15,9 +15,9 @@ Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY WARRA
 You should have received a copy of the GNU Lesser General Public License along with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 This base module is a Python wrapper for the Rumble Live Stream API v1.0 (beta), with some quality of life additions, such as:
-- Automatic refresh when past the refresh_rate delay when querying any non_static property.
+- Implementing a cache of the API data with an automatic time to live enforcer. If the stored API data is older than `refresh_rate` (and you are querying an endpoint that can actually change over time), the wrapper will automatically refresh in the background before handing you the fresh endpoint data.
 - All timespamps are parsed to seconds since Epoch, UTC timezone.
-- Chat has new_messages and new_rants properties that return only messages and rants since the last time they were read.
+- Additional `new_followers` and `new_subscribers`, plus `chat.new_messages` and `chat.new_rants` as endpoints that automatically clear themselves when read.
 
 
 Modules exported by this package:
@@ -669,7 +669,7 @@ class RumbleAPI:
 
         Args:
             api_url (str): The Rumble API URL, with the key.
-            refresh_rate (int | float): How long to reuse queried data before refreshing.
+            refresh_rate (int | float): AKA time to live. How long to reuse queried data before refreshing.
                 Defaults to static.Delays.api_refresh_default.
             rumbot_mode (bool): Does the api_url points to an instance of VapinGamers' RUM Live Alerts?
                 The API URL for this would usually be http://localhost:9843/api/ls
