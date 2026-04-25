@@ -21,6 +21,8 @@ with Cocorum. If not, see <https://www.gnu.org/licenses/>.
 
 S.D.G."""
 
+from __future__ import annotations
+
 from typing import Optional, SupportsInt
 import requests
 import bs4

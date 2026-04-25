@@ -16,6 +16,8 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 S.D.G."""
 
+from __future__ import annotations
+
 from typing import Any, Optional, TYPE_CHECKING
 import requests
 import bs4
