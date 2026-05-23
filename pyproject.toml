@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cocorum"
-version = "2.15.3"
+version = "2.15.4"
 keywords = ["rumble", "api", "wrapper", "livestream"]
 authors = [
   { name="Wilbur Jaywright", email="zargulthewizard@outlook.com" },
@@ -20,7 +20,7 @@ dependencies = [
   ]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Development Status :: 4 - Beta",
 ]

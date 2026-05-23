@@ -7,21 +7,19 @@ WARNING: This does not currently work reliably. It's only in the module because
 I was working on it and a critical fix for .uploadphp at the same time, and I
 don't want to figure out how to Git that. Sorry!
 
-Copyright 2025 Wilbur Jaywright.
+Copyright 2026 Wilbur Jaywright d.b.a. Marswide BGL.
 
-This file is part of Cocorum.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-Cocorum is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free
-Software Foundation, either version 3 of the License, or (at your option) any
-later version.
+    http://www.apache.org/licenses/LICENSE-2.0
 
-Cocorum is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with Cocorum. If not, see <https://www.gnu.org/licenses/>.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 S.D.G."""
 
@@ -88,7 +86,7 @@ class AccountAPI:
             headers=static.RequestHeaders.user_agent,
             cookies=self.servicephp.session_cookie,
             timeout=static.Delays.request_timeout,
-            )
+        )
 
         assert r.status_code == 200, f"Keyed request failed with status {r.status_code}:\n" + \
             r.text
@@ -103,7 +101,8 @@ class AccountAPI:
         Returns:
             settings (cocorum.scraping.HTMLVideoSettings): The data"""
 
-        r = self.keyed_request("/account/content", "edit", {"id": video_id}, method="POST")
+        r = self.keyed_request("/account/content", "edit",
+                               {"id": video_id}, method="POST")
         soup = bs4.BeautifulSoup(r.text, features="html.parser")
         return scraping.HTMLVideoSettings(soup, self.servicephp)
 
@@ -148,7 +147,7 @@ class AccountAPI:
             "category_primary",
             "category_secondary",
             "placeholder",
-            )
+        )
 
         # Mapping from argument names to form data names
         mapping = {
@@ -157,14 +156,14 @@ class AccountAPI:
             "channel_id": "channelId",
             "category_primary": "siteChannelId",
             "category_secondary": "mediaChannelId",
-            }
+        }
 
         # base data with blank stubs for unsupported keys
         data = {
             "liveStreamingUnlistReplay": 0,
             "liveStreamingSourcePassthrough": 0,
-            "closed_captions": {"uploads":{},"removals":{}},
-            }
+            "closed_captions": {"uploads": {}, "removals": {}},
+        }
 
         # Figure out if some of the settings are staying the same
         old_data_needed = False
@@ -180,13 +179,15 @@ class AccountAPI:
                 "title": old_data.title,
                 "description": old_data.description,
                 "tags": static.Misc.tag_split.join(old_data.tags),
-                "is_featured_for_channel": "0",  # str(old_data.channel_featured), TODO
-                "is_featured_for_user": "0",  # str(old_data.profile_featured), TODO
+                # str(old_data.channel_featured), TODO
+                "is_featured_for_channel": "0",
+                # str(old_data.profile_featured), TODO
+                "is_featured_for_user": "0",
                 "visibility": old_data.visibility,
                 "channelId": str(old_data.channel[1]),
                 "siteChannelId": str(old_data.category_primary[1]),
                 "mediaChannelId": str(old_data.category_secondary[1]),
-                })
+            })
 
         # Overwrite old data with new
         data.update(kwargs)
@@ -199,7 +200,8 @@ class AccountAPI:
 
         print(data)
 
-        r = self.keyed_request(endpoint="/account/content", action="edit", params={"id": video_id, "sid": 8}, data=data, method="POST")
+        r = self.keyed_request(endpoint="/account/content", action="edit",
+                               params={"id": video_id, "sid": 8}, data=data, method="POST")
 
         assert r.text.strip() == static.Misc.video_edit_success, str(r.content)
 
@@ -219,7 +221,7 @@ class AccountAPI:
         v = self.keyed_request("/api/Media/GetClosedCaptions", params={
             "mid": video_id,
             "language": lang,
-            }).json()["return"]
+        }).json()["return"]
         if not v:
             return None
         return v["path"]
