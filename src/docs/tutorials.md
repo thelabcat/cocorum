@@ -183,6 +183,30 @@ while time.time() - start_time < 60 and (msg := chat.get_message()):
         print("(Hey, that was our message!)")
 ```
 
+By the way, if we're logged in anyway, we can also obtain the RLS API URL with key automatically:
+
+```python
+# Set up the HTML Scraper, for getting data that is only shown on webpages
+from cocorum import scraping
+scraper = scraping.Scraper(sphp)
+
+key_info_list = scraper.get_rls_api_keys()  # Returns a list of scraping.HTMLRLSAPIKeyInfo objects
+user_key_info = key_info_list[0]  # The user key info is always first, then the channels
+assert user_key_info.channel_id is None, "User key info was not first, for unknown reason"
+
+# Make sure the user has a key. If not, this value will be NoneType
+if not user_key_info.url_with_key:
+    print("No key generated for user! Creating now...")
+    assert user_key_info.reset_key(), "Key failed to reset."  # WARNING: This makes the info objects stale! They are all inaccurate now.
+    
+    # We must recreate all the data storage
+    key_info_list = scraper.get_rls_api_keys()
+    user_key_info = key_info_list[0]
+
+# We can use this info to create the RumbleAPI object now.
+API_URL = user_key_info.url_with_key
+```
+
 When we are done with any `ServicePHP` instance, just to make less of an attack surface and possible confusion on the number of signed-in devices, we should do something about the still-valid session token cookie. We can do this with the `logout()` method, immediately invalidating the token:
 
 ```python
