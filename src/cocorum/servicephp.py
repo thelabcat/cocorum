@@ -432,7 +432,8 @@ class ServicePHP:
                 "user.has_unread_notifications",
                 method="GET",
             ).json()
-            self.__user_id = utils.base_36_to_10(j["user"]["id"].removeprefix("_"))
+            self.__user_id = utils.base_36_to_10(
+                j["user"]["id"].removeprefix("_"))
 
         return self.__user_id
 
@@ -955,4 +956,4 @@ class ServicePHP:
             data={
                 "channel_id": str(utils.ensure_b10(channel_id)) if channel_id else None
             },
-        )["data"]["success"]
+        ).json()["data"]["success"]
