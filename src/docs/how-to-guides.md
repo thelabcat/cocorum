@@ -1,4 +1,4 @@
-#How-To Guides
+# How-To Guides
 
 ## Iterate through all comments under all videos, and mute spam bots based on your custom detection algorithm
 ```
