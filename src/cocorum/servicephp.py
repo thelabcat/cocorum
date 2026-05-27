@@ -956,4 +956,4 @@ class ServicePHP:
             data={
                 "channel_id": str(utils.ensure_b10(channel_id)) if channel_id else None
             },
-        ).json()["data"]["success"]
+        ).json().get("data", {}).get("success", False)
