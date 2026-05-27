@@ -28,6 +28,7 @@ import bs4
 from . import static
 from . import utils
 from .basehandles import *
+
 if TYPE_CHECKING:
     from .servicephp import ServicePHP
 
@@ -38,10 +39,10 @@ class HTMLObj:
     def __init__(self, elem: bs4.Tag, sphp: Optional[ServicePHP] = None):
         """Abstract object scraped from bs4 HTML
 
-    Args:
-        elem (bs4.Tag): The BeautifulSoup element to base our data on.
-        sphp (servicephp.ServicePHP): The parent ServicePHP, for convenience methods.
-            Defaults to None.
+        Args:
+            elem (bs4.Tag): The BeautifulSoup element to base our data on.
+            sphp (ServicePHP): The parent ServicePHP, for convenience methods.
+                Defaults to None.
         """
 
         self._elem: bs4.Tag = elem
@@ -53,8 +54,8 @@ class HTMLObj:
     def __getitem__(self, key: str):
         """Get a key from the element attributes
 
-    Args:
-        key (str): A valid attribute name.
+        Args:
+            key (str): A valid attribute name.
         """
 
         return self._elem.attrs[key]
@@ -66,14 +67,13 @@ class HTMLUserBadge(HTMLObj, BaseUserBadge):
     def __init__(self, elem: bs4.Tag, sphp: ServicePHP):
         """A user badge as extracted from a bs4 HTML element.
 
-    Args:
-        elem (bs4.Tag): The badge <img> element.
+        Args:
+            elem (bs4.Tag): The badge <img> element.
         """
 
         HTMLObj.__init__(self, elem, sphp)
 
-        self.slug: str = elem.attrs["src"].split(
-            "/")[-1:elem.attrs["src"].rfind("_")]
+        self.slug: str = elem.attrs["src"].split("/")[-1 : elem.attrs["src"].rfind("_")]
         """The space-less string identifier for this badge type"""
 
         self.__icon = None
@@ -96,24 +96,31 @@ class HTMLComment(HTMLObj, BaseComment):
     def __init__(self, elem: bs4.Tag, sphp: ServicePHP):
         """A comment on a video as returned by service.php comment.list
 
-    Args:
-        elem (bs4.Tag): The <li> element of the comment.
-        sphp (ServicePHP): The parent ServicePHP, for convenience methods.
+        Args:
+            elem (bs4.Tag): The <li> element of the comment.
+            sphp (ServicePHP): The parent ServicePHP, for convenience methods.
         """
 
         HTMLObj.__init__(self, elem, sphp)
 
         # Badges of the user who commented if we have them
-        badges_unkeyed = (HTMLUserBadge(badge_elem, sphp) for badge_elem in self._elem.find_all(
-            "li", attrs={"class": "comments-meta-user-badge"}))
+        badges_unkeyed = (
+            HTMLUserBadge(badge_elem, sphp)
+            for badge_elem in self._elem.find_all(
+                "li", attrs={"class": "comments-meta-user-badge"}
+            )
+        )
 
         self.user_badges: dict[str, HTMLUserBadge] = {
-            badge.slug: badge for badge in badges_unkeyed}
+            badge.slug: badge for badge in badges_unkeyed
+        }
         """The badges that this comment's user has, by slug"""
 
     def __repr__(self) -> str:
         """String to represent this object"""
-        return f"{type(self).__name__}(username='{self.username}', text=\"{self.text}\")"
+        return (
+            f"{type(self).__name__}(username='{self.username}', text=\"{self.text}\")"
+        )
 
     @property
     def is_first(self) -> bool:
@@ -197,9 +204,9 @@ class HTMLPlaylist(HTMLObj, BasePlaylist):
     def __init__(self, elem: bs4.Tag, scraper: Scraper):
         """A playlist as obtained from HTML data.
 
-    Args:
-        elem (bs4.Tag): The playlist class = "thumbnail__grid-item" element.
-        scraper (Scraper): The HTML scraper object that spawned us.
+        Args:
+            elem (bs4.Tag): The playlist class = "thumbnail__grid-item" element.
+            scraper (Scraper): The HTML scraper object that spawned us.
         """
 
         HTMLObj.__init__(self, elem)
@@ -234,9 +241,11 @@ class HTMLPlaylist(HTMLObj, BasePlaylist):
         """The playlist thumbnail as a binary string"""
         if not self.__thumbnail:  # We never queried the thumbnail before
             response = requests.get(
-                self.thumbnail_url, timeout=static.Delays.request_timeout)
-            assert response.status_code == 200, "Status code " + \
-                str(response.status_code)
+                self.thumbnail_url, timeout=static.Delays.request_timeout
+            )
+            assert response.status_code == 200, "Status code " + str(
+                response.status_code
+            )
 
             self.__thumbnail = response.content
 
@@ -249,7 +258,7 @@ class HTMLPlaylist(HTMLObj, BasePlaylist):
 
     @property
     def url(self) -> str:
-        """The URL of the playlist page """
+        """The URL of the playlist page"""
         return static.URI.rumble_base + self._url_raw
 
     @property
@@ -275,22 +284,36 @@ class HTMLPlaylist(HTMLObj, BasePlaylist):
     @property
     def title(self) -> str:
         """The title of the playlist"""
-        return self._pagesoup.find("h1", attrs={"class": "playlist-control-panel__playlist-name"}).string.strip()
+        return self._pagesoup.find(
+            "h1", attrs={"class": "playlist-control-panel__playlist-name"}
+        ).string.strip()
 
     @property
     def description(self) -> str:
         """The description of the playlist"""
-        return self._pagesoup.find("div", attrs={"class": "playlist-control-panel__description"}).string.strip()
+        return self._pagesoup.find(
+            "div", attrs={"class": "playlist-control-panel__description"}
+        ).string.strip()
 
     @property
     def visibility(self) -> str:
         """The visibility of the playlist"""
-        return self._pagesoup.find("span", attrs={"class": "playlist-control-panel__visibility-state"}).string.strip().lower()
+        return (
+            self._pagesoup.find(
+                "span", attrs={"class": "playlist-control-panel__visibility-state"}
+            )
+            .string.strip()
+            .lower()
+        )
 
     @property
     def num_items(self) -> int:
         """The number of items in the playlist"""
-        return int(self._elem.find("span", attrs={"class": "playlist__videos"}).string.strip().removesuffix(" videos"))
+        return int(
+            self._elem.find("span", attrs={"class": "playlist__videos"})
+            .string.strip()
+            .removesuffix(" videos")
+        )
 
 
 class HTMLChannel(HTMLObj):
@@ -302,7 +325,9 @@ class HTMLChannel(HTMLObj):
 
     def __repr__(self) -> str:
         """String to represent this object"""
-        return f"{type(self).__name__}(title=\"{self.title}\", channel_id={self.channel_id})"
+        return (
+            f'{type(self).__name__}(title="{self.title}", channel_id={self.channel_id})'
+        )
 
     def __int__(self) -> int:
         """The channel as an integer (its numeric ID)"""
@@ -368,8 +393,8 @@ class HTMLVideo(HTMLObj):
     def __init__(self, elem: bs4.Tag):
         """Video on a user or channel page as extracted from the page's HTML.
 
-    Args:
-        elem (bs4.Tag): The class = "thumbnail__grid-item" video element.
+        Args:
+            elem (bs4.Tag): The class = "thumbnail__grid-item" video element.
         """
 
         super().__init__(elem)
@@ -387,7 +412,7 @@ class HTMLVideo(HTMLObj):
 
     def __repr__(self) -> str:
         """String to represent this object"""
-        return f"{type(self).__name__}(title=\"{self.title}\", video_id={self.video_id})"
+        return f'{type(self).__name__}(title="{self.title}", video_id={self.video_id})'
 
     def __eq__(self, other: Any) -> bool:
         """Determine if this video is equal to another.
@@ -443,9 +468,11 @@ class HTMLVideo(HTMLObj):
         """The video thumbnail as a bytestring"""
         if not self.__thumbnail:  # We never queried the thumbnail before
             response = requests.get(
-                self.thumbnail_url, timeout=static.Delays.request_timeout)
-            assert response.status_code == 200, "Status code " + \
-                str(response.status_code)
+                self.thumbnail_url, timeout=static.Delays.request_timeout
+            )
+            assert response.status_code == 200, "Status code " + str(
+                response.status_code
+            )
 
             self.__thumbnail = response.content
 
@@ -454,7 +481,9 @@ class HTMLVideo(HTMLObj):
     @property
     def video_url(self) -> str:
         """The URL of the video's viewing page"""
-        return static.URI.rumble_base + self._elem.find("a", attrs={"class": "videostream__link link"}).get("href")
+        return static.URI.rumble_base + self._elem.find(
+            "a", attrs={"class": "videostream__link link"}
+        ).get("href")
 
     @property
     def title(self) -> str:
@@ -464,7 +493,11 @@ class HTMLVideo(HTMLObj):
     @property
     def upload_date(self) -> float:
         """The time that the video was uploaded, in seconds since epoch"""
-        return utils.parse_timestamp(self._elem.find("time", attrs={"class": "videostream__data--subitem videostream__time"}).get("datetime"))
+        return utils.parse_timestamp(
+            self._elem.find(
+                "time", attrs={"class": "videostream__data--subitem videostream__time"}
+            ).get("datetime")
+        )
 
 
 class HTMLVideoSettings(HTMLObj):
@@ -473,9 +506,9 @@ class HTMLVideoSettings(HTMLObj):
     def __init__(self, elem: bs4.Tag, servicephp: ServicePHP):
         """Video on a user or channel page as extracted from the page's HTML.
 
-    Args:
-        elem (bs4.Tag): The returned HTML from the request.
-        servicephp (cocorum.servicephp.ServicePHP): We may not need this. TODO.
+        Args:
+            elem (bs4.Tag): The returned HTML from the request.
+            servicephp (ServicePHP): We may not need this. TODO.
         """
 
         super().__init__(elem, servicephp)
@@ -485,13 +518,14 @@ class HTMLVideoSettings(HTMLObj):
 
     def __repr__(self) -> str:
         """String to represent this object"""
-        return f"{type(self).__name__}(title=\"{self.title}\")"
+        return f'{type(self).__name__}(title="{self.title}")'
 
     @property
     def thumbnail_url(self) -> str:
         """The URL to the thumbnail of the video"""
-        label = self._elem.find(lambda tag: tag.name ==
-                                "label" and "Thumbnail" in tag.text)
+        label = self._elem.find(
+            lambda tag: tag.name == "label" and "Thumbnail" in tag.text
+        )
         for tag in label.next_siblings:
             if tag.name == "img":
                 break
@@ -504,9 +538,11 @@ class HTMLVideoSettings(HTMLObj):
         """The video thumbnail as a bytestring"""
         if not self.__thumbnail:  # We never queried the thumbnail before
             response = requests.get(
-                self.thumbnail_url, timeout=static.Delays.request_timeout)
-            assert response.status_code == 200, "Status code " + \
-                str(response.status_code)
+                self.thumbnail_url, timeout=static.Delays.request_timeout
+            )
+            assert response.status_code == 200, "Status code " + str(
+                response.status_code
+            )
 
             self.__thumbnail = response.content
 
@@ -536,14 +572,16 @@ class HTMLVideoSettings(HTMLObj):
     def category_primary(self) -> (str, int):
         """The name and numeric ID of the video's primary category"""
         tag = self._elem.find(name="select", id="siteChannelId").find(
-            "option", selected=True)
+            "option", selected=True
+        )
         return tag.text.strip(), int(tag["value"])
 
     @property
     def category_secondary(self) -> (str, int):
         """The name and numeric ID of the video's secondary category"""
         tag = self._elem.find(name="select", id="mediaChannelId").find(
-            "option", selected=True)
+            "option", selected=True
+        )
         if tag:
             return tag.text.strip(), int(tag["value"])
         # No secondary channel was selected
@@ -553,7 +591,8 @@ class HTMLVideoSettings(HTMLObj):
     def channel(self) -> (str | None, int):
         """The name and numeric ID of the channel the video was posted to"""
         tag = self._elem.find(name="select", id="channelId").find(
-            "option", selected=True)
+            "option", selected=True
+        )
         if tag["value"]:
             return tag.text.strip(), int(tag["value"])
 
@@ -563,19 +602,77 @@ class HTMLVideoSettings(HTMLObj):
     @property
     def channel_featured(self) -> bool:
         """Wether this video is featured on the top of the channel"""
-        return bool(self._elem.find("input", type="checkbox", id="featured_for_channel").checked)
+        return bool(
+            self._elem.find("input", type="checkbox", id="featured_for_channel").checked
+        )
 
     @property
     def profile_featured(self) -> bool:
         """Wether this video is featured on the top of the profile"""
-        return bool(self._elem.find("input", type="checkbox", id="featured_for_user").checked)
+        return bool(
+            self._elem.find("input", type="checkbox", id="featured_for_user").checked
+        )
 
     @property
     def visibility(self) -> str:
         """The video's visibility setting"""
-        return self._elem.find("input", attrs={"name": "visibility"}, checked=True)["value"]
+        return self._elem.find("input", attrs={"name": "visibility"}, checked=True)[
+            "value"
+        ]
 
     # TODO support placeholder video for livestreams
+
+
+class HTMLRLSAPIKeyInfo(HTMLObj):
+    """Information on a user or channel's Live Stream API key"""
+
+    def __init__(self, button: bs4.Tag, servicephp: ServicePHP):
+        """
+        Information on a user or channel's Live Stream API key.
+
+        Args:
+            button (bs4.Tag): The reset button element for this key.
+            servicephp (ServicePHP): The Service.PHP wrapper for convenience ops.
+
+        """
+
+        super().__init__(button, servicephp)
+
+        self._passbox: bs4.Tag | None = self._elem.parent.find("input")
+        """The password box where the API URL is, if we have one"""
+
+    @property
+    def channel_id(self) -> int | None:
+        """The channel ID this key info is associated with, if any, in base 10"""
+        return (
+            int(self._elem["data-channel-id"])
+            if self._elem["data-channel-id"]
+            else None
+        )
+
+    @property
+    def channel_id_b10(self) -> int | None:
+        """The channel ID this key info is associated with, if any, in base 10"""
+        return self.channel_id
+
+    @property
+    def channel_id_b36(self) -> str | None:
+        """The channel ID this key info is associated with, if any, in base 36"""
+        return utils.ensure_b36(self.channel_id) if self.channel_id else None
+
+    @property
+    def url_with_key(self) -> str | None:
+        """The Live Stream API URL with key, if one has been generated"""
+        return self._passbox["value"] if self._passbox else None
+
+    def reset_key(self) -> bool:
+        """
+        Reset or generate this Live Stream API key. WARNING: Makes this object stale!
+
+        Returns:
+            success (bool): The success attribute of the response JSON.
+        """
+        return self.servicephp.reset_rls_api_key(self.channel_id)
 
 
 class Scraper:
@@ -584,8 +681,8 @@ class Scraper:
     def __init__(self, servicephp: ServicePHP):
         """Scraper for general information.
 
-    Args:
-        servicephp (ServicePHP): A ServicePHP instance, for authentication.
+        Args:
+            servicephp (ServicePHP): A ServicePHP instance, for authentication.
         """
 
         self.servicephp: ServicePHP = servicephp
@@ -607,15 +704,15 @@ class Scraper:
 
     def soup_request(self, url: str, allow_soft_404: bool = False) -> bs4.BeautifulSoup:
         """Make a GET request to a URL, and return HTML beautiful soup for
-        scraping.
+            scraping.
 
-    Args:
-        url (str): The URL to query.
-        allow_soft_404 (bool): Treat a 404 as a success if text is returned.
-            Defaults to False
+        Args:
+            url (str): The URL to query.
+            allow_soft_404 (bool): Treat a 404 as a success if text is returned.
+                Defaults to False
 
-    Returns:
-        Soup (bs4.BeautifulSoup): The webpage at the URL, logged-in version.
+        Returns:
+            Soup (bs4.BeautifulSoup): The webpage at the URL, logged-in version.
         """
 
         r = requests.get(
@@ -625,20 +722,23 @@ class Scraper:
             headers=static.RequestHeaders.user_agent,
         )
 
-        assert r.status_code == 200 or (allow_soft_404 and r.status_code == 404 and r.text), \
-            f"Fetching page {url} failed: {r}\n{r.text}"
+        assert r.status_code == 200 or (
+            allow_soft_404 and r.status_code == 404 and r.text
+        ), f"Fetching page {url} failed: {r}\n{r.text}"
 
         return bs4.BeautifulSoup(r.text, features="html.parser")
 
-    def get_muted_user_record(self, username: Optional[str] = None) -> int | None | dict[str, int]:
+    def get_muted_user_record(
+        self, username: Optional[str] = None
+    ) -> int | None | dict[str, int]:
         """Get the record IDs for mutes.
 
-    Args:
-        username (str): Username to find record ID for.
-            Defaults to None, return all records as a dict.
+        Args:
+            username (str): Username to find record ID for.
+                Defaults to None, return all records as a dict.
 
-    Returns:
-        Record (int | dict[str, int] | None): Either the single user's mute record ID, or None if they are not found, or a dict of all username:mute record ID pairs.
+        Returns:
+            Record (int | dict[str, int] | None): Either the single user's mute record ID, or None if they are not found, or a dict of all username:mute record ID pairs.
         """
 
         # The page we are on
@@ -650,10 +750,10 @@ class Scraper:
         # While there are more pages
         while True:
             # Get the next page of mutes and search for mute buttons
-            soup = self.soup_request(
-                static.URI.mutes_page.format(page=pagenum))
+            soup = self.soup_request(static.URI.mutes_page.format(page=pagenum))
             elems = soup.find_all(
-                "button", attrs={"class": "unmute_action button-small"})
+                "button", attrs={"class": "unmute_action button-small"}
+            )
 
             # We reached the last page
             if not elems:
@@ -665,8 +765,7 @@ class Scraper:
                 if username and e.attrs["data-username"] == username:
                     return e.attrs["data-record-id"]
 
-                record_ids[e.attrs["data-username"]
-                           ] = int(e.attrs["data-record-id"])
+                record_ids[e.attrs["data-username"]] = int(e.attrs["data-record-id"])
 
             # Turn the page
             pagenum += 1
@@ -681,39 +780,40 @@ class Scraper:
     def get_channels(self, username: str = None) -> list[HTMLChannel]:
         """Get all channels under a username.
 
-    Args:
-        username (str): The username to get the channels under.
-            Defaults to None, use our own username.
+        Args:
+            username (str): The username to get the channels under.
+                Defaults to None, use our own username.
 
-    Returns:
-        Channels (list): List of HTMLChannel objects.
+        Returns:
+            Channels (list): List of HTMLChannel objects.
         """
 
         if not username:
             username = self.username
 
         # Get the page of channels and parse for them
-        soup = self.soup_request(
-            static.URI.channels_page.format(username=username))
+        soup = self.soup_request(static.URI.channels_page.format(username=username))
         elems = soup.find_all("div", attrs={"data-type": "channel"})
         return [HTMLChannel(e) for e in elems]
 
-    def get_videos(self, username=None, is_channel=False, max_num=None) -> list[HTMLVideo]:
+    def get_videos(
+        self, username=None, is_channel=False, max_num=None
+    ) -> list[HTMLVideo]:
         """Get the videos under a user or channel.
 
-    Args:
-        username (str): The name of the user or channel to search under.
-            Defaults to ourselves.
-        is_channel (bool): Is this a channel instead of a userpage?
-            Defaults to False.
-        max_num (int): The maximum number of videos to retrieve, starting from
-            the newest. WARNING: You will likely hit a 503 error if max_num is
-            None or too high.
-            Defaults to None, return all videos.
-            Note, rounded up to the nearest page.
+        Args:
+            username (str): The name of the user or channel to search under.
+                Defaults to ourselves.
+            is_channel (bool): Is this a channel instead of a userpage?
+                Defaults to False.
+            max_num (int): The maximum number of videos to retrieve, starting from
+                the newest. WARNING: You will likely hit a 503 error if max_num is
+                None or too high.
+                Defaults to None, return all videos.
+                Note, rounded up to the nearest page.
 
-    Returns:
-        Videos (list[HTMLVideo]): List of scraped videos.
+        Returns:
+            Videos (list[HTMLVideo]): List of scraped videos.
         """
 
         # default to the logged-in username
@@ -735,12 +835,12 @@ class Scraper:
         pagenum = 1
         while new_video_elems and (not max_num or len(videos) < max_num):
             # Get the next page of videos
-            soup = self.soup_request(
-                f"{url_start}?page={pagenum}", allow_soft_404=True)
+            soup = self.soup_request(f"{url_start}?page={pagenum}", allow_soft_404=True)
 
             # Search for video listings
             new_video_elems = soup.find_all(
-                "div", attrs={"class": "videostream thumbnail__grid--item"})
+                "div", attrs={"class": "videostream thumbnail__grid--item"}
+            )
 
             # We found some video listings
             if new_video_elems:
@@ -759,7 +859,10 @@ class Scraper:
         """
 
         soup = self.soup_request(static.URI.playlists_page)
-        return [HTMLPlaylist(elem, self) for elem in soup.find_all("div", attrs={"class": "playlist"})]
+        return [
+            HTMLPlaylist(elem, self)
+            for elem in soup.find_all("div", attrs={"class": "playlist"})
+        ]
 
     def get_categories(self) -> (dict[str, int], dict[str, int]):
         """Load the primary and secondary upload categories from Rumble
@@ -774,21 +877,30 @@ class Scraper:
         print("Loading categories")
         soup = self.soup_request(static.URI.uploadphp)
 
-        options_box1 = soup.find(
-            "input", attrs={"id": "category_primary"}).parent
-        options_elems1 = options_box1.find_all(
-            "div", attrs={"class": "select-option"})
-        categories1 = {e.string.strip(): int(
-            e.attrs["data-value"]) for e in options_elems1}
+        options_box1 = soup.find("input", attrs={"id": "category_primary"}).parent
+        options_elems1 = options_box1.find_all("div", attrs={"class": "select-option"})
+        categories1 = {
+            e.string.strip(): int(e.attrs["data-value"]) for e in options_elems1
+        }
 
-        options_box2 = soup.find(
-            "input", attrs={"id": "category_secondary"}).parent
-        options_elems2 = options_box2.find_all(
-            "div", attrs={"class": "select-option"})
-        categories2 = {e.string.strip(): int(
-            e.attrs["data-value"]) for e in options_elems2}
+        options_box2 = soup.find("input", attrs={"id": "category_secondary"}).parent
+        options_elems2 = options_box2.find_all("div", attrs={"class": "select-option"})
+        categories2 = {
+            e.string.strip(): int(e.attrs["data-value"]) for e in options_elems2
+        }
 
         return categories1, categories2
+
+    def get_rls_api_keys(self) -> list[HTMLRLSAPIKeyInfo]:
+        """
+        Get information on the Live Stream API keys for the user and each channel.
+
+        Returns:
+            keys_info (list[HTMLRLSAPIKeyInfo]): An object wrapping the information for each user and channel key.
+        """
+        soup = self.soup_request(static.URI.rls_api_keys_page)
+        buttons = soup.findAll("button", {"class": "reset-livestream-api-key"})
+        return [HTMLRLSAPIKeyInfo(button, self.servicephp) for button in buttons]
 
     def get_acc_apikey(self) -> str:
         """Get the apiKey used for some account-related operations.

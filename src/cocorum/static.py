@@ -75,6 +75,9 @@ class URI:
     channels_page = rumble_base + "/user/{username}/channels"
     """Channels under a user, format with username"""
 
+    rls_api_keys_page = rumble_base + "/account/livestream-api"
+    """Live Stream API key management, with the keys for viewing"""
+
     playlists_page = rumble_base + "/my-library/playlists"
     """The logged-in user's playlist page"""
 

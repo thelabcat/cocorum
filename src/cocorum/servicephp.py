@@ -37,9 +37,9 @@ class APIUserBadge(JSONObj, BaseUserBadge):
     def __init__(self, slug: str, jsondata: dict):
         """A badge of a user as returned by the API.
 
-    Args:
-        slug (str): The string identifier of the badge.
-        jsondata (dict): The JSON data block of the badge.
+        Args:
+            slug (str): The string identifier of the badge.
+            jsondata (dict): The JSON data block of the badge.
         """
 
         JSONObj.__init__(self, jsondata)
@@ -65,9 +65,9 @@ class APIComment(JSONObj, BaseComment):
     def __init__(self, jsondata: dict, servicephp: ServicePHP):
         """A comment on a video as returned by a successful attempt to make it
 
-    Args:
-        jsondata (dict): The JSON block for a single comment.
-        servicephp (ServicePHP): The ServicePHP object that spawned us.
+        Args:
+            jsondata (dict): The JSON block for a single comment.
+            servicephp (ServicePHP): The ServicePHP object that spawned us.
         """
 
         JSONObj.__init__(self, jsondata)
@@ -76,8 +76,10 @@ class APIComment(JSONObj, BaseComment):
 
         # Badges of the user who commented if we have them
         if self.get("comment_user_badges"):
-            self.user_badges = {slug: APIUserBadge(
-                slug, data) for slug, data in self["comment_user_badges"].items()}
+            self.user_badges = {
+                slug: APIUserBadge(slug, data)
+                for slug, data in self["comment_user_badges"].items()
+            }
 
     def __repr__(self) -> str:
         """String to represent this object"""
@@ -110,9 +112,9 @@ class APIUser(JSONObj, BaseUser):
     def __init__(self, jsondata: dict, servicephp: ServicePHP):
         """User data as returned by the API.
 
-    Args:
-        jsondata (dict): The JSON data block of a single user.
-        servicephp (ServicePHP): The ServicePHP object that spawned us.
+        Args:
+            jsondata (dict): The JSON data block of a single user.
+            servicephp (ServicePHP): The ServicePHP object that spawned us.
         """
 
         JSONObj.__init__(self, jsondata)
@@ -124,7 +126,9 @@ class APIUser(JSONObj, BaseUser):
 
     def __repr__(self) -> str:
         """String to represent this object"""
-        return f"{type(self).__name__}(username='{self.username}', user_id={self.user_id})"
+        return (
+            f"{type(self).__name__}(username='{self.username}', user_id={self.user_id})"
+        )
 
     @property
     def user_id(self) -> int:
@@ -155,13 +159,15 @@ class APIUser(JSONObj, BaseUser):
     def picture(self) -> bytes:
         """The user's profile picture as a bytes string"""
         if not self.picture_url:  # The profile picture is blank
-            return b''
+            return b""
 
         if not self.__picture:  # We never queried the profile pic before
             response = requests.get(
-                self.picture_url, timeout=static.Delays.request_timeout)
-            assert response.status_code == 200, "Status code " + \
-                str(response.status_code)
+                self.picture_url, timeout=static.Delays.request_timeout
+            )
+            assert response.status_code == 200, "Status code " + str(
+                response.status_code
+            )
 
             self.__picture = response.content
 
@@ -190,9 +196,9 @@ class APIPlaylist(JSONObj, BasePlaylist):
     def __init__(self, jsondata: dict, servicephp: ServicePHP):
         """Playlist as returned by the API.
 
-    Args:
-        jsondata (dict): The JSON data block of a playlist.
-        servicephp (ServicePHP): The ServicePHP object that spawned us.
+        Args:
+            jsondata (dict): The JSON data block of a playlist.
+            servicephp (ServicePHP): The ServicePHP object that spawned us.
         """
 
         JSONObj.__init__(self, jsondata)
@@ -277,9 +283,9 @@ class TwoFacAuth(JSONObj):
     def __init__(self, jsondata: dict, servicephp: ServicePHP):
         """Handle and use the resposne data from the 2FA request.
 
-    Args:
-        jsondata (dict): The JSON data block of the 2FA first step data.
-        servicephp (ServicePHP): The ServicePHP object that spawned us.
+        Args:
+            jsondata (dict): The JSON data block of the 2FA first step data.
+            servicephp (ServicePHP): The ServicePHP object that spawned us.
         """
 
         JSONObj.__init__(self, jsondata)
@@ -308,8 +314,7 @@ class TwoFacAuth(JSONObj):
             return tuple()
 
         return tuple(
-            option for option, available in self["options"].items()
-            if available
+            option for option, available in self["options"].items() if available
         )
 
     def request_2fa_code(self, option: str = "authenticator") -> str | None:
@@ -326,8 +331,9 @@ class TwoFacAuth(JSONObj):
 
         assert self.options, "2FA is not enabled on this account"
 
-        assert option in self.options, \
-            f"Option '{option}' is not enabled on this account for 2FA"
+        assert (
+            option in self.options
+        ), f"Option '{option}' is not enabled on this account for 2FA"
 
         if option == "email":
             r = self.servicephp.sphp_request(
@@ -363,14 +369,14 @@ class TwoFacAuth(JSONObj):
 class ServicePHP:
     """Interact with Rumble's service.php API"""
 
-    def __init__(self, username: str, session: (str | dict) = None):
+    def __init__(self, username: str, session: str | dict = None):
         """Interact with Rumble's service.php API.
 
-    Args:
-        username (str): The username we will be working under.
-        session (str | dict): A pre-existing session token.
-            Defaults to None, await login.
-            """
+        Args:
+            username (str): The username we will be working under.
+            session (str | dict): A pre-existing session token.
+                Defaults to None, await login.
+        """
 
         # Set up initial auth data variables
         self.username: str = username
@@ -386,18 +392,20 @@ class ServicePHP:
         # Session is a cookie dict
         elif isinstance(session, dict):
             assert session.get(
-                static.Misc.session_token_key), f"Session cookie dict must have '{static.Misc.session_token_key}' as key."
+                static.Misc.session_token_key
+            ), f"Session cookie dict must have '{static.Misc.session_token_key}' as key."
             self.session_cookie = session
 
         # Session was passed but it is not anything we can use
         elif session is not None:
             raise ValueError(
-                f"Session must be a token str or cookie dict, got {type(session)}")
+                f"Session must be a token str or cookie dict, got {type(session)}"
+            )
 
         # If a session cookie was passed, test it
-        assert not self.session_cookie\
-            or utils.test_session_cookie(self.session_cookie), \
-            "Session cookie is invalid."
+        assert not self.session_cookie or utils.test_session_cookie(
+            self.session_cookie
+        ), "Session cookie is invalid."
 
         # Stored ID of the logged in user
         self.__user_id = None
@@ -409,7 +417,11 @@ class ServicePHP:
     @property
     def session_token(self) -> str:
         """The token stored in our session cookie, empty if if we are not logged in"""
-        return self.session_cookie[static.Misc.session_token_key] if self.session_cookie else ""
+        return (
+            self.session_cookie[static.Misc.session_token_key]
+            if self.session_cookie
+            else ""
+        )
 
     @property
     def user_id(self) -> int:
@@ -420,8 +432,7 @@ class ServicePHP:
                 "user.has_unread_notifications",
                 method="GET",
             ).json()
-            self.__user_id = utils.base_36_to_10(
-                j["user"]["id"].removeprefix("_"))
+            self.__user_id = utils.base_36_to_10(j["user"]["id"].removeprefix("_"))
 
         return self.__user_id
 
@@ -435,7 +446,14 @@ class ServicePHP:
         """The numeric ID of the logged in user in base 36"""
         return utils.base_10_to_36(self.user_id)
 
-    def sphp_request(self, service_name: str, data: dict = {}, additional_params: dict = {}, logged_in: bool = True, method: str = "POST") -> requests.Response:
+    def sphp_request(
+        self,
+        service_name: str,
+        data: dict = {},
+        additional_params: dict = {},
+        logged_in: bool = True,
+        method: str = "POST",
+    ) -> requests.Response:
         """
         Make a request to Service.PHP with common settings
 
@@ -466,16 +484,20 @@ class ServicePHP:
             cookies=self.session_cookie if logged_in else None,
             timeout=static.Delays.request_timeout,
         )
-        assert r.status_code == 200, f"Service.PHP request for {service_name} failed: {r}\n{r.text}"
+        assert (
+            r.status_code == 200
+        ), f"Service.PHP request for {service_name} failed: {r}\n{r.text}"
         # If the request json has a data -> success value, make sure it is True
         d = r.json().get("data")
         if isinstance(d, dict):
             assert d.get(
-                "success", True), f"Service.PHP request for {service_name} failed: \n{r.text}"
+                "success", True
+            ), f"Service.PHP request for {service_name} failed: \n{r.text}"
         # Data was not a dict but was not empty
         elif d:
             print(
-                f"Service.PHP request for {service_name} did not fail but returned unknown data type {type(d)}: {d}")
+                f"Service.PHP request for {service_name} did not fail but returned unknown data type {type(d)}: {d}"
+            )
 
         return r
 
@@ -494,7 +516,7 @@ class ServicePHP:
             "user.get_salts",
             data={"username": self.username},
             logged_in=False,
-            additional_params={"response_type": "session"}
+            additional_params={"response_type": "session"},
         )
         salts = r.json()["data"]["salts"]
 
@@ -517,7 +539,7 @@ class ServicePHP:
                 "password": password_hashes,
                 "redirect_url": static.URI.rumble_base,
             },
-            logged_in=False
+            logged_in=False,
         )
 
         return TwoFacAuth(r.json()["data"], self)
@@ -533,7 +555,7 @@ class ServicePHP:
         Returns:
             result (TwoFacAuth | None): The result of the first login step.
                 None means login is complete.
-            """
+        """
 
         # Get the password hash to start off
         ph = self.get_hashed_password(password)
@@ -550,7 +572,6 @@ class ServicePHP:
             "user.login",
             data={
                 "username": self.username,
-
                 # Hash the password using the salts
                 "password_hashes": ph,
             },
@@ -586,18 +607,24 @@ class ServicePHP:
         cookie_start = static.Misc.session_token_key + "="
         for piece in r.headers["Set-Cookie"].split():
             if piece.startswith(cookie_start):
-                self.session_cookie = {static.Misc.session_token_key: piece.removeprefix(
-                    cookie_start).removesuffix(";")}
+                self.session_cookie = {
+                    static.Misc.session_token_key: piece.removeprefix(
+                        cookie_start
+                    ).removesuffix(";")
+                }
                 return
         raise ValueError(
-            "Login failed: Did not find session token in 2FA response headers.")
+            "Login failed: Did not find session token in 2FA response headers."
+        )
 
     def logout(self):
         """Log out this ServicePHP instance"""
         self.sphp_request("user.logout", method="GET")
         self.session_cookie = None
 
-    def chat_pin(self, stream_id: SupportsInt | str, message: SupportsInt, unpin: bool = False):
+    def chat_pin(
+        self, stream_id: SupportsInt | str, message: SupportsInt, unpin: bool = False
+    ):
         """Pin or unpin a message in a chat.
 
         Args:
@@ -614,19 +641,26 @@ class ServicePHP:
             },
         )
 
-    def mute_user(self, username: str, is_channel: bool = False, video: Optional[SupportsInt] = None, duration: Optional[int] = None, total: bool = False):
+    def mute_user(
+        self,
+        username: str,
+        is_channel: bool = False,
+        video: Optional[SupportsInt] = None,
+        duration: Optional[int] = None,
+        total: bool = False,
+    ):
         """Mute a user or channel by name.
 
-    Args:
-        username (str): The user to mute.
-        is_channel (bool): Is this a channel name rather than a username?
-        video (SupportsInt): The video to mute the user on.
-            Defaults to None.
-        duration (int): How long the user will be muted for, in seconds.
-            Defaults to None, mute permanently.
-        total (bool): Is this a mute across all videos?
-            Defaults to False, requires video if False.
-            """
+        Args:
+            username (str): The user to mute.
+            is_channel (bool): Is this a channel name rather than a username?
+            video (SupportsInt): The video to mute the user on.
+                Defaults to None.
+            duration (int): How long the user will be muted for, in seconds.
+                Defaults to None, mute permanently.
+            total (bool): Is this a mute across all videos?
+                Defaults to False, requires video if False.
+        """
 
         self.sphp_request(
             "moderation.mute",
@@ -650,7 +684,7 @@ class ServicePHP:
             "moderation.unmute",
             data={
                 "record_id": int(record_id),
-            }
+            },
         )
 
     def _is_comment_elem(self, e: bs4.Tag) -> bool:
@@ -663,16 +697,20 @@ class ServicePHP:
             Result (bool): Did the element fit the criteria for being a comment?
         """
 
-        return e.name == "li" and "comment-item" in e.get("class") and "comments-create" not in e.get("class")
+        return (
+            e.name == "li"
+            and "comment-item" in e.get("class")
+            and "comments-create" not in e.get("class")
+        )
 
     def comment_list(self, video_id: str | SupportsInt) -> list[scraping.HTMLComment]:
         """Get the list of comments under a video.
 
-    Args:
-        video_id (str | SupportsInt): The numeric ID of a video in base 10 or 36.
+        Args:
+            video_id (str | SupportsInt): The numeric ID of a video in base 10 or 36.
 
-    Returns:
-        Comments (list[scraping.HTMLComment]): A list of scraping.HTMLComment objects.
+        Returns:
+            Comments (list[scraping.HTMLComment]): A list of scraping.HTMLComment objects.
         """
 
         r = self.sphp_request(
@@ -686,7 +724,9 @@ class ServicePHP:
         comment_elems = soup.find_all(self._is_comment_elem)
         return [scraping.HTMLComment(e, self) for e in comment_elems]
 
-    def comment_add(self, video_id: SupportsInt | str, comment: str, reply_id: SupportsInt = 0) -> APIComment:
+    def comment_add(
+        self, video_id: SupportsInt | str, comment: str, reply_id: SupportsInt = 0
+    ) -> APIComment:
         """Post a comment on a video.
 
         Args:
@@ -786,15 +826,15 @@ class ServicePHP:
             data={
                 "playlist_id": str(playlist_id),
                 "video_id": utils.ensure_b10(video_id),
-            }
+            },
         )
 
     def playlist_delete_video(self, playlist_id: str, video_id: SupportsInt | str):
         """Remove a video from a playlist.
 
-    Args:
-        playlist_id (str): The numeric ID of the playlist in base 64.
-        video_id (int, str): The numeric ID of the video to remove, in base 10 or 36.
+        Args:
+            playlist_id (str): The numeric ID of the playlist in base 64.
+            video_id (int, str): The numeric ID of the video to remove, in base 10 or 36.
         """
 
         self.sphp_request(
@@ -802,10 +842,16 @@ class ServicePHP:
             data={
                 "playlist_id": str(playlist_id),
                 "video_id": utils.ensure_b10(video_id),
-            }
+            },
         )
 
-    def playlist_add(self, title: str, description: str = "", visibility: str = "public", channel_id: SupportsInt | str = None) -> APIPlaylist:
+    def playlist_add(
+        self,
+        title: str,
+        description: str = "",
+        visibility: str = "public",
+        channel_id: SupportsInt | str = None,
+    ) -> APIPlaylist:
         """Create a new playlist.
 
         Args:
@@ -828,11 +874,18 @@ class ServicePHP:
                 "description": str(description),
                 "visibility": str(visibility),
                 "channel_id": str(utils.ensure_b10(channel_id)) if channel_id else None,
-            }
+            },
         )
         return APIPlaylist(r.json()["data"], self)
 
-    def playlist_edit(self, playlist_id: str, title: str, description: str = "", visibility: str = "public", channel_id: Optional[SupportsInt | str] = None) -> APIPlaylist:
+    def playlist_edit(
+        self,
+        playlist_id: str,
+        title: str,
+        description: str = "",
+        visibility: str = "public",
+        channel_id: Optional[SupportsInt | str] = None,
+    ) -> APIPlaylist:
         """Edit the details of an existing playlist
 
         Args:
@@ -857,7 +910,7 @@ class ServicePHP:
                 "visibility": str(visibility),
                 "channel_id": str(utils.ensure_b10(channel_id)) if channel_id else None,
                 "playlist_id": str(playlist_id),
-            }
+            },
         )
         return APIPlaylist(r.json()["data"], self)
 
@@ -884,3 +937,22 @@ class ServicePHP:
             "raid.confirm",
             data={"video_id": utils.ensure_b10(stream_id)},
         )
+
+    def reset_rls_api_key(self, channel_id: SupportsInt | str = None) -> bool:
+        """
+        Reset the Live Stream API URL for a user or channel.
+
+        Args:
+            channel_id (SupportsInt | str): The channel to reset the API key for.
+                Defaults to None, reset the user API key.
+
+        Returns:
+            success (bool): The success attribute of the returned JSON.
+        """
+
+        return self.sphp_request(
+            "livestream_api.reset_api_key",
+            data={
+                "channel_id": str(utils.ensure_b10(channel_id)) if channel_id else None
+            },
+        )["data"]["success"]
