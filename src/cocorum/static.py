@@ -90,7 +90,7 @@ class URI:
     servicephp = rumble_base + "/service.php"
     """The Service.PHP API"""
 
-    uploadphp = "https://web5.rumble.com/upload.php"
+    uploadphp = rumble_base + "/upload.php"
     """The video upload PHP"""
 
     rumbot_suffix = "/api/ls"
