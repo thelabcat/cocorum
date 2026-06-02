@@ -686,6 +686,7 @@ class RumbleAPI:
         self.refresh_rate: int | float = refresh_rate
         """How long to reuse queried data before refreshing"""
 
+        api_url = str(api_url)
         self._rumbot_mode: bool = rumbot_mode or api_url.endswith(
             static.URI.rumbot_suffix)
         """Does the api_url points to an instance of VapinGamers' RUM Live Alerts?"""
