@@ -667,14 +667,14 @@ class RumbleAPI:
 
     def __init__(
         self,
-        api_url: str,
+        api_url: str | scraping.HTMLRLSAPIKeyInfo,
         refresh_rate: int | float = static.Delays.api_refresh_default,
         rumbot_mode: Optional[bool] = None,
     ):
         """Rumble Live Stream API wrapper
 
         Args:
-            api_url (str): The Rumble API URL, with the key.
+            api_url (str | scraping.HTMLRLSAPIKeyInfo): The Rumble API URL, with the key.
             refresh_rate (int | float): AKA time to live. How long to reuse queried data before refreshing.
                 Defaults to static.Delays.api_refresh_default.
             rumbot_mode (bool): Does the api_url points to an instance of VapinGamers' RUM Live Alerts?
@@ -726,14 +726,14 @@ class RumbleAPI:
         return self.__api_url
 
     @api_url.setter
-    def api_url(self, url: str):
+    def api_url(self, url: str | scraping.HTMLRLSAPIKeyInfo):
         """Set a new API URL, and refresh
 
         Args:
-            url (str): The new API URL to use.
+            url (str | scraping.HTMLRLSAPIKeyInfo): The new API URL to use.
         """
 
-        self.__api_url = url
+        self.__api_url = str(url)
         self.refresh()
 
     def __getitem__(self, key: str):
