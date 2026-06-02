@@ -716,10 +716,10 @@ class Scraper:
         """Our username (automatically sets the ServicePHP username if it was unknown)"""
         if self.servicephp.username:
             return self.servicephp.username
-        return self.verify_username()
+        return self.validate_username()
 
-    def verify_username(self) -> str:
-        """Verify the username that ServicePHP's cookie is associated with, setting it in ServicePHP if they do not match.
+    def validate_username(self) -> str:
+        """Find out the username that ServicePHP's cookie is associated with, setting it in ServicePHP if they do not match.
 
         Returns:
             username (str): The username as shown on the account settings page.
