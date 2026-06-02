@@ -73,7 +73,8 @@ class HTMLUserBadge(HTMLObj, BaseUserBadge):
 
         HTMLObj.__init__(self, elem, sphp)
 
-        self.slug: str = elem.attrs["src"].split("/")[-1 : elem.attrs["src"].rfind("_")]
+        self.slug: str = elem.attrs["src"].split(
+            "/")[-1: elem.attrs["src"].rfind("_")]
         """The space-less string identifier for this badge type"""
 
         self.__icon = None
@@ -603,14 +604,16 @@ class HTMLVideoSettings(HTMLObj):
     def channel_featured(self) -> bool:
         """Wether this video is featured on the top of the channel"""
         return bool(
-            self._elem.find("input", type="checkbox", id="featured_for_channel").checked
+            self._elem.find("input", type="checkbox",
+                            id="featured_for_channel").checked
         )
 
     @property
     def profile_featured(self) -> bool:
         """Wether this video is featured on the top of the profile"""
         return bool(
-            self._elem.find("input", type="checkbox", id="featured_for_user").checked
+            self._elem.find("input", type="checkbox",
+                            id="featured_for_user").checked
         )
 
     @property
@@ -699,8 +702,22 @@ class Scraper:
 
     @property
     def username(self) -> str:
-        """Our username"""
-        return self.servicephp.username
+        """Our username (automatically sets the ServicePHP username if it was unknown)"""
+        if self.servicephp.username:
+            return self.servicephp.username
+        return self.verify_username()
+
+    def verify_username(self) -> str:
+        """Verify the username that ServicePHP's cookie is associated with, setting it in ServicePHP if they do not match.
+
+        Returns:
+            username (str): The username as shown on the account settings page.
+        """
+        username = self.soup_request(static.URI.acc_settings_page).\
+            find("input", attrs={"name": "username"})["value"]
+        if not self.servicephp.username or self.servicephp.username != username:
+            self.servicephp.username = username
+        return username
 
     def soup_request(self, url: str, allow_soft_404: bool = False) -> bs4.BeautifulSoup:
         """Make a GET request to a URL, and return HTML beautiful soup for
@@ -750,7 +767,8 @@ class Scraper:
         # While there are more pages
         while True:
             # Get the next page of mutes and search for mute buttons
-            soup = self.soup_request(static.URI.mutes_page.format(page=pagenum))
+            soup = self.soup_request(
+                static.URI.mutes_page.format(page=pagenum))
             elems = soup.find_all(
                 "button", attrs={"class": "unmute_action button-small"}
             )
@@ -765,7 +783,8 @@ class Scraper:
                 if username and e.attrs["data-username"] == username:
                     return e.attrs["data-record-id"]
 
-                record_ids[e.attrs["data-username"]] = int(e.attrs["data-record-id"])
+                record_ids[e.attrs["data-username"]
+                           ] = int(e.attrs["data-record-id"])
 
             # Turn the page
             pagenum += 1
@@ -792,7 +811,8 @@ class Scraper:
             username = self.username
 
         # Get the page of channels and parse for them
-        soup = self.soup_request(static.URI.channels_page.format(username=username))
+        soup = self.soup_request(
+            static.URI.channels_page.format(username=username))
         elems = soup.find_all("div", attrs={"data-type": "channel"})
         return [HTMLChannel(e) for e in elems]
 
@@ -835,7 +855,8 @@ class Scraper:
         pagenum = 1
         while new_video_elems and (not max_num or len(videos) < max_num):
             # Get the next page of videos
-            soup = self.soup_request(f"{url_start}?page={pagenum}", allow_soft_404=True)
+            soup = self.soup_request(
+                f"{url_start}?page={pagenum}", allow_soft_404=True)
 
             # Search for video listings
             new_video_elems = soup.find_all(
@@ -877,14 +898,18 @@ class Scraper:
         print("Loading categories")
         soup = self.soup_request(static.URI.uploadphp)
 
-        options_box1 = soup.find("input", attrs={"id": "category_primary"}).parent
-        options_elems1 = options_box1.find_all("div", attrs={"class": "select-option"})
+        options_box1 = soup.find(
+            "input", attrs={"id": "category_primary"}).parent
+        options_elems1 = options_box1.find_all(
+            "div", attrs={"class": "select-option"})
         categories1 = {
             e.string.strip(): int(e.attrs["data-value"]) for e in options_elems1
         }
 
-        options_box2 = soup.find("input", attrs={"id": "category_secondary"}).parent
-        options_elems2 = options_box2.find_all("div", attrs={"class": "select-option"})
+        options_box2 = soup.find(
+            "input", attrs={"id": "category_secondary"}).parent
+        options_elems2 = options_box2.find_all(
+            "div", attrs={"class": "select-option"})
         categories2 = {
             e.string.strip(): int(e.attrs["data-value"]) for e in options_elems2
         }

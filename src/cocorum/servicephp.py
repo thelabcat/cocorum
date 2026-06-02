@@ -369,17 +369,20 @@ class TwoFacAuth(JSONObj):
 class ServicePHP:
     """Interact with Rumble's service.php API"""
 
-    def __init__(self, username: str, session: str | dict = None):
+    def __init__(self, username: str = None, session: str | dict = None):
         """Interact with Rumble's service.php API.
 
         Args:
             username (str): The username we will be working under.
+                Defaults to None, refer to session.
             session (str | dict): A pre-existing session token.
                 Defaults to None, await login.
         """
 
+        assert username or session, "Must pass at least one thing to log in with"
+
         # Set up initial auth data variables
-        self.username: str = username
+        self.username: str | None = username
         """The username this ServicePHP wrapper is working under"""
 
         self.session_cookie: dict | None = None

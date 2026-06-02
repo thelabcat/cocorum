@@ -84,6 +84,9 @@ class URI:
     account_page = rumble_base + "/account"
     """Account page"""
 
+    acc_settings_page = account_page + "/settings"
+    """Account settings page, where lots of user info is stored"""
+
     servicephp = rumble_base + "/service.php"
     """The Service.PHP API"""
 
