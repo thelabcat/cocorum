@@ -644,6 +644,17 @@ class HTMLRLSAPIKeyInfo(HTMLObj):
         self._passbox: bs4.Tag | None = self._elem.parent.find("input")
         """The password box where the API URL is, if we have one"""
 
+    def __str__(self) -> str:
+        """The API URL with key stored in this info object, if any"""
+        return self.url_with_key if self.url_with_key else ""
+
+    def __eq__(self, other) -> bool:
+        """Compare this object to another"""
+        if isinstance(other, str) or hasattr(other, "__str__"):
+            return self.url_with_key == str(other)
+
+        return False
+
     @property
     def channel_id(self) -> int | None:
         """The channel ID this key info is associated with, if any, in base 10"""
