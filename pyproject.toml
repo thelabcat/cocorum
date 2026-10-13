@@ -16,7 +16,8 @@ dependencies = [
   "beautifulsoup4",
   "json-five",
   "requests",
-  "requests-sse", #Only for the Rumble chat SSE stream
+  "urllib3>=2.3", # HTTPResponse.shutdown(), so ChatAPI.close() can unblock a read
+  "launchdarkly-eventsource>=1.7.3", # Rumble chat SSE stream
   ]
 classifiers = [
     "Programming Language :: Python :: 3",

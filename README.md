@@ -73,7 +73,8 @@ from cocorum import chatapi
 chat = chatapi.ChatAPI(stream_id = STREAM_ID) # Stream ID can be base 10 or 36
 chat.clear_mailbox() # Erase messages that were still visible before we connected
 
-# Get messages for one minute
+# Get messages for one minute.
+# get_message() returns None when the livestream chat ends (HTTP 204 after a read timeout) or after close().
 start_time = time.time()
 while time.time() - start_time < 60 and (msg := chat.get_message()):
     print(msg.user.username, "said", msg)

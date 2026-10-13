@@ -21,11 +21,16 @@ S.D.G."""
 
 from __future__ import annotations
 
+import threading
 import time
-from typing import Any, Optional, SupportsInt
+import urllib3
+from typing import Any, Callable, Iterator, Optional, SupportsInt
 import requests
 import json5 as json  # For parsing SSE message data
-from requests_sse import client as ssec
+from ld_eventsource import SSEClient
+from ld_eventsource.actions import Event, Fault
+from ld_eventsource.config import ConnectStrategy, ErrorStrategy
+from ld_eventsource.errors import HTTPContentTypeError, HTTPStatusError
 from .basehandles import *
 from .jsonhandles import JSONObj, JSONUserAction
 from .servicephp import ServicePHP
@@ -511,21 +516,87 @@ class Message(ChatAPIObj):
         return self.chat.unpin_message(self)
 
 
-class ChatAPI():
-    """The Rumble internal chat API"""
+class ChatClosed(Exception):
+    """The livestream chat is not open.
 
-    def __init__(self, stream_id: SupportsInt | str, servicephp: Optional[ServicePHP] = None, history_len: int = 1000):
+    Raised when constructing `ChatAPI` against a chat Rumble has already ended
+    (HTTP 204). `get_message()` does not raise this; it returns None.
+    """
+
+
+def _is_timeout(error: BaseException | None) -> bool:
+    """True when `error` is a socket or urllib3 timeout, including a wrapped one."""
+
+    if error is None:
+        return False
+    if isinstance(error, (TimeoutError, urllib3.exceptions.TimeoutError)):
+        return True
+    reason = getattr(error, "reason", None)
+    if isinstance(reason, BaseException) and reason is not error:
+        return _is_timeout(reason)
+    return False
+
+
+def _rumble_sse_error_action(
+    error: Optional[BaseException],
+) -> tuple[bool, Optional[ErrorStrategy]]:
+    """Choose reconnect versus stop for one SSE failure.
+
+    A timeout means the chat was quiet, so reconnect. HTTP 204 means Rumble
+    has ended the chat, so stop. Other HTTP failures stop as well and are
+    raised to the caller; they are not treated as "the stream ended".
+    A dropped connection or a clean EOF also reconnects, so the next status
+    code is what decides.
+
+    Args:
+        error: The failure from `SSEClient`, or None if the server closed the stream.
+
+    Returns:
+        The `ErrorStrategy` action (`FAIL` or `CONTINUE`) and None to keep this strategy.
+    """
+
+    if isinstance(error, (HTTPStatusError, HTTPContentTypeError)):
+        return (ErrorStrategy.FAIL, None)
+    # Timeouts, clean EOF (error is None), and other I/O errors.
+    return (ErrorStrategy.CONTINUE, None)
+
+
+class ChatAPI():
+    """The Rumble internal chat API
+
+    The live stream is read with `launchdarkly-eventsource`. Rumble does not
+    send SSE event ids or an "ended" event. A read timeout reconnects; HTTP 204
+    on that connection means the chat is over, and `get_message()` then returns
+    None. The chat id is the embed id (`/embed/vXXXX/`), not the watch-page slug.
+    """
+
+    def __init__(
+        self,
+        stream_id: SupportsInt | str,
+        servicephp: Optional[ServicePHP] = None,
+        history_len: int = 1000,
+        read_timeout: float = static.Delays.sse_read_timeout,
+        reconnect_delay: float = static.Delays.sse_reconnect_delay,
+        on_ended: Optional[Callable[[], None]] = None,
+    ):
         """The Rumble internal chat API
 
     Args:
         stream_id (int, str): Stream ID in base 10 int or base 36 str.
-            WARNING: If a str is passed, this WILL ASSUME BASE 36
-            even if only digits are present! Convert to int before passing
-            if it is base 10.
+            This is the embed id. WARNING: If a str is passed, this WILL
+            ASSUME BASE 36 even if only digits are present! Convert to int
+            before passing if it is base 10.
         servicephp (ServicePHP): A logged in Service.PHP agent for two-way.
             Defaults to None, view chat as a guest.
         history_len (int): Length of message history to store.
             Defaults to 1000.
+        read_timeout (float): Seconds to wait for the next SSE bytes before
+            reconnecting. Defaults to 90. This is not the end of the chat.
+        reconnect_delay (float): Seconds to wait before that reconnect.
+            Defaults to 2.
+        on_ended (Callable): Called once, with no arguments, when the stream
+            stops. That includes HTTP 204, the iterator ending, and `close()`.
+            Defaults to None.
             """
 
         self.stream_id: str = utils.ensure_b36(stream_id)
@@ -548,6 +619,30 @@ class ChatAPI():
         self.badges: dict[str, UserBadge] = {}
         """User badge types by slug"""
 
+        self.read_timeout: float = read_timeout
+        """Seconds of SSE silence before reconnecting"""
+
+        self.reconnect_delay: float = reconnect_delay
+        """Seconds to wait before reconnecting after a timeout or drop"""
+
+        self.on_ended: Optional[Callable[[], None]] = on_ended
+        """Called once when the stream stops, if set"""
+
+        self._closed = threading.Event()
+        """Set when close() has been requested. Safe to check from any thread."""
+
+        self._state_lock = threading.Lock()
+        """Guards close bookkeeping. Never held while reading the stream."""
+
+        self._ended_notified = False
+        """True after on_ended has been called"""
+
+        self._seen_message_ids: set[int] = set()
+        """Message IDs already delivered. Init replays about 50 of these on reconnect."""
+
+        self._action_iter: Optional[Iterator] = None
+        """The single SSEClient.all iterator. One reader thread only."""
+
         # Generate our URLs
         self.sse_url: str = static.URI.ChatAPI.sse_stream.format(
             stream_id_b10=self.stream_id_b10)
@@ -557,13 +652,11 @@ class ChatAPI():
             stream_id_b10=self.stream_id_b10)
         """The URL of the chat API"""
 
-        #  Connect to SSE stream
-        #  Note: We do NOT want this request to have a timeout
-        self.client: ssec.EventSource = ssec.EventSource(
-            self.sse_url, headers=static.RequestHeaders.sse_api)
-        """The client for the chat SSE stream"""
+        # A read timeout is required. Without one, a chat that has ended
+        # (and that Rumble never closes) blocks in recv forever.
+        self.client: Optional[SSEClient] = self._make_sse_client()
+        """The launchdarkly-eventsource client for the chat SSE stream"""
 
-        self.client.connect()
         self.chat_running: bool = True
         """Status of wether the chat is still open"""
 
@@ -575,20 +668,106 @@ class ChatAPI():
             self.servicephp) if self.servicephp else None
         """An HTML scraper for getting data like mute records"""
 
-        #  Parse the init data for the stream (must do AFTER we have servicephp)
-        self.parse_init_data(self.__next_event_json())
-
         self.last_send_time: float = 0
         """The last time we sent a message"""
+
+        # Parse the init data (must do AFTER we have servicephp).
+        # HTTP 204 here means the chat was already over.
+        try:
+            init_json = self.__next_event_json()
+            if not init_json:
+                raise ChatClosed(f"Chat {self.stream_id} ended before init")
+            self.parse_init_data(init_json)
+        except ChatClosed:
+            raise
+        except Exception:
+            self._shutdown_socket()
+            raise
 
     def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(stream_id={self.stream_id})"
 
+    def _make_sse_client(self) -> SSEClient:
+        """Build the SSE client.
+
+        Timeouts must be a `urllib3.Timeout` inside `urllib3_request_options`.
+        A `(connect, read)` tuple is rejected by urllib3 here.
+        """
+
+        # close() from another thread calls HTTPResponse.shutdown() (urllib3 >= 2.3).
+        if not hasattr(urllib3.response.HTTPResponse, "shutdown"):
+            raise RuntimeError(
+                "urllib3>=2.3 is required so ChatAPI.close() can unblock a waiting read"
+            )
+        timeout = urllib3.Timeout(
+            connect=static.Delays.sse_connect_timeout,
+            read=self.read_timeout,
+        )
+        return SSEClient(
+            connect=ConnectStrategy.http(
+                url=self.sse_url,
+                headers=dict(static.RequestHeaders.sse_api),
+                urllib3_request_options={"timeout": timeout},
+            ),
+            initial_retry_delay=self.reconnect_delay,
+            # Rumble sends no event ids, so Last-Event-ID cannot resume the stream.
+            error_strategy=ErrorStrategy.from_lambda(_rumble_sse_error_action),
+        )
+
+    def _shutdown_socket(self):
+        """Mark the chat closed and close the SSE client, without on_ended.
+
+        Thread-safe. `SSEClient.close()` wakes a blocked read on Linux.
+        """
+
+        with self._state_lock:
+            self._closed.set()
+            self.chat_running = False
+            client = self.client
+        if client is not None:
+            try:
+                client.close()
+            except Exception:
+                pass
+
+    def _notify_ended(self):
+        """Call on_ended once. The callback is not invoked while the lock is held."""
+
+        with self._state_lock:
+            if self._ended_notified:
+                return
+            self._ended_notified = True
+            callback = self.on_ended
+        if callback is not None:
+            callback()
+
+    def _end_stream(self):
+        """Stop the stream and notify on_ended once."""
+
+        self._shutdown_socket()
+        self._notify_ended()
+
     def close(self):
-        """Close the chat connection"""
-        self.client.close()
-        self.chat_running = False
+        """Close the chat connection.
+
+        Thread-safe. Calling this from another thread unblocks `get_message()`
+        waiting on the SSE read (promptly on Linux; on Windows the read may
+        wait until `read_timeout`). Safe to call more than once. Runs `on_ended`
+        the first time.
+        """
+
+        self._end_stream()
+
+    def __enter__(self) -> ChatAPI:
+        """Return this chat so it can be used as a context manager."""
+
+        return self
+
+    def __exit__(self, exc_type, exc, tb) -> None:
+        """Close the chat stream when leaving the `with` block."""
+
+        self.close()
 
     @property
     def session_cookie(self) -> dict | None:
@@ -765,35 +944,79 @@ class ChatAPI():
         assert record_id, "User was not in muted records"
         self.servicephp.unmute_user(record_id)
 
-    def __next_event_json(self) -> dict:
+    def __next_event_json(self) -> dict | None:
         """Wait for the next event from the SSE and parse the JSON
 
         Returns:
-            json (dict): The next event
+            json (dict | None): The next event, or None if the chat has ended.
         """
 
-        if not self.chat_running:  # Do not try to query a new event if chat is closed
+        if not self.chat_running or self._closed.is_set():
             print("Chat closed, cannot retrieve new JSON data.")
-            return
+            return None
 
-        try:
-            event = next(self.client, None)
+        if self._action_iter is None:
+            self._action_iter = iter(self.client.all)
 
-        # TODO: Will this ever happen?
-        except requests.exceptions.ReadTimeout:
-            print("Request read timeout.")
-            event = None
+        while not self._closed.is_set():
+            try:
+                action = next(self._action_iter)
+            except StopIteration:
+                self._end_stream()
+                print("Chat has closed.")
+                return None
+            except HTTPStatusError as exc:
+                # 204 is Rumble's "this chat has ended" on connect or reconnect.
+                # Any other status is an error, not a quiet or finished chat.
+                if exc.status == 204:
+                    self._end_stream()
+                    print("Chat has closed.")
+                    return None
+                self._shutdown_socket()
+                raise
+            except Exception:
+                if self._closed.is_set():
+                    self._end_stream()
+                    print("Chat has closed.")
+                    return None
+                self._shutdown_socket()
+                raise
 
-        if not event:
-            self.chat_running = False  # Chat has been closed
-            print("Chat has closed.")
-            return
-        if not event.data:  # Blank SSE event
-            print("Blank SSE event:>", event, "<:")
-            # Self recursion should work so long as we don't get dozens of blank events in a row
-            return self.__next_event_json()
+            if self._closed.is_set():
+                self._end_stream()
+                print("Chat has closed.")
+                return None
 
-        return json.loads(event.data)
+            if isinstance(action, Fault):
+                # CONTINUE faults are timeouts and dropped connections.
+                # The client reconnects; a following 204 is what ends the chat.
+                if isinstance(action.error, HTTPStatusError) and action.error.status == 204:
+                    self._end_stream()
+                    print("Chat has closed.")
+                    return None
+                if self._closed.is_set():
+                    self._end_stream()
+                    print("Chat has closed.")
+                    return None
+                if _is_timeout(action.error):
+                    print("Chat stream read timed out; reconnecting.")
+                else:
+                    print("Chat stream interrupted; reconnecting.")
+                continue
+
+            if not isinstance(action, Event):
+                # Start (connected) and Comment (Rumble sends ": ") carry no payload.
+                continue
+
+            if not action.data:  # Blank SSE event
+                print("Blank SSE event:>", action, "<:")
+                continue
+
+            return json.loads(action.data)
+
+        self._end_stream()
+        print("Chat has closed.")
+        return None
 
     def parse_init_data(self, jsondata: dict):
         """Extract initial chat data from the SSE init event JSON
@@ -826,12 +1049,23 @@ class ChatAPI():
         jsondata (dict): A JSON data block from an SSE event.
         """
 
-        # Add new messages
-        self.__mailbox += [Message(message_json, self) for message_json in jsondata["data"].get(
-            "messages", []) if int(message_json["id"]) not in self.__mailbox]
+        # Reconnects replay recent messages inside `init`. Skip any id already seen,
+        # including messages that were moved to history or cleared from the mailbox.
+        for message_json in jsondata["data"].get("messages", []):
+            message_id = int(message_json["id"])
+            if message_id in self._seen_message_ids:
+                continue
+            message = Message(message_json, self)
+            self._seen_message_ids.add(message_id)
+            self.__mailbox.append(message)
 
     def clear_mailbox(self):
-        """Delete anything in the mailbox"""
+        """Delete anything in the mailbox
+
+        Message ids that were already seen stay remembered, so a reconnect
+        does not deliver that backlog again.
+        """
+
         self.__mailbox = []
 
     def update_users(self, jsondata: dict):
@@ -880,7 +1114,8 @@ class ChatAPI():
 
     def get_message(self) -> Message | None:
         """Return the next chat message (parsing any additional data).
-        Waits for it to come in, returns None if chat closed.
+        Waits for it to come in. Returns None when the chat has ended
+        (HTTP 204) or after `close()`.
 
         Returns:
             result (Message | None): Either the next chat message or NoneType.

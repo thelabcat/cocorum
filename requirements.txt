@@ -1,4 +1,5 @@
 requests
-requests-sse
+urllib3>=2.3
+launchdarkly-eventsource>=1.7.3
 json-five
 beautifulsoup4

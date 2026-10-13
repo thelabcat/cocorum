@@ -118,6 +118,19 @@ class Delays:
     request_timeout = 20
     """How long to wait before giving up on a network request, in seconds"""
 
+    sse_connect_timeout = 10
+    """How long to wait for the chat SSE connection to be established, in seconds"""
+
+    sse_read_timeout = 90
+    """How long to wait for the next chat SSE bytes before reconnecting, in seconds.
+
+    Silence this long is not treated as the chat ending. The client reconnects,
+    and HTTP 204 on that connection means the livestream chat is over.
+    """
+
+    sse_reconnect_delay = 2
+    """How long to wait before reconnecting the chat SSE stream, in seconds"""
+
     upload_request_timeout = 300
     """How long to wait before giving up on a video chunk upload, in seconds"""
 
