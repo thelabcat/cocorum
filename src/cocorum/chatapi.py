@@ -24,6 +24,7 @@ from __future__ import annotations
 import threading
 import time
 import urllib3
+from collections import deque
 from typing import Any, Callable, Iterator, Optional, SupportsInt
 import requests
 import json5 as json  # For parsing SSE message data
@@ -603,7 +604,7 @@ class ChatAPI():
         self.stream_id: str = utils.ensure_b36(stream_id)
         """The stream ID in base 36"""
 
-        self.__mailbox = []  # A mailbox if you will
+        self.__mailbox = deque()  # A mailbox if you will
         self.__history = []  # Chat history
         self.history_len: int = history_len
         """How many messages to store in history"""
@@ -1060,7 +1061,7 @@ class ChatAPI():
         does not deliver that backlog again.
         """
 
-        self.__mailbox = []
+        self.__mailbox.clear()
 
     def update_users(self, jsondata: dict):
         """Update our dictionary of users from an SSE data JSON
@@ -1151,7 +1152,7 @@ class ChatAPI():
                 print("API sent an unimplemented SSE event type")
                 print(jsondata)
 
-        m = self.__mailbox.pop(0)  # Get the oldest message in the mailbox
+        m = self.__mailbox.popleft()  # Get the oldest message in the mailbox
         self.__history.append(m)  # Add the message to the history
 
         # Make sure the history is not too long, clipping off the oldest messages
