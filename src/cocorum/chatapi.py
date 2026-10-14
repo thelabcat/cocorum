@@ -564,10 +564,7 @@ def _rumble_sse_error_action(
 class ChatAPI():
     """The Rumble internal chat API
 
-    The live stream is read with `launchdarkly-eventsource`. Rumble does not
-    send SSE event ids or an "ended" event. A read timeout reconnects; HTTP 204
-    on that connection means the chat is over, and `get_message()` then returns
-    None.
+    The live stream is read with `launchdarkly-eventsource`.
     """
 
     def __init__(
@@ -582,7 +579,13 @@ class ChatAPI():
         """The Rumble internal chat API
 
     Args:
-        stream_id (int, str): Stream ID in base 10 int or base 36 str.
+        stream_id (int, str): The chat popout id, as a base 10 int or as
+            that same number in base 36 with no prefix. Copy the base 10
+            form from `rumble.com/chat/popup/<id>`. The embed URL is
+            `rumble.com/embed/v` plus the base 36 form: the leading `v` is
+            a prefix, so the whole embed token is not this id in base 36,
+            and it is not base 64. The watch-page slug is a different id,
+            and the chat stream returns HTTP 204 for it.
             WARNING: If a str is passed, this WILL ASSUME BASE 36
             even if only digits are present! Convert to int before passing
             if it is base 10.
@@ -591,12 +594,12 @@ class ChatAPI():
         history_len (int): Length of message history to store.
             Defaults to 1000.
         read_timeout (float): Seconds to wait for the next SSE bytes before
-            reconnecting. Defaults to 90. This is not the end of the chat.
+            reconnecting. Defaults to 90. Silence is not the end of the chat.
         reconnect_delay (float): Seconds to wait before that reconnect.
             Defaults to 2.
-        on_ended (Callable): Called once, with no arguments, when the stream
-            stops. That includes HTTP 204, the iterator ending, and `close()`.
-            Defaults to None.
+        on_ended (Callable): Optional callback, called once with no
+            arguments when the stream stops. That includes HTTP 204, the
+            iterator ending, and `close()`. Defaults to None.
             """
 
         self.stream_id: str = utils.ensure_b36(stream_id)
@@ -626,7 +629,7 @@ class ChatAPI():
         """Seconds to wait before reconnecting after a timeout or drop"""
 
         self.on_ended: Optional[Callable[[], None]] = on_ended
-        """Called once when the stream stops, if set"""
+        """Optional callback, called once with no arguments when the stream stops"""
 
         self._closed = threading.Event()
         """Set when close() has been requested. Safe to check from any thread."""
@@ -638,7 +641,7 @@ class ChatAPI():
         """True after on_ended has been called"""
 
         self._seen_message_ids: set[int] = set()
-        """Message IDs already delivered. Init replays about 50 of these on reconnect."""
+        """Message IDs already delivered. Every connection sends the chat history again."""
 
         self._action_iter: Optional[Iterator] = None
         """The single SSEClient.all iterator. One reader thread only."""
@@ -701,7 +704,7 @@ class ChatAPI():
                 urllib3_request_options={"timeout": timeout},
             ),
             initial_retry_delay=self.reconnect_delay,
-            # Rumble sends no event ids, so Last-Event-ID cannot resume the stream.
+            # Rumble sends no SSE event ids, so Last-Event-ID cannot resume the stream.
             error_strategy=ErrorStrategy.from_lambda(_rumble_sse_error_action),
         )
 
@@ -1035,12 +1038,15 @@ class ChatAPI():
     def update_mailbox(self, jsondata: dict):
         """Parse chat messages from an SSE data JSON
 
+        Every time a chat client connects, Rumble delivers all the messages
+        in the chat history. This background reconnection skips message ids
+        already seen, so that history is not delivered again.
+
     Args:
         jsondata (dict): A JSON data block from an SSE event.
         """
 
-        # Reconnects replay recent messages inside `init`. Skip any id already seen,
-        # including messages that were moved to history or cleared from the mailbox.
+        # Skip any id already seen, including messages moved to history or cleared.
         for message_json in jsondata["data"].get("messages", []):
             message_id = int(message_json["id"])
             if message_id in self._seen_message_ids:
@@ -1104,8 +1110,8 @@ class ChatAPI():
 
     def get_message(self) -> Message | None:
         """Return the next chat message (parsing any additional data).
-        Waits for it to come in. Returns None when the chat has ended
-        (HTTP 204) or after `close()`.
+
+        Waits for it to come in. Rumble does not send an ended SSE event, so a read timeout reconnects and HTTP 204 on that connection means the chat is over and this returns None. Also returns None after `close()`.
 
         Returns:
             result (Message | None): Either the next chat message or NoneType.
