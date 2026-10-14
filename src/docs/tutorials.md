@@ -92,7 +92,9 @@ With that being understood, let's connect to the SSE chat stream. I expect this 
 
 A warning here, if you used some other method to get your stream ID (such as copying it from a chat popup window's URL), be sure that it is not both base 10 and a string. Said chat URLs have it in base 10, so when copying it from there, you MUST make it an integer type before passing it here (can be converted with Python's `int()` function). This is because whatever format you pass must be converted to base 10 internally. [The converter](../modules_ref/cocorum_utils/#cocorum.utils.ensure_b10) has no way to tell the difference between a base 10 string, and a base 36 string that happens to only have base 10 numerals. So, where Cocorum uses such converters, I set them to assume any string is base 36. I could have done this the other way around maybe, but we'd hit the same sort of limitation in reverse.
 
-Copy that id from the popout chat URL, `rumble.com/chat/popup/<base 10>`. You can also pass the same number written in base 36, with no prefix. The embed URL is `rumble.com/embed/v` plus that base 36 form. The `v` is a prefix, so the embed token is not the chat id in base 36, and it is not base 64 either. The watch-page slug is a different id, and the chat stream returns HTTP 204 for it. For example, a live Lofi Girl chat popout of `85324457` is `1essrt` in base 36, and the embed path for that chat is `v1essrt`.
+Two such places to get the stream ID without using the RLS API are:
+ - The chat pop-out window URL: `rumble.com/chat/popup/<base 10>`.
+ - The video embed URL: `rumble.com/embed/v<base 36>` (don't forget to trim off the `v` prefix if you get it from here).
 
 ```python
 from cocorum import chatapi
@@ -123,7 +125,9 @@ while time.time() - start_time < 60 and (msg := chat.get_message()):
 
 ```python
 with chatapi.ChatAPI(STREAM_ID) as managed_chat:
-    managed_chat.clear_mailbox()
+    if "TheLabCat" in managed_chat.users.values():
+        print("TheLabCat is here!")
+
 ```
 
 That's all fine and dandy, but what about _sending_ messages? Well...

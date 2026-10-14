@@ -580,12 +580,10 @@ class ChatAPI():
 
     Args:
         stream_id (int, str): The chat popout id, as a base 10 int or as
-            that same number in base 36 with no prefix. Copy the base 10
-            form from `rumble.com/chat/popup/<id>`. The embed URL is
-            `rumble.com/embed/v` plus the base 36 form: the leading `v` is
-            a prefix, so the whole embed token is not this id in base 36,
-            and it is not base 64. The watch-page slug is a different id,
-            and the chat stream returns HTTP 204 for it.
+            that same number in base 36 with no prefix. Can be obtained from:
+                - The RLS API.
+                - The chat pop-out window URL: `rumble.com/chat/popup/<id>`.
+                - The video embed URL: `rumble.com/embed/v<id>` (be sure to trim off the V).
             WARNING: If a str is passed, this WILL ASSUME BASE 36
             even if only digits are present! Convert to int before passing
             if it is base 10.
