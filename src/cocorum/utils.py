@@ -279,11 +279,8 @@ def test_session_cookie(session_cookie: dict[str, str]) -> bool:
         timeout=static.Delays.request_timeout,
     )
 
-    assert r.status_code == 200, f"Testing session token failed: {r}"
-
-    # If the token is valid, we will redirect to rumble.com base
-    # Otherwise, we will redirect to auth.rumble.com
-    return static.URI.login_fail not in r.url
+    # If this code is 200, we still need to log in and it FAILED
+    return r.status_code == 409
 
 
 def options_check(url: str, method: str, origin=static.URI.rumble_base, cookies: dict = {}, params: dict = {}) -> bool:
