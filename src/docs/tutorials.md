@@ -92,12 +92,15 @@ With that being understood, let's connect to the SSE chat stream. I expect this 
 
 A warning here, if you used some other method to get your stream ID (such as copying it from a chat popup window's URL), be sure that it is not both base 10 and a string. Said chat URLs have it in base 10, so when copying it from there, you MUST make it an integer type before passing it here (can be converted with Python's `int()` function). This is because whatever format you pass must be converted to base 10 internally. [The converter](../modules_ref/cocorum_utils/#cocorum.utils.ensure_b10) has no way to tell the difference between a base 10 string, and a base 36 string that happens to only have base 10 numerals. So, where Cocorum uses such converters, I set them to assume any string is base 36. I could have done this the other way around maybe, but we'd hit the same sort of limitation in reverse.
 
-The id this wrapper wants is the livestream **embed** id (the `vXXXX` in `rumble.com/embed/vXXXX/`), which is the same value as the public API's stream id. It is not the watch-page slug. A slug that is not the embed id comes back as HTTP 204.
+The popout chat URL is the right place to copy that id from. The same id is in the embed URL (`rumble.com/embed/vXXXX/`). The watch-page slug is a different value, and the chat stream answers HTTP 204 for it.
 
 ```python
 from cocorum import chatapi
 
-chat = chatapi.ChatAPI(stream_id = STREAM_ID) # Stream ID can be an integer or a base 36 string
+def chat_over():
+    print("Chat ended")
+
+chat = chatapi.ChatAPI(stream_id = STREAM_ID, read_timeout = 90, on_ended = chat_over) # Stream ID can be an integer or a base 36 string
 chat.clear_mailbox() # Erase messages that were still visible before we connected
 ```
 
@@ -114,19 +117,14 @@ while time.time() - start_time < 60 and (msg := chat.get_message()):
 
 `get_message()` blocks until the next message. It returns `None` when the chat has ended or after `close()`. The `while` test above stops calling it once the minute is up, but the call that is already waiting still waits for one more message or for the chat to end. Rumble never sends an SSE "end" event and does not put ids on events, so the client cannot resume with `Last-Event-ID`. A read timeout (`read_timeout`, 90 seconds by default) means nothing arrived. The client waits `reconnect_delay` seconds (default 2) and connects again. HTTP 204 on that connection means the livestream chat is over, and `get_message()` returns `None`. Any other HTTP error is raised. Each reconnect's `init` event replays recent messages; ids that were already seen are skipped. A message sent during the disconnect is only recovered if it is still in that replay.
 
-`close()` is safe to call from another thread. On Linux it unblocks a waiting `get_message()` immediately. `ChatAPI` is also a context manager, and `on_ended=` runs a no-argument callback once when the stream stops, including when you call `close()`. Passing a shorter `read_timeout` notices a finished stream sooner and reconnects more often on a quiet chat.
+`close()` is safe to call from another thread. On Linux it unblocks a waiting `get_message()` immediately. `on_ended` runs once when the stream stops, including when you call `close()`. Passing a shorter `read_timeout` notices a finished stream sooner and reconnects more often on a quiet chat.
+
+`ChatAPI` can also be used as a context manager. Leaving the `with` block calls `close()`.
 
 ```python
-def chat_over():
-    print("Chat ended")
-
-with chatapi.ChatAPI(STREAM_ID, read_timeout=90, on_ended=chat_over) as chat:
-    chat.clear_mailbox()
-    while msg := chat.get_message():
-        print(msg.user.username, "said", msg)
+with chatapi.ChatAPI(STREAM_ID) as managed_chat:
+    managed_chat.clear_mailbox()
 ```
-
-This is the fix for [GitHub issue #5](https://github.com/thelabcat/cocorum/issues/5).
 
 That's all fine and dandy, but what about _sending_ messages? Well...
 

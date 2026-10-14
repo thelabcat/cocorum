@@ -295,6 +295,9 @@ class ChatSSETests(unittest.TestCase):
         with ChatAPI(1, read_timeout=30, on_ended=lambda: ended.append("ended")) as chat:
             self.chat = chat
             self.assertTrue(chat.chat_running)
+            with self.assertRaises(AttributeError):
+                chat.chat_running = False
+            self.assertTrue(chat.chat_running)
         self.assertFalse(chat.chat_running)
         self.assertEqual(ended, ["ended"])
 

@@ -30,9 +30,6 @@ class RequestHeaders:
     }
     """Header with a fake user-agent string"""
 
-    sse_api = {"Accept": "text/event-stream"}
-    """Headers for the SSE chat API"""
-
 
 class StaticAPIEndpoints:
     """API endpoints that don't change and shouldn't trigger a refresh"""

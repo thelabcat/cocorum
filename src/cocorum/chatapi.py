@@ -567,7 +567,7 @@ class ChatAPI():
     The live stream is read with `launchdarkly-eventsource`. Rumble does not
     send SSE event ids or an "ended" event. A read timeout reconnects; HTTP 204
     on that connection means the chat is over, and `get_message()` then returns
-    None. The chat id is the embed id (`/embed/vXXXX/`), not the watch-page slug.
+    None.
     """
 
     def __init__(
@@ -583,9 +583,9 @@ class ChatAPI():
 
     Args:
         stream_id (int, str): Stream ID in base 10 int or base 36 str.
-            This is the embed id. WARNING: If a str is passed, this WILL
-            ASSUME BASE 36 even if only digits are present! Convert to int
-            before passing if it is base 10.
+            WARNING: If a str is passed, this WILL ASSUME BASE 36
+            even if only digits are present! Convert to int before passing
+            if it is base 10.
         servicephp (ServicePHP): A logged in Service.PHP agent for two-way.
             Defaults to None, view chat as a guest.
         history_len (int): Length of message history to store.
@@ -652,13 +652,8 @@ class ChatAPI():
             stream_id_b10=self.stream_id_b10)
         """The URL of the chat API"""
 
-        # A read timeout is required. Without one, a chat that has ended
-        # (and that Rumble never closes) blocks in recv forever.
         self.client: Optional[SSEClient] = self._make_sse_client()
         """The launchdarkly-eventsource client for the chat SSE stream"""
-
-        self.chat_running: bool = True
-        """Status of wether the chat is still open"""
 
         #  If we have session login, use it
         self.servicephp: ServicePHP = servicephp
@@ -689,11 +684,7 @@ class ChatAPI():
         return f"{type(self).__name__}(stream_id={self.stream_id})"
 
     def _make_sse_client(self) -> SSEClient:
-        """Build the SSE client.
-
-        Timeouts must be a `urllib3.Timeout` inside `urllib3_request_options`.
-        A `(connect, read)` tuple is rejected by urllib3 here.
-        """
+        """Build the SSE client."""
 
         # close() from another thread calls HTTPResponse.shutdown() (urllib3 >= 2.3).
         if not hasattr(urllib3.response.HTTPResponse, "shutdown"):
@@ -707,7 +698,6 @@ class ChatAPI():
         return SSEClient(
             connect=ConnectStrategy.http(
                 url=self.sse_url,
-                headers=dict(static.RequestHeaders.sse_api),
                 urllib3_request_options={"timeout": timeout},
             ),
             initial_retry_delay=self.reconnect_delay,
@@ -723,7 +713,6 @@ class ChatAPI():
 
         with self._state_lock:
             self._closed.set()
-            self.chat_running = False
             client = self.client
         if client is not None:
             try:
@@ -742,12 +731,6 @@ class ChatAPI():
         if callback is not None:
             callback()
 
-    def _end_stream(self):
-        """Stop the stream and notify on_ended once."""
-
-        self._shutdown_socket()
-        self._notify_ended()
-
     def close(self):
         """Close the chat connection.
 
@@ -757,7 +740,8 @@ class ChatAPI():
         the first time.
         """
 
-        self._end_stream()
+        self._shutdown_socket()
+        self._notify_ended()
 
     def __enter__(self) -> ChatAPI:
         """Return this chat so it can be used as a context manager."""
@@ -768,6 +752,12 @@ class ChatAPI():
         """Close the chat stream when leaving the `with` block."""
 
         self.close()
+
+    @property
+    def chat_running(self) -> bool:
+        """Status of wether the chat is still open"""
+
+        return not self._closed.is_set()
 
     @property
     def session_cookie(self) -> dict | None:
@@ -951,7 +941,7 @@ class ChatAPI():
             json (dict | None): The next event, or None if the chat has ended.
         """
 
-        if not self.chat_running or self._closed.is_set():
+        if self._closed.is_set():
             print("Chat closed, cannot retrieve new JSON data.")
             return None
 
@@ -962,28 +952,28 @@ class ChatAPI():
             try:
                 action = next(self._action_iter)
             except StopIteration:
-                self._end_stream()
+                self.close()
                 print("Chat has closed.")
                 return None
             except HTTPStatusError as exc:
                 # 204 is Rumble's "this chat has ended" on connect or reconnect.
                 # Any other status is an error, not a quiet or finished chat.
                 if exc.status == 204:
-                    self._end_stream()
+                    self.close()
                     print("Chat has closed.")
                     return None
                 self._shutdown_socket()
                 raise
             except Exception:
                 if self._closed.is_set():
-                    self._end_stream()
+                    self.close()
                     print("Chat has closed.")
                     return None
                 self._shutdown_socket()
                 raise
 
             if self._closed.is_set():
-                self._end_stream()
+                self.close()
                 print("Chat has closed.")
                 return None
 
@@ -991,11 +981,11 @@ class ChatAPI():
                 # CONTINUE faults are timeouts and dropped connections.
                 # The client reconnects; a following 204 is what ends the chat.
                 if isinstance(action.error, HTTPStatusError) and action.error.status == 204:
-                    self._end_stream()
+                    self.close()
                     print("Chat has closed.")
                     return None
                 if self._closed.is_set():
-                    self._end_stream()
+                    self.close()
                     print("Chat has closed.")
                     return None
                 if _is_timeout(action.error):
@@ -1014,7 +1004,7 @@ class ChatAPI():
 
             return json.loads(action.data)
 
-        self._end_stream()
+        self.close()
         print("Chat has closed.")
         return None
 
