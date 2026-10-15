@@ -58,8 +58,8 @@ if livestream:
         time.sleep(0.1)
 ```
 
-## Experimental internal API submodules
-This part of Cocorum is not part of the official Rumble Live Stream API. It includes the following submodules:
+## Rumble internal API submodules
+This part of Cocorum's wrapping is not part of the official Rumble Live Stream API. It includes the following submodules:
 - chatapi
 - servicephp
 - uploadphp
@@ -70,13 +70,14 @@ Example usage of `cocorum.chatapi`:
 ```
 from cocorum import chatapi
 
-chat = chatapi.ChatAPI(stream_id = STREAM_ID) # Stream ID can be base 10 or 36
-chat.clear_mailbox() # Erase messages that were still visible before we connected
+# Stream ID can be base 10 int or base 36 str
+with chatapi.ChatAPI(stream_id = STREAM_ID) as chat:
+    chat.clear_mailbox() # Erase messages that were still visible before we connected
 
-# Get messages for one minute
-start_time = time.time()
-while time.time() - start_time < 60 and (msg := chat.get_message()):
-    print(msg.user.username, "said", msg)
+    # Get messages for one minute
+    start_time = time.time()
+    while time.time() - start_time < 60 and (msg := chat.get_message()):
+        print(msg.user.username, "said", msg)
 ```
 
 ## Conclusion
@@ -84,4 +85,18 @@ Hope this helps!
 
 I, Wilbur Jaywright, and my brand, Marswide BGL, have no official association with Rumble Corp. beyond that of a normal user and/or channel on the Rumble Video platform. This wrapper is not officially endorsed by Rumble Corp. or its subsidiaries.
 
-S.D.G.
+Copyright 2026 Wilbur Jaywright d.b.a. Marswide BGL.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+## S.D.G.
