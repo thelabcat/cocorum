@@ -26,6 +26,7 @@ import os
 import random
 import time
 from typing import Optional, TYPE_CHECKING
+from urllib3 import Timeout
 import requests
 import json5 as json
 from .jsonhandles import JSONObj
@@ -114,7 +115,7 @@ class UploadPHP:
         """Our Rumble session cookie to authenticate requests"""
         return self.servicephp.session_cookie
 
-    def uphp_request(self, additional_params: dict, method: str = "PUT", data: Optional[dict] = None, timeout: int | float = static.Delays.request_timeout) -> requests.Response:
+    def uphp_request(self, additional_params: dict, method: str = "PUT", data: Optional[dict] = None, timeout: int | float | Timeout = static.Delays.request_timeout) -> requests.Response:
         """Make a request to Upload.PHP with common settings.
 
         Args:
@@ -123,7 +124,7 @@ class UploadPHP:
                 Defaults to PUT.
             data (dict): Form data for the request.
                 Defaults to None.
-            timeout (int | float): Request timeout.
+            timeout (int | float | Timeout): Request timeout.
                 Defaults to static.Delays.request_timeout
 
         Returns:

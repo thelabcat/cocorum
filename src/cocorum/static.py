@@ -20,6 +20,7 @@ limitations under the License.
 S.D.G."""
 
 import re
+from urllib3 import Timeout
 
 
 class RequestHeaders:
@@ -109,8 +110,8 @@ class URI:
 class Delays:
     """Various times for delays and waits"""
 
-    request_timeout = 20
-    """How long to wait before giving up on a network request, in seconds"""
+    request_timeout = Timeout(5, 15)
+    """Timeout object for generic network requests"""
 
     sse_connect_timeout = 10
     """How long to wait for the chat SSE connection to be established, in seconds"""
