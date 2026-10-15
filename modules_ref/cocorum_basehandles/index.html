@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
       
 
@@ -1668,37 +1668,37 @@ limitations under the License.</p>
 <span class="normal">142</span>
 <span class="normal">143</span>
 <span class="normal">144</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseComment</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A comment on a Rumble video&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A comment on a Rumble video"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The comment in integer form (its ID)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The comment in integer form (its ID)"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment_id</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The comment as a string (its text)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The comment as a string (its text)"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">comment_id_b10</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The base 10 ID of the comment&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The base 10 ID of the comment"""</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">comment_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="s2">&quot;Contact the Cocorum developers, this is probably their mistake&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comment_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="s2">"Contact the Cocorum developers, this is probably their mistake"</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment_id</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">comment_id_b36</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The base 36 ID of the comment&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The base 36 ID of the comment"""</span>
         <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">base_10_to_36</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comment_id</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if this comment is equal to another.</span>
+<span class="w">        </span><span class="sd">"""Determine if this comment is equal to another.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            other (Any): Object to compare to.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># Check for direct matches first</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -1707,31 +1707,31 @@ limitations under the License.</p>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="n">other</span>
 
         <span class="c1"># Check for object attributes to match to</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;comment_id_b10&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"comment_id_b10"</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment_id_b10</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">comment_id_b10</span>
 
         <span class="c1"># Check conversion to integer last</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__int__&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"__int__"</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment_id_b10</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unpin</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pin or unpin this comment.</span>
+<span class="w">        </span><span class="sd">"""Pin or unpin this comment.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        unpin (bool): If true, unpins instead of pinning comment.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">comment_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unpin</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete this comment&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Delete this comment"""</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">comment_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">restore</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">APIComment</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Un-delete this comment&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Un-delete this comment"""</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">comment_restore</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -1889,14 +1889,14 @@ limitations under the License.</p>
 <span class="normal">123</span>
 <span class="normal">124</span>
 <span class="normal">125</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if this comment is equal to another.</span>
+<span class="w">    </span><span class="sd">"""Determine if this comment is equal to another.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        other (Any): Object to compare to.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Check for direct matches first</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -1905,11 +1905,11 @@ limitations under the License.</p>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="n">other</span>
 
     <span class="c1"># Check for object attributes to match to</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;comment_id_b10&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"comment_id_b10"</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment_id_b10</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">comment_id_b10</span>
 
     <span class="c1"># Check conversion to integer last</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__int__&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"__int__"</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment_id_b10</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span>
@@ -1938,7 +1938,7 @@ limitations under the License.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">81</span>
 <span class="normal">82</span>
 <span class="normal">83</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The comment in integer form (its ID)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The comment in integer form (its ID)"""</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment_id</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -1965,7 +1965,7 @@ limitations under the License.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">85</span>
 <span class="normal">86</span>
 <span class="normal">87</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The comment as a string (its text)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The comment as a string (its text)"""</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -1993,7 +1993,7 @@ limitations under the License.</p>
 <span class="normal">137</span>
 <span class="normal">138</span>
 <span class="normal">139</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete this comment&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Delete this comment"""</span>
 
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">comment_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2057,11 +2057,11 @@ limitations under the License.</p>
 <span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unpin</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pin or unpin this comment.</span>
+<span class="w">    </span><span class="sd">"""Pin or unpin this comment.</span>
 
 <span class="sd">Args:</span>
 <span class="sd">    unpin (bool): If true, unpins instead of pinning comment.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">comment_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unpin</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2090,7 +2090,7 @@ limitations under the License.</p>
 <span class="normal">142</span>
 <span class="normal">143</span>
 <span class="normal">144</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">restore</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">APIComment</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Un-delete this comment&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Un-delete this comment"""</span>
 
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">comment_restore</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2169,25 +2169,25 @@ limitations under the License.</p>
 <span class="normal">180</span>
 <span class="normal">181</span>
 <span class="normal">182</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseContentVotes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Likes and dislikes on a video or comment&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Likes and dislikes on a video or comment"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;String to represent this object&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(content_id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">content_id</span><span class="si">}</span><span class="s2">, score=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">)&quot;</span>
+<span class="w">        </span><span class="sd">"""String to represent this object"""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(content_id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">content_id</span><span class="si">}</span><span class="s2">, score=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">)"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The integer form of the content votes&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The integer form of the content votes"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if this content votes is equal to another.</span>
+<span class="w">        </span><span class="sd">"""Determine if this content votes is equal to another.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            other (Any): Object to compare to.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># Check for direct matches first</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -2196,11 +2196,11 @@ limitations under the License.</p>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="n">other</span>
 
         <span class="c1"># Check for object attributes to match to</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">score</span>
 
         <span class="c1"># Check conversion to integer last</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__int__&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"__int__"</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">False</span>
@@ -2315,14 +2315,14 @@ limitations under the License.</p>
 <span class="normal">180</span>
 <span class="normal">181</span>
 <span class="normal">182</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if this content votes is equal to another.</span>
+<span class="w">    </span><span class="sd">"""Determine if this content votes is equal to another.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        other (Any): Object to compare to.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Check for direct matches first</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -2331,11 +2331,11 @@ limitations under the License.</p>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="n">other</span>
 
     <span class="c1"># Check for object attributes to match to</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">score</span>
 
     <span class="c1"># Check conversion to integer last</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__int__&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"__int__"</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span>
@@ -2364,7 +2364,7 @@ limitations under the License.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The integer form of the content votes&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The integer form of the content votes"""</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -2391,8 +2391,8 @@ limitations under the License.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">150</span>
 <span class="normal">151</span>
 <span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;String to represent this object&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(content_id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">content_id</span><span class="si">}</span><span class="s2">, score=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">)&quot;</span>
+<span class="w">    </span><span class="sd">"""String to represent this object"""</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(content_id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">content_id</span><span class="si">}</span><span class="s2">, score=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">)"</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2535,29 +2535,29 @@ limitations under the License.</p>
 <span class="normal">344</span>
 <span class="normal">345</span>
 <span class="normal">346</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BasePlaylist</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A playlist of Rumble videos&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A playlist of Rumble videos"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The playlist as an integer (it&#39;s ID in base 10)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The playlist as an integer (it's ID in base 10)"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">playlist_id_b10</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The playlist as a string (it&#39;s ID in base 64)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The playlist as a string (it's ID in base 64)"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">playlist_id_b64</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;String to represent this object&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(playlist_id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span><span class="si">}</span><span class="s2">, title=</span><span class="se">\&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">)&quot;</span>
+<span class="w">        </span><span class="sd">"""String to represent this object"""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(playlist_id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span><span class="si">}</span><span class="s2">, title=</span><span class="se">\"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="se">\"</span><span class="s2">)"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if this playlist is equal to another.</span>
+<span class="w">        </span><span class="sd">"""Determine if this playlist is equal to another.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            other (Any): Object to compare to.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># Check for direct matches first</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -2566,46 +2566,46 @@ limitations under the License.</p>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">playlist_id_b64</span>
 
         <span class="c1"># # Check for object attributes to match to</span>
-        <span class="c1"># if hasattr(other, &quot;playlist_id_b10&quot;):</span>
+        <span class="c1"># if hasattr(other, "playlist_id_b10"):</span>
         <span class="c1">#     return self.playlist_id_b10 == other.playlist_id_b10</span>
 
         <span class="c1"># # Check conversion to integer last, in case another ID or something happens to match</span>
-        <span class="c1"># if hasattr(other, &quot;__int__&quot;):</span>
+        <span class="c1"># if hasattr(other, "__int__"):</span>
         <span class="c1">#     return self.playlist_id_b10 == int(other)</span>
 
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">playlist_id_b64</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The numeric ID of the playlist in base 64&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The numeric ID of the playlist in base 64"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">playlist_id_b10</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The numeric ID of the playlist in base 10&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;See Cocorum issue #22&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""The numeric ID of the playlist in base 10"""</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"See Cocorum issue #22"</span><span class="p">)</span>
         <span class="c1"># return utils.base_64_to_10(self.playlist_id)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">add_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_id</span><span class="p">:</span> <span class="n">SupportsInt</span> <span class="o">|</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a video to this playlist</span>
+<span class="w">        </span><span class="sd">"""Add a video to this playlist</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        video_id (SupportsInt | str): The numeric ID of the video to add, in base 10 or 36.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">playlist_add_video</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span><span class="p">,</span> <span class="n">video_id</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">delete_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_id</span><span class="p">:</span> <span class="n">SupportsInt</span> <span class="o">|</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a video from this playlist</span>
+<span class="w">        </span><span class="sd">"""Remove a video from this playlist</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        video_id (SupportsInt | str): The numeric ID of the video to remove, in base 10 or 36.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">playlist_delete_video</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span><span class="p">,</span> <span class="n">video_id</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">visibility</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">APIPlaylist</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Edit the details of this playlist. WARNING: The original object will probably be stale after this operation.</span>
+<span class="w">        </span><span class="sd">"""Edit the details of this playlist. WARNING: The original object will probably be stale after this operation.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            title (str): The title of the playlist.</span>
@@ -2619,7 +2619,7 @@ limitations under the License.</p>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            playlist (APIPlaylist): The edit result.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
@@ -2633,7 +2633,7 @@ limitations under the License.</p>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">playlist_edit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">visibility</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete this playlist&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Delete this playlist"""</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">playlist_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2791,14 +2791,14 @@ limitations under the License.</p>
 <span class="normal">282</span>
 <span class="normal">283</span>
 <span class="normal">284</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if this playlist is equal to another.</span>
+<span class="w">    </span><span class="sd">"""Determine if this playlist is equal to another.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        other (Any): Object to compare to.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Check for direct matches first</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -2807,11 +2807,11 @@ limitations under the License.</p>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">playlist_id_b64</span>
 
     <span class="c1"># # Check for object attributes to match to</span>
-    <span class="c1"># if hasattr(other, &quot;playlist_id_b10&quot;):</span>
+    <span class="c1"># if hasattr(other, "playlist_id_b10"):</span>
     <span class="c1">#     return self.playlist_id_b10 == other.playlist_id_b10</span>
 
     <span class="c1"># # Check conversion to integer last, in case another ID or something happens to match</span>
-    <span class="c1"># if hasattr(other, &quot;__int__&quot;):</span>
+    <span class="c1"># if hasattr(other, "__int__"):</span>
     <span class="c1">#     return self.playlist_id_b10 == int(other)</span>
 
     <span class="k">return</span> <span class="kc">False</span>
@@ -2840,7 +2840,7 @@ limitations under the License.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">248</span>
 <span class="normal">249</span>
 <span class="normal">250</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The playlist as an integer (it&#39;s ID in base 10)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The playlist as an integer (it's ID in base 10)"""</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">playlist_id_b10</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -2867,8 +2867,8 @@ limitations under the License.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">256</span>
 <span class="normal">257</span>
 <span class="normal">258</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;String to represent this object&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(playlist_id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span><span class="si">}</span><span class="s2">, title=</span><span class="se">\&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">)&quot;</span>
+<span class="w">    </span><span class="sd">"""String to represent this object"""</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(playlist_id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span><span class="si">}</span><span class="s2">, title=</span><span class="se">\"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="se">\"</span><span class="s2">)"</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2894,7 +2894,7 @@ limitations under the License.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">252</span>
 <span class="normal">253</span>
 <span class="normal">254</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The playlist as a string (it&#39;s ID in base 64)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The playlist as a string (it's ID in base 64)"""</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">playlist_id_b64</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -2957,11 +2957,11 @@ limitations under the License.</p>
 <span class="normal">302</span>
 <span class="normal">303</span>
 <span class="normal">304</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_id</span><span class="p">:</span> <span class="n">SupportsInt</span> <span class="o">|</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a video to this playlist</span>
+<span class="w">    </span><span class="sd">"""Add a video to this playlist</span>
 
 <span class="sd">Args:</span>
 <span class="sd">    video_id (SupportsInt | str): The numeric ID of the video to add, in base 10 or 36.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">playlist_add_video</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span><span class="p">,</span> <span class="n">video_id</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2990,7 +2990,7 @@ limitations under the License.</p>
 <span class="normal">344</span>
 <span class="normal">345</span>
 <span class="normal">346</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete this playlist&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Delete this playlist"""</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">playlist_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -3054,11 +3054,11 @@ limitations under the License.</p>
 <span class="normal">311</span>
 <span class="normal">312</span>
 <span class="normal">313</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_id</span><span class="p">:</span> <span class="n">SupportsInt</span> <span class="o">|</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove a video from this playlist</span>
+<span class="w">    </span><span class="sd">"""Remove a video from this playlist</span>
 
 <span class="sd">Args:</span>
 <span class="sd">    video_id (SupportsInt | str): The numeric ID of the video to remove, in base 10 or 36.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">playlist_delete_video</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playlist_id</span><span class="p">,</span> <span class="n">video_id</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -3216,7 +3216,7 @@ Defaults to resetting to None.</p>
 <span class="normal">339</span>
 <span class="normal">340</span>
 <span class="normal">341</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">visibility</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">APIPlaylist</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Edit the details of this playlist. WARNING: The original object will probably be stale after this operation.</span>
+<span class="w">    </span><span class="sd">"""Edit the details of this playlist. WARNING: The original object will probably be stale after this operation.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        title (str): The title of the playlist.</span>
@@ -3230,7 +3230,7 @@ Defaults to resetting to None.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        playlist (APIPlaylist): The edit result.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
@@ -3340,21 +3340,21 @@ Defaults to resetting to None.</p>
 <span class="normal">240</span>
 <span class="normal">241</span>
 <span class="normal">242</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseUser</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Rumble user&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A Rumble user"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The user as an integer (it&#39;s ID in base 10)&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The user as an integer (it's ID in base 10)"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id_b10</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if this user is equal to another.</span>
+<span class="w">        </span><span class="sd">"""Determine if this user is equal to another.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            other (Any): Object to compare to.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># Check for direct matches first</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -3363,39 +3363,39 @@ Defaults to resetting to None.</p>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id_b36</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
 
         <span class="c1"># Check for object attributes to match to</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;user_id&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"user_id"</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id_b10</span> <span class="o">==</span> <span class="n">utils</span><span class="o">.</span><span class="n">ensure_b10</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
 
         <span class="c1"># Check conversion to integer last, in case another ID or something happens to match</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__int__&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"__int__"</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id_b10</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">user_id_b10</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The numeric ID of the user in base 10&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The numeric ID of the user in base 10"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">user_id_b36</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The numeric ID of the user in base 36&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The numeric ID of the user in base 36"""</span>
         <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">base_10_to_36</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">mute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mute this user.</span>
+<span class="w">        </span><span class="sd">"""Mute this user.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        duration (int): How long to mute the user in seconds.</span>
 <span class="sd">            Defaults to infinite.</span>
 <span class="sd">        total (bool): Wether or not they are muted across all videos.</span>
 <span class="sd">            Defaults to False, just this video.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">mute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">unmute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unmute this user.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Unmute this user."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">unmute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
               </details>
@@ -3552,14 +3552,14 @@ Defaults to resetting to None.</p>
 <span class="normal">214</span>
 <span class="normal">215</span>
 <span class="normal">216</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if this user is equal to another.</span>
+<span class="w">    </span><span class="sd">"""Determine if this user is equal to another.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        other (Any): Object to compare to.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Check for direct matches first</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -3568,11 +3568,11 @@ Defaults to resetting to None.</p>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id_b36</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
 
     <span class="c1"># Check for object attributes to match to</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;user_id&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"user_id"</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id_b10</span> <span class="o">==</span> <span class="n">utils</span><span class="o">.</span><span class="n">ensure_b10</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
 
     <span class="c1"># Check conversion to integer last, in case another ID or something happens to match</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;__int__&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"__int__"</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id_b10</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">False</span>
@@ -3601,7 +3601,7 @@ Defaults to resetting to None.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">188</span>
 <span class="normal">189</span>
 <span class="normal">190</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The user as an integer (it&#39;s ID in base 10)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The user as an integer (it's ID in base 10)"""</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id_b10</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3685,14 +3685,14 @@ Defaults to False, just this video.</p>
 <span class="normal">236</span>
 <span class="normal">237</span>
 <span class="normal">238</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">mute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mute this user.</span>
+<span class="w">    </span><span class="sd">"""Mute this user.</span>
 
 <span class="sd">Args:</span>
 <span class="sd">    duration (int): How long to mute the user in seconds.</span>
 <span class="sd">        Defaults to infinite.</span>
 <span class="sd">    total (bool): Wether or not they are muted across all videos.</span>
 <span class="sd">        Defaults to False, just this video.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">mute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -3720,7 +3720,7 @@ Defaults to False, just this video.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">240</span>
 <span class="normal">241</span>
 <span class="normal">242</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unmute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unmute this user.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Unmute this user."""</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">unmute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3806,44 +3806,44 @@ Defaults to False, just this video.</p>
 <span class="normal">73</span>
 <span class="normal">74</span>
 <span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseUserBadge</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A badge on a username&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A badge on a username"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if this badge is equal to another.</span>
+<span class="w">        </span><span class="sd">"""Check if this badge is equal to another.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            other (Any): Object to compare to.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># Check if the string is either our slug or our label in any language</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">other</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
         <span class="c1"># Check if the compared object has the same slug, if it has one</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;slug&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"slug"</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">slug</span>
 
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The chat user badge in string form&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The chat user badge in string form"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;String to represent this object&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(slug=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
+<span class="w">        </span><span class="sd">"""String to represent this object"""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(slug='</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="si">}</span><span class="s2">')"</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">icon</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The badge&#39;s icon as a bytestring&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The badge's icon as a bytestring"""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__icon</span><span class="p">:</span>  <span class="c1"># We never queried the icon before</span>
             <span class="c1"># TODO make the timeout configurable</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">icon_url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="s2">&quot;Status code &quot;</span> <span class="o">+</span> \
+            <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="s2">"Status code "</span> <span class="o">+</span> \
                 <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">__icon</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
@@ -3976,21 +3976,21 @@ Defaults to False, just this video.</p>
 <span class="normal">51</span>
 <span class="normal">52</span>
 <span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if this badge is equal to another.</span>
+<span class="w">    </span><span class="sd">"""Check if this badge is equal to another.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        other (Any): Object to compare to.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Comparison (bool): Did it fit the criteria?</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Check if the string is either our slug or our label in any language</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">other</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
     <span class="c1"># Check if the compared object has the same slug, if it has one</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;slug&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">"slug"</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">slug</span>
 
     <span class="k">return</span> <span class="kc">False</span>
@@ -4019,8 +4019,8 @@ Defaults to False, just this video.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
 <span class="normal">60</span>
 <span class="normal">61</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;String to represent this object&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(slug=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
+<span class="w">    </span><span class="sd">"""String to represent this object"""</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(slug='</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="si">}</span><span class="s2">')"</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -4046,7 +4046,7 @@ Defaults to False, just this video.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The chat user badge in string form&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The chat user badge in string form"""</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -4122,7 +4122,7 @@ Defaults to False, just this video.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

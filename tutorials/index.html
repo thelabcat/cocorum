@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
       
 
@@ -825,9 +825,15 @@ while time.time() - start_time &lt; 60 and livestream.is_live:
 <p>This is where Cocorum goes into the backroads of Rumble. So far, we have only seen wrappers for the API that Rumble expresssly designed for the public to use. Beyond this point, we get into wrappers for APIs used by the internals of the web interface. If Rumble officially forbids / denies public access to them (which they have every right to do), these wrappers will break. Thankfully, they have made no indication that they intend to do so as far as I know, so please, don't give them a reason to. We're fudging our boundaries here, make sure you respect the spirit of the law rather than just the letter. I do not, in any regards whatsoever, endorse any sort of cyber-arson, including but not limited to; disrupting the Rumble platform, via misuse of the public RLS API or any other means.</p>
 <p>With that being understood, let's connect to the SSE chat stream. I expect this to be in the same interpreter, so <code>time</code> will still be imported, api is still a RumbleAPI object, and <code>STREAM_ID</code> is still assigned, from earlier.</p>
 <p>A warning here, if you used some other method to get your stream ID (such as copying it from a chat popup window's URL), be sure that it is not both base 10 and a string. Said chat URLs have it in base 10, so when copying it from there, you MUST make it an integer type before passing it here (can be converted with Python's <code>int()</code> function). This is because whatever format you pass must be converted to base 10 internally. <a href="../modules_ref/cocorum_utils/#cocorum.utils.ensure_b10">The converter</a> has no way to tell the difference between a base 10 string, and a base 36 string that happens to only have base 10 numerals. So, where Cocorum uses such converters, I set them to assume any string is base 36. I could have done this the other way around maybe, but we'd hit the same sort of limitation in reverse.</p>
+<p>Two such places to get the stream ID without using the RLS API are:
+ - The chat pop-out window URL: <code>rumble.com/chat/popup/&lt;base 10&gt;</code>.
+ - The video embed URL: <code>rumble.com/embed/v&lt;base 36&gt;</code> (don't forget to trim off the <code>v</code> prefix if you get it from here).</p>
 <pre><code class="language-python">from cocorum import chatapi
 
-chat = chatapi.ChatAPI(stream_id = STREAM_ID) # Stream ID can be an integer or a base 36 string
+def chat_over():
+    print(&quot;Chat ended&quot;)
+
+chat = chatapi.ChatAPI(stream_id = STREAM_ID, read_timeout = 90, on_ended = chat_over) # Stream ID can be an integer or a base 36 string
 chat.clear_mailbox() # Erase messages that were still visible before we connected
 </code></pre>
 <p>If you don't run <code>chat.clear_mailbox()</code>, then the following code will print messages that were already in chat before it gets to waiting for new ones. Anyways, let's monitor chat for one minute. </p>
@@ -838,7 +844,14 @@ start_time = time.time()
 while time.time() - start_time &lt; 60 and (msg := chat.get_message()):
     print(msg.user.username, &quot;said&quot;, msg)
 </code></pre>
-<p>A note about this. <code>ChatAPI().get_message()</code> will always wait for an additional message, even after the time runs out. I've also had trouble getting the chat to close properly once the stream ends, or staying open if it is inactive for several minutes. See <a href="https://github.com/thelabcat/cocorum/issues/5">GitHub issue # 5</a> for more info on this.</p>
+<p><code>get_message()</code> blocks until the next message. It returns <code>None</code> when the chat has ended or after <code>close()</code>. The <code>while</code> test above stops calling it once the minute is up, but the call that is already waiting still waits for one more message or for the chat to end. Rumble never sends an SSE "end" event and does not put ids on events, so the client cannot resume with <code>Last-Event-ID</code>. A read timeout (<code>read_timeout</code>, 90 seconds by default) means nothing arrived. The client waits <code>reconnect_delay</code> seconds (default 2) and connects again. HTTP 204 on that connection means the livestream chat is over, and <code>get_message()</code> returns <code>None</code>. Any other HTTP error is raised. Every time a chat client connects, Rumble delivers all the messages in the chat history, so this background reconnection skips ids already seen and does not deliver that history again. A message sent during the disconnect is only recovered if it is still in that history.</p>
+<p><code>close()</code> is safe to call from another thread. On Linux it unblocks a waiting <code>get_message()</code> immediately. <code>on_ended</code> runs once when the stream stops, including when you call <code>close()</code>. Passing a shorter <code>read_timeout</code> notices a finished stream sooner and reconnects more often on a quiet chat.</p>
+<p><code>ChatAPI</code> can also be used as a context manager. Leaving the <code>with</code> block calls <code>close()</code>.</p>
+<pre><code class="language-python">with chatapi.ChatAPI(STREAM_ID) as managed_chat:
+    if &quot;TheLabCat&quot; in managed_chat.users.values():
+        print(&quot;TheLabCat is here!&quot;)
+
+</code></pre>
 <p>That's all fine and dandy, but what about <em>sending</em> messages? Well...</p>
 <h2 id="logging-in-to-rumble">Logging in to Rumble</h2>
 <p>Logging into Rumble is handled by a separate submodule called <code>servicephp</code>, wrapping a number of Rumble endpoints, all contained within one file on the Rumble servers named (you guessed it) <code>service.php</code>. The <code>servicephp</code> library used to be called by default inside <code>ChatAPI.__init__()</code> if you passed credentials to that method, but when Rumble added 2FA, this became inviable. Now, you pass an already logged-in <code>ServicePHP</code> to <code>__init__()</code> instead. Since our current instance of <code>ChatAPI</code> in this example was initialized without this, we cannot use it any more.</p>
@@ -977,7 +990,7 @@ token: str = cookie[cocorum.static.Misc.session_token_key]
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

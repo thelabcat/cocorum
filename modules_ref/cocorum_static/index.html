@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
       
 
@@ -626,6 +626,39 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cocorum.static.Delays.sse_connect_timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sse_connect_timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.Delays.sse_read_timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sse_read_timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.Delays.sse_reconnect_delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sse_reconnect_delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cocorum.static.Delays.upload_request_timeout" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -859,17 +892,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cocorum.static.RequestHeaders.sse_api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        sse_api
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#cocorum.static.RequestHeaders.user_agent" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -963,17 +985,6 @@
     <span class="md-ellipsis">
       
         channels_page
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.static.URI.login_fail" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        login_fail
       
     </span>
   </a>
@@ -1310,6 +1321,39 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cocorum.static.Delays.sse_connect_timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sse_connect_timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.Delays.sse_read_timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sse_read_timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.Delays.sse_reconnect_delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sse_reconnect_delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cocorum.static.Delays.upload_request_timeout" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1543,17 +1587,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cocorum.static.RequestHeaders.sse_api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        sse_api
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#cocorum.static.RequestHeaders.user_agent" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1647,17 +1680,6 @@
     <span class="md-ellipsis">
       
         channels_page
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.static.URI.login_fail" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        login_fail
       
     </span>
   </a>
@@ -1956,7 +1978,12 @@ limitations under the License.</p>
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">115</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
 <span class="normal">116</span>
 <span class="normal">117</span>
 <span class="normal">118</span>
@@ -1969,20 +1996,41 @@ limitations under the License.</p>
 <span class="normal">125</span>
 <span class="normal">126</span>
 <span class="normal">127</span>
-<span class="normal">128</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Delays</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Various times for delays and waits&quot;&quot;&quot;</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Delays</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Various times for delays and waits"""</span>
 
-    <span class="n">request_timeout</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How long to wait before giving up on a network request, in seconds&quot;&quot;&quot;</span>
+    <span class="n">request_timeout</span> <span class="o">=</span> <span class="n">Timeout</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Timeout object for generic network requests"""</span>
+
+    <span class="n">sse_connect_timeout</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="w">    </span><span class="sd">"""How long to wait for the chat SSE connection to be established, in seconds"""</span>
+
+    <span class="n">sse_read_timeout</span> <span class="o">=</span> <span class="mi">90</span>
+<span class="w">    </span><span class="sd">"""How long to wait for the next chat SSE bytes before reconnecting, in seconds.</span>
+
+<span class="sd">    Silence this long is not treated as the chat ending. The client reconnects,</span>
+<span class="sd">    and HTTP 204 on that connection means the livestream chat is over.</span>
+<span class="sd">    """</span>
+
+    <span class="n">sse_reconnect_delay</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="w">    </span><span class="sd">"""How long to wait before reconnecting the chat SSE stream, in seconds"""</span>
 
     <span class="n">upload_request_timeout</span> <span class="o">=</span> <span class="mi">300</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How long to wait before giving up on a video chunk upload, in seconds&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""How long to wait before giving up on a video chunk upload, in seconds"""</span>
 
     <span class="n">api_refresh_default</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How long to reuse old data from the main API, in seconds&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""How long to reuse old data from the main API, in seconds"""</span>
 
     <span class="n">api_refresh_minimum</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimum refresh rate for the main API, as defined by Rumble&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Minimum refresh rate for the main API, as defined by Rumble"""</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2047,7 +2095,7 @@ limitations under the License.</p>
 
 
 <h3 id="cocorum.static.Delays.request_timeout" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">request_timeout</span> <span class="o">=</span> <span class="mi">20</span></code>
+            <code class="highlight language-python"><span class="n">request_timeout</span> <span class="o">=</span> <span class="n">Timeout</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2059,7 +2107,78 @@ limitations under the License.</p>
 
     <div class="doc doc-contents ">
 
-        <p>How long to wait before giving up on a network request, in seconds</p>
+        <p>Timeout object for generic network requests</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cocorum.static.Delays.sse_connect_timeout" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">sse_connect_timeout</span> <span class="o">=</span> <span class="mi">10</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>How long to wait for the chat SSE connection to be established, in seconds</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cocorum.static.Delays.sse_read_timeout" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">sse_read_timeout</span> <span class="o">=</span> <span class="mi">90</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>How long to wait for the next chat SSE bytes before reconnecting, in seconds.</p>
+<p>Silence this long is not treated as the chat ending. The client reconnects,
+and HTTP 204 on that connection means the livestream chat is over.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cocorum.static.Delays.sse_reconnect_delay" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">sse_reconnect_delay</span> <span class="o">=</span> <span class="mi">2</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>How long to wait before reconnecting the chat SSE stream, in seconds</p>
 
     </div>
 
@@ -2125,27 +2244,27 @@ limitations under the License.</p>
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">139</span>
 <span class="normal">140</span>
-<span class="normal">141</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Message</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;For chat messages&quot;&quot;&quot;</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Message</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""For chat messages"""</span>
 
     <span class="n">max_len</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum chat message length&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Maximum chat message length"""</span>
 
     <span class="n">send_cooldown</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How long to wait between sending messages&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""How long to wait between sending messages"""</span>
 
-    <span class="n">command_prefix</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prefix Rumble uses for native command&quot;&quot;&quot;</span>
+    <span class="n">command_prefix</span> <span class="o">=</span> <span class="s2">"/"</span>
+<span class="w">    </span><span class="sd">"""Prefix Rumble uses for native command"""</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2164,7 +2283,7 @@ limitations under the License.</p>
 
 
 <h3 id="cocorum.static.Message.command_prefix" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">command_prefix</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span></code>
+            <code class="highlight language-python"><span class="n">command_prefix</span> <span class="o">=</span> <span class="s1">'/'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2265,15 +2384,7 @@ limitations under the License.</p>
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">165</span>
 <span class="normal">166</span>
 <span class="normal">167</span>
 <span class="normal">168</span>
@@ -2316,58 +2427,66 @@ limitations under the License.</p>
 <span class="normal">205</span>
 <span class="normal">206</span>
 <span class="normal">207</span>
-<span class="normal">208</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Misc</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;No idea where else to put this data&quot;&quot;&quot;</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Misc</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""No idea where else to put this data"""</span>
 
-    <span class="n">base36</span> <span class="o">=</span> <span class="s2">&quot;0123456789abcdefghijklmnopqrstuvwxyz&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Digits of the numerical base 36 that Rumble uses&quot;&quot;&quot;</span>
+    <span class="n">base36</span> <span class="o">=</span> <span class="s2">"0123456789abcdefghijklmnopqrstuvwxyz"</span>
+<span class="w">    </span><span class="sd">"""Digits of the numerical base 36 that Rumble uses"""</span>
 
     <span class="n">badges_as_glyphs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;verified&quot;</span><span class="p">:</span> <span class="s2">&quot;✅&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;admin&quot;</span><span class="p">:</span> <span class="s2">&quot;👑&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;moderator&quot;</span><span class="p">:</span> <span class="s2">&quot;🛡&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;premium&quot;</span><span class="p">:</span> <span class="s2">&quot;🗲&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;locals&quot;</span><span class="p">:</span> <span class="s2">&quot;♖&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;recurring_subscription&quot;</span><span class="p">:</span> <span class="s2">&quot;♖&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;locals_supporter&quot;</span><span class="p">:</span> <span class="s2">&quot;⛋&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;whale-grey&quot;</span><span class="p">:</span> <span class="s2">&quot;🐳&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;whale-yellow&quot;</span><span class="p">:</span> <span class="s2">&quot;🐳&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;whale-blue&quot;</span><span class="p">:</span> <span class="s2">&quot;🐳&quot;</span><span class="p">,</span>
+        <span class="s2">"verified"</span><span class="p">:</span> <span class="s2">"✅"</span><span class="p">,</span>
+        <span class="s2">"admin"</span><span class="p">:</span> <span class="s2">"👑"</span><span class="p">,</span>
+        <span class="s2">"moderator"</span><span class="p">:</span> <span class="s2">"🛡"</span><span class="p">,</span>
+        <span class="s2">"premium"</span><span class="p">:</span> <span class="s2">"🗲"</span><span class="p">,</span>
+        <span class="s2">"locals"</span><span class="p">:</span> <span class="s2">"♖"</span><span class="p">,</span>
+        <span class="s2">"recurring_subscription"</span><span class="p">:</span> <span class="s2">"♖"</span><span class="p">,</span>
+        <span class="s2">"locals_supporter"</span><span class="p">:</span> <span class="s2">"⛋"</span><span class="p">,</span>
+        <span class="s2">"whale-grey"</span><span class="p">:</span> <span class="s2">"🐳"</span><span class="p">,</span>
+        <span class="s2">"whale-yellow"</span><span class="p">:</span> <span class="s2">"🐳"</span><span class="p">,</span>
+        <span class="s2">"whale-blue"</span><span class="p">:</span> <span class="s2">"🐳"</span><span class="p">,</span>
     <span class="p">}</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dictionary of badge slugs mapped to UTF-8 glyphs, for end-user convenience&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Dictionary of badge slugs mapped to UTF-8 glyphs, for end-user convenience"""</span>
 
-    <span class="n">text_encoding</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encoding for all text-bytes conversions&quot;&quot;&quot;</span>
+    <span class="n">text_encoding</span> <span class="o">=</span> <span class="s2">"utf-8"</span>
+<span class="w">    </span><span class="sd">"""Encoding for all text-bytes conversions"""</span>
 
-    <span class="n">badge_icon_size</span> <span class="o">=</span> <span class="s2">&quot;48&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Size of chat badge icons to retrieve, only valid one has long been the string 48&quot;&quot;&quot;</span>
+    <span class="n">badge_icon_size</span> <span class="o">=</span> <span class="s2">"48"</span>
+<span class="w">    </span><span class="sd">"""Size of chat badge icons to retrieve, only valid one has long been the string 48"""</span>
 
-    <span class="n">timestamp_format</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rumble&#39;s timestamp format in ISO 8601 designations&quot;&quot;&quot;</span>
+    <span class="n">timestamp_format</span> <span class="o">=</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z"</span>
+<span class="w">    </span><span class="sd">"""Rumble's timestamp format in ISO 8601 designations"""</span>
 
-    <span class="n">session_token_key</span> <span class="o">=</span> <span class="s2">&quot;u_s&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Key of the session token within the session cookie dict&quot;&quot;&quot;</span>
+    <span class="n">session_token_key</span> <span class="o">=</span> <span class="s2">"u_s"</span>
+<span class="w">    </span><span class="sd">"""Key of the session token within the session cookie dict"""</span>
 
     <span class="n">find_acc_apikey</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s1">&#39;(?&lt;=var \$a = new Account\(&quot;AccountOverview&quot;,&quot;).*(?=&quot;\);)&#39;</span>
+        <span class="sa">r</span><span class="s1">'(?&lt;=var \$a = new Account\("AccountOverview",").*(?="\);)'</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;RegEx to find the account API key in the https://rumble.com/account page source</span>
-<span class="sd">    It looks like this: `var $a = new Account(&quot;AccountContent&quot;,&quot;##########&quot;);`&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""RegEx to find the account API key in the https://rumble.com/account page source</span>
+<span class="sd">    It looks like this: `var $a = new Account("AccountContent","##########");`"""</span>
 
-    <span class="n">tag_split</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Characters that video tags are separated by&quot;&quot;&quot;</span>
+    <span class="n">tag_split</span> <span class="o">=</span> <span class="s2">", "</span>
+<span class="w">    </span><span class="sd">"""Characters that video tags are separated by"""</span>
 
-    <span class="n">video_edit_success</span> <span class="o">=</span> <span class="s2">&quot;Your changes have been saved!&lt;br&gt;Please allow up to 30 seconds for them to take effect.&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Message that Rumble shows (in HTML) upon successful video edit&quot;&quot;&quot;</span>
+    <span class="n">video_edit_success</span> <span class="o">=</span> <span class="s2">"Your changes have been saved!&lt;br&gt;Please allow up to 30 seconds for them to take effect."</span>
+<span class="w">    </span><span class="sd">"""Message that Rumble shows (in HTML) upon successful video edit"""</span>
 
     <span class="k">class</span><span class="w"> </span><span class="nc">ContentTypes</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Types of content that can be rumbled on&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Types of content that can be rumbled on"""</span>
 
         <span class="n">video</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;A video or livestream&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""A video or livestream"""</span>
 
         <span class="n">comment</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;A comment&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""A comment"""</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2386,7 +2505,7 @@ limitations under the License.</p>
 
 
 <h3 id="cocorum.static.Misc.badge_icon_size" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">badge_icon_size</span> <span class="o">=</span> <span class="s1">&#39;48&#39;</span></code>
+            <code class="highlight language-python"><span class="n">badge_icon_size</span> <span class="o">=</span> <span class="s1">'48'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2409,7 +2528,7 @@ limitations under the License.</p>
 
 
 <h3 id="cocorum.static.Misc.badges_as_glyphs" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">badges_as_glyphs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;verified&#39;</span><span class="p">:</span> <span class="s1">&#39;✅&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">:</span> <span class="s1">&#39;👑&#39;</span><span class="p">,</span> <span class="s1">&#39;moderator&#39;</span><span class="p">:</span> <span class="s1">&#39;🛡&#39;</span><span class="p">,</span> <span class="s1">&#39;premium&#39;</span><span class="p">:</span> <span class="s1">&#39;🗲&#39;</span><span class="p">,</span> <span class="s1">&#39;locals&#39;</span><span class="p">:</span> <span class="s1">&#39;♖&#39;</span><span class="p">,</span> <span class="s1">&#39;recurring_subscription&#39;</span><span class="p">:</span> <span class="s1">&#39;♖&#39;</span><span class="p">,</span> <span class="s1">&#39;locals_supporter&#39;</span><span class="p">:</span> <span class="s1">&#39;⛋&#39;</span><span class="p">,</span> <span class="s1">&#39;whale-grey&#39;</span><span class="p">:</span> <span class="s1">&#39;🐳&#39;</span><span class="p">,</span> <span class="s1">&#39;whale-yellow&#39;</span><span class="p">:</span> <span class="s1">&#39;🐳&#39;</span><span class="p">,</span> <span class="s1">&#39;whale-blue&#39;</span><span class="p">:</span> <span class="s1">&#39;🐳&#39;</span><span class="p">}</span></code>
+            <code class="highlight language-python"><span class="n">badges_as_glyphs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'verified'</span><span class="p">:</span> <span class="s1">'✅'</span><span class="p">,</span> <span class="s1">'admin'</span><span class="p">:</span> <span class="s1">'👑'</span><span class="p">,</span> <span class="s1">'moderator'</span><span class="p">:</span> <span class="s1">'🛡'</span><span class="p">,</span> <span class="s1">'premium'</span><span class="p">:</span> <span class="s1">'🗲'</span><span class="p">,</span> <span class="s1">'locals'</span><span class="p">:</span> <span class="s1">'♖'</span><span class="p">,</span> <span class="s1">'recurring_subscription'</span><span class="p">:</span> <span class="s1">'♖'</span><span class="p">,</span> <span class="s1">'locals_supporter'</span><span class="p">:</span> <span class="s1">'⛋'</span><span class="p">,</span> <span class="s1">'whale-grey'</span><span class="p">:</span> <span class="s1">'🐳'</span><span class="p">,</span> <span class="s1">'whale-yellow'</span><span class="p">:</span> <span class="s1">'🐳'</span><span class="p">,</span> <span class="s1">'whale-blue'</span><span class="p">:</span> <span class="s1">'🐳'</span><span class="p">}</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2432,7 +2551,7 @@ limitations under the License.</p>
 
 
 <h3 id="cocorum.static.Misc.base36" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">base36</span> <span class="o">=</span> <span class="s1">&#39;0123456789abcdefghijklmnopqrstuvwxyz&#39;</span></code>
+            <code class="highlight language-python"><span class="n">base36</span> <span class="o">=</span> <span class="s1">'0123456789abcdefghijklmnopqrstuvwxyz'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2455,7 +2574,7 @@ limitations under the License.</p>
 
 
 <h3 id="cocorum.static.Misc.find_acc_apikey" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">find_acc_apikey</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;(?&lt;=var </span><span class="se">\\</span><span class="s1">$a = new Account</span><span class="se">\\</span><span class="s1">(&quot;AccountOverview&quot;,&quot;).*(?=&quot;</span><span class="se">\\</span><span class="s1">);)&#39;</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">find_acc_apikey</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">'(?&lt;=var </span><span class="se">\\</span><span class="s1">$a = new Account</span><span class="se">\\</span><span class="s1">("AccountOverview",").*(?="</span><span class="se">\\</span><span class="s1">);)'</span><span class="p">)</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2479,7 +2598,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.Misc.session_token_key" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">session_token_key</span> <span class="o">=</span> <span class="s1">&#39;u_s&#39;</span></code>
+            <code class="highlight language-python"><span class="n">session_token_key</span> <span class="o">=</span> <span class="s1">'u_s'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2502,7 +2621,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.Misc.tag_split" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">tag_split</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span></code>
+            <code class="highlight language-python"><span class="n">tag_split</span> <span class="o">=</span> <span class="s1">', '</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2525,7 +2644,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.Misc.text_encoding" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">text_encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span></code>
+            <code class="highlight language-python"><span class="n">text_encoding</span> <span class="o">=</span> <span class="s1">'utf-8'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2548,7 +2667,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.Misc.timestamp_format" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">timestamp_format</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S%z&#39;</span></code>
+            <code class="highlight language-python"><span class="n">timestamp_format</span> <span class="o">=</span> <span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S%z'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2571,7 +2690,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.Misc.video_edit_success" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">video_edit_success</span> <span class="o">=</span> <span class="s1">&#39;Your changes have been saved!&lt;br&gt;Please allow up to 30 seconds for them to take effect.&#39;</span></code>
+            <code class="highlight language-python"><span class="n">video_edit_success</span> <span class="o">=</span> <span class="s1">'Your changes have been saved!&lt;br&gt;Please allow up to 30 seconds for them to take effect.'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2617,21 +2736,21 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
-<span class="normal">208</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ContentTypes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Types of content that can be rumbled on&quot;&quot;&quot;</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ContentTypes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Types of content that can be rumbled on"""</span>
 
     <span class="n">video</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A video or livestream&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A video or livestream"""</span>
 
     <span class="n">comment</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A comment&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A comment"""</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2737,25 +2856,19 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
-<span class="normal">26</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
 <span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RequestHeaders</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Headers for various HTTPrequests&quot;&quot;&quot;</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RequestHeaders</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Headers for various HTTPrequests"""</span>
 
     <span class="n">user_agent</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36&quot;</span>
+        <span class="s2">"User-Agent"</span><span class="p">:</span> <span class="s2">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"</span>
     <span class="p">}</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Header with a fake user-agent string&quot;&quot;&quot;</span>
-
-    <span class="n">sse_api</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/event-stream&quot;</span><span class="p">}</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Headers for the SSE chat API&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Header with a fake user-agent string"""</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2773,31 +2886,8 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 
-<h3 id="cocorum.static.RequestHeaders.sse_api" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">sse_api</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/event-stream&#39;</span><span class="p">}</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Headers for the SSE chat API</p>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
 <h3 id="cocorum.static.RequestHeaders.user_agent" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">user_agent</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36&#39;</span><span class="p">}</span></code>
+            <code class="highlight language-python"><span class="n">user_agent</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'User-Agent'</span><span class="p">:</span> <span class="s1">'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'</span><span class="p">}</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2852,7 +2942,9 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
@@ -2862,21 +2954,19 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 <span class="normal">44</span>
 <span class="normal">45</span>
 <span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">StaticAPIEndpoints</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;API endpoints that don&#39;t change and shouldn&#39;t trigger a refresh&quot;&quot;&quot;</span>
+<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">StaticAPIEndpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""API endpoints that don't change and shouldn't trigger a refresh"""</span>
 
     <span class="n">main</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;user_id&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;username&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;channel_id&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;channel_name&quot;</span><span class="p">,</span>
+        <span class="s2">"user_id"</span><span class="p">,</span>
+        <span class="s2">"username"</span><span class="p">,</span>
+        <span class="s2">"channel_id"</span><span class="p">,</span>
+        <span class="s2">"channel_name"</span><span class="p">,</span>
     <span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Endpoints of the main API&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Endpoints of the main API"""</span>
 
-    <span class="n">stream</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;created_on&quot;</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Endpoints of the stream subobject&quot;&quot;&quot;</span>
+    <span class="n">stream</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"created_on"</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""Endpoints of the stream subobject"""</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2895,7 +2985,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.StaticAPIEndpoints.main" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">main</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;channel_id&#39;</span><span class="p">,</span> <span class="s1">&#39;channel_name&#39;</span><span class="p">]</span></code>
+            <code class="highlight language-python"><span class="n">main</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'username'</span><span class="p">,</span> <span class="s1">'channel_id'</span><span class="p">,</span> <span class="s1">'channel_name'</span><span class="p">]</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2918,7 +3008,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.StaticAPIEndpoints.stream" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">stream</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;created_on&#39;</span><span class="p">]</span></code>
+            <code class="highlight language-python"><span class="n">stream</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'created_on'</span><span class="p">]</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -2973,7 +3063,9 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 60</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
 <span class="normal"> 61</span>
 <span class="normal"> 62</span>
 <span class="normal"> 63</span>
@@ -3020,64 +3112,56 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 <span class="normal">104</span>
 <span class="normal">105</span>
 <span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">URI</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;URIs to various Rumble services&quot;&quot;&quot;</span>
+<span class="normal">107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">URI</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""URIs to various Rumble services"""</span>
 
-    <span class="n">rumble_base</span> <span class="o">=</span> <span class="s2">&quot;https://rumble.com&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base URL to Rumble&#39;s website, for URLs that are relative to it&quot;&quot;&quot;</span>
+    <span class="n">rumble_base</span> <span class="o">=</span> <span class="s2">"https://rumble.com"</span>
+<span class="w">    </span><span class="sd">"""Base URL to Rumble's website, for URLs that are relative to it"""</span>
 
-    <span class="n">login_test</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">&quot;/login.php&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the session token by sending it here and checking the redirect URL&quot;&quot;&quot;</span>
+    <span class="n">login_test</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/-htmx/web-services/user-login"</span>
+<span class="w">    </span><span class="sd">"""Test the session token by sending it here and checking the status code (409 is valid token)"""</span>
 
-    <span class="n">login_fail</span> <span class="o">=</span> <span class="s2">&quot;auth.rumble.com&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This URL component will be in a failed session login redirect, but not a successful one&quot;&quot;&quot;</span>
+    <span class="n">mutes_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/account/moderation/muting?pg=</span><span class="si">{page}</span><span class="s2">"</span>
+<span class="w">    </span><span class="sd">"""Webpage with all the mutes on it, format with page number"""</span>
 
-    <span class="n">mutes_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">&quot;/account/moderation/muting?pg=</span><span class="si">{page}</span><span class="s2">&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Webpage with all the mutes on it, format with page number&quot;&quot;&quot;</span>
+    <span class="n">channels_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/user/</span><span class="si">{username}</span><span class="s2">/channels"</span>
+<span class="w">    </span><span class="sd">"""Channels under a user, format with username"""</span>
 
-    <span class="n">channels_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">&quot;/user/</span><span class="si">{username}</span><span class="s2">/channels&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Channels under a user, format with username&quot;&quot;&quot;</span>
+    <span class="n">rls_api_keys_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/account/livestream-api"</span>
+<span class="w">    </span><span class="sd">"""Live Stream API key management, with the keys for viewing"""</span>
 
-    <span class="n">rls_api_keys_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">&quot;/account/livestream-api&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Live Stream API key management, with the keys for viewing&quot;&quot;&quot;</span>
+    <span class="n">playlists_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/my-library/playlists"</span>
+<span class="w">    </span><span class="sd">"""The logged-in user's playlist page"""</span>
 
-    <span class="n">playlists_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">&quot;/my-library/playlists&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The logged-in user&#39;s playlist page&quot;&quot;&quot;</span>
+    <span class="n">account_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/account"</span>
+<span class="w">    </span><span class="sd">"""Account page"""</span>
 
-    <span class="n">account_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">&quot;/account&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Account page&quot;&quot;&quot;</span>
+    <span class="n">acc_settings_page</span> <span class="o">=</span> <span class="n">account_page</span> <span class="o">+</span> <span class="s2">"/settings"</span>
+<span class="w">    </span><span class="sd">"""Account settings page, where lots of user info is stored"""</span>
 
-    <span class="n">acc_settings_page</span> <span class="o">=</span> <span class="n">account_page</span> <span class="o">+</span> <span class="s2">&quot;/settings&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Account settings page, where lots of user info is stored&quot;&quot;&quot;</span>
+    <span class="n">servicephp</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/service.php"</span>
+<span class="w">    </span><span class="sd">"""The Service.PHP API"""</span>
 
-    <span class="n">servicephp</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">&quot;/service.php&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Service.PHP API&quot;&quot;&quot;</span>
+    <span class="n">uploadphp</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/upload.php"</span>
+<span class="w">    </span><span class="sd">"""The video upload PHP"""</span>
 
-    <span class="n">uploadphp</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">&quot;/upload.php&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The video upload PHP&quot;&quot;&quot;</span>
-
-    <span class="n">rumbot_suffix</span> <span class="o">=</span> <span class="s2">&quot;/api/ls&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;RumBot passthrough API ending&quot;&quot;&quot;</span>
+    <span class="n">rumbot_suffix</span> <span class="o">=</span> <span class="s2">"/api/ls"</span>
+<span class="w">    </span><span class="sd">"""RumBot passthrough API ending"""</span>
 
     <span class="k">class</span><span class="w"> </span><span class="nc">ChatAPI</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;URIs of the chat API&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""URIs of the chat API"""</span>
 
-        <span class="n">base</span> <span class="o">=</span> <span class="s2">&quot;https://web7.rumble.com/chat/api/chat/</span><span class="si">{stream_id_b10}</span><span class="s2">&quot;</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rumble&#39;s internal chat URL for a stream, format this string with a stream_id_b10&quot;&quot;&quot;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="s2">"https://web7.rumble.com/chat/api/chat/</span><span class="si">{stream_id_b10}</span><span class="s2">"</span>
+<span class="w">        </span><span class="sd">"""Rumble's internal chat URL for a stream, format this string with a stream_id_b10"""</span>
 
-        <span class="n">sse_stream</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s2">&quot;/stream&quot;</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;SSE stream of chat events&quot;&quot;&quot;</span>
+        <span class="n">sse_stream</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s2">"/stream"</span>
+<span class="w">        </span><span class="sd">"""SSE stream of chat events"""</span>
 
-        <span class="n">message</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s2">&quot;/message&quot;</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Message actions&quot;&quot;&quot;</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s2">"/message"</span>
+<span class="w">        </span><span class="sd">"""Message actions"""</span>
 
-        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;https://rumble.com/chat/command&quot;</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Chat commands (does not use the base)&quot;&quot;&quot;</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">"https://rumble.com/chat/command"</span>
+<span class="w">        </span><span class="sd">"""Chat commands (does not use the base)"""</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -3096,7 +3180,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.acc_settings_page" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">acc_settings_page</span> <span class="o">=</span> <span class="n">account_page</span> <span class="o">+</span> <span class="s1">&#39;/settings&#39;</span></code>
+            <code class="highlight language-python"><span class="n">acc_settings_page</span> <span class="o">=</span> <span class="n">account_page</span> <span class="o">+</span> <span class="s1">'/settings'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3119,7 +3203,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.account_page" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">account_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">&#39;/account&#39;</span></code>
+            <code class="highlight language-python"><span class="n">account_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">'/account'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3142,7 +3226,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.channels_page" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">channels_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">&#39;/user/</span><span class="si">{username}</span><span class="s1">/channels&#39;</span></code>
+            <code class="highlight language-python"><span class="n">channels_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">'/user/</span><span class="si">{username}</span><span class="s1">/channels'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3164,31 +3248,8 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 
-<h3 id="cocorum.static.URI.login_fail" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">login_fail</span> <span class="o">=</span> <span class="s1">&#39;auth.rumble.com&#39;</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>This URL component will be in a failed session login redirect, but not a successful one</p>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
 <h3 id="cocorum.static.URI.login_test" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">login_test</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">&#39;/login.php&#39;</span></code>
+            <code class="highlight language-python"><span class="n">login_test</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">'/-htmx/web-services/user-login'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3200,7 +3261,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
     <div class="doc doc-contents ">
 
-        <p>Test the session token by sending it here and checking the redirect URL</p>
+        <p>Test the session token by sending it here and checking the status code (409 is valid token)</p>
 
     </div>
 
@@ -3211,7 +3272,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.mutes_page" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">mutes_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">&#39;/account/moderation/muting?pg=</span><span class="si">{page}</span><span class="s1">&#39;</span></code>
+            <code class="highlight language-python"><span class="n">mutes_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">'/account/moderation/muting?pg=</span><span class="si">{page}</span><span class="s1">'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3234,7 +3295,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.playlists_page" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">playlists_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">&#39;/my-library/playlists&#39;</span></code>
+            <code class="highlight language-python"><span class="n">playlists_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">'/my-library/playlists'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3257,7 +3318,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.rls_api_keys_page" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">rls_api_keys_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">&#39;/account/livestream-api&#39;</span></code>
+            <code class="highlight language-python"><span class="n">rls_api_keys_page</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">'/account/livestream-api'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3280,7 +3341,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.rumble_base" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">rumble_base</span> <span class="o">=</span> <span class="s1">&#39;https://rumble.com&#39;</span></code>
+            <code class="highlight language-python"><span class="n">rumble_base</span> <span class="o">=</span> <span class="s1">'https://rumble.com'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3303,7 +3364,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.rumbot_suffix" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">rumbot_suffix</span> <span class="o">=</span> <span class="s1">&#39;/api/ls&#39;</span></code>
+            <code class="highlight language-python"><span class="n">rumbot_suffix</span> <span class="o">=</span> <span class="s1">'/api/ls'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3326,7 +3387,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.servicephp" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">servicephp</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">&#39;/service.php&#39;</span></code>
+            <code class="highlight language-python"><span class="n">servicephp</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">'/service.php'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3349,7 +3410,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.URI.uploadphp" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">uploadphp</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">&#39;/upload.php&#39;</span></code>
+            <code class="highlight language-python"><span class="n">uploadphp</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">'/upload.php'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3395,7 +3456,12 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
@@ -3403,25 +3469,20 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 <span class="normal">104</span>
 <span class="normal">105</span>
 <span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatAPI</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;URIs of the chat API&quot;&quot;&quot;</span>
+<span class="normal">107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatAPI</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""URIs of the chat API"""</span>
 
-    <span class="n">base</span> <span class="o">=</span> <span class="s2">&quot;https://web7.rumble.com/chat/api/chat/</span><span class="si">{stream_id_b10}</span><span class="s2">&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rumble&#39;s internal chat URL for a stream, format this string with a stream_id_b10&quot;&quot;&quot;</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="s2">"https://web7.rumble.com/chat/api/chat/</span><span class="si">{stream_id_b10}</span><span class="s2">"</span>
+<span class="w">    </span><span class="sd">"""Rumble's internal chat URL for a stream, format this string with a stream_id_b10"""</span>
 
-    <span class="n">sse_stream</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s2">&quot;/stream&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;SSE stream of chat events&quot;&quot;&quot;</span>
+    <span class="n">sse_stream</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s2">"/stream"</span>
+<span class="w">    </span><span class="sd">"""SSE stream of chat events"""</span>
 
-    <span class="n">message</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s2">&quot;/message&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Message actions&quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s2">"/message"</span>
+<span class="w">    </span><span class="sd">"""Message actions"""</span>
 
-    <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;https://rumble.com/chat/command&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Chat commands (does not use the base)&quot;&quot;&quot;</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="s2">"https://rumble.com/chat/command"</span>
+<span class="w">    </span><span class="sd">"""Chat commands (does not use the base)"""</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -3440,7 +3501,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h4 id="cocorum.static.URI.ChatAPI.base" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">base</span> <span class="o">=</span> <span class="s1">&#39;https://web7.rumble.com/chat/api/chat/</span><span class="si">{stream_id_b10}</span><span class="s1">&#39;</span></code>
+            <code class="highlight language-python"><span class="n">base</span> <span class="o">=</span> <span class="s1">'https://web7.rumble.com/chat/api/chat/</span><span class="si">{stream_id_b10}</span><span class="s1">'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3463,7 +3524,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h4 id="cocorum.static.URI.ChatAPI.command" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;https://rumble.com/chat/command&#39;</span></code>
+            <code class="highlight language-python"><span class="n">command</span> <span class="o">=</span> <span class="s1">'https://rumble.com/chat/command'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3486,7 +3547,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h4 id="cocorum.static.URI.ChatAPI.message" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">message</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s1">&#39;/message&#39;</span></code>
+            <code class="highlight language-python"><span class="n">message</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s1">'/message'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3509,7 +3570,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h4 id="cocorum.static.URI.ChatAPI.sse_stream" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">sse_stream</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s1">&#39;/stream&#39;</span></code>
+            <code class="highlight language-python"><span class="n">sse_stream</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="s1">'/stream'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3573,27 +3634,27 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">152</span>
 <span class="normal">153</span>
-<span class="normal">154</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Upload</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data relating to uploading videos&quot;&quot;&quot;</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Upload</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Data relating to uploading videos"""</span>
 
     <span class="n">chunksz</span> <span class="o">=</span> <span class="mi">10000000</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Size of upload chunks in bytes, not sure if this can be changed&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Size of upload chunks in bytes, not sure if this can be changed"""</span>
 
-    <span class="n">api_ver</span> <span class="o">=</span> <span class="s2">&quot;1.3&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Upload API version to use&quot;&quot;&quot;</span>
+    <span class="n">api_ver</span> <span class="o">=</span> <span class="s2">"1.3"</span>
+<span class="w">    </span><span class="sd">"""Upload API version to use"""</span>
 
     <span class="n">max_filesize</span> <span class="o">=</span> <span class="mi">15</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1000</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum upload size in bytes, is 15GB as stated by Rumble&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Maximum upload size in bytes, is 15GB as stated by Rumble"""</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -3612,7 +3673,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
 
 <h3 id="cocorum.static.Upload.api_ver" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">api_ver</span> <span class="o">=</span> <span class="s1">&#39;1.3&#39;</span></code>
+            <code class="highlight language-python"><span class="n">api_ver</span> <span class="o">=</span> <span class="s1">'1.3'</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
@@ -3747,7 +3808,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
