@@ -232,20 +232,13 @@ def video_id_from_url(url: str) -> str:
     text = str(url).strip()
 
     # Embed URLs already hold the real ID
-    m = static.RegEx.URLType.embed.search(text)
-    if m:
+    if m := static.RegEx.embed_url.search(text):
         return m.group(1).lower()
 
-    m = static.RegEx.URLType.shorts.match(text)
-    if m:
-        slug = m.group(1).lower()
-        lookup = f"{static.URI.rumble_base}/shorts/v{slug}"
-    else:
-        m = static.RegEx.URLType.watch.match(text) or static.RegEx.URLType.slug.match(text)
-        if not m:
-            raise ValueError(f"Not a Rumble watch URL, v-slug, or embed URL: {text!r}")
-        slug = m.group(1).lower()
-        lookup = f"{static.URI.rumble_base}/v{slug}-.html"
+    vslug = url.removesuffix("/").rsplit("/", 1)[-1].split("-", 1)[0].split("?", 1)[0]
+    assert vslug.startswith("v"), "Not a valid v-slug or URL containing one"
+
+    lookup = f"{static.URI.rumble_base}/{vslug}-.html"
 
     r = requests.get(
         static.URI.oembed,
@@ -254,12 +247,12 @@ def video_id_from_url(url: str) -> str:
         timeout=static.Delays.request_timeout,
     )
     if r.status_code == 404:
-        raise LookupError(f"Rumble has no video at the watch slug v{slug}")
+        raise LookupError(f"Rumble has no video at the v-slug {vslug}")
     assert r.status_code == 200, f"oEmbed request failed: {r}\n{r.text}"
 
-    m = static.RegEx.URLType.embed.search(r.json().get("html", ""))
+    m = static.RegEx.embed_url.search(r.json().get("html", ""))
     if not m:
-        raise LookupError(f"Rumble's oEmbed reply for v{slug} had no embed ID")
+        raise LookupError(f"Rumble's oEmbed reply for {vslug} had no embed ID")
     return m.group(1).lower()
 
 

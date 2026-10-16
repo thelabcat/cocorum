@@ -188,16 +188,8 @@ class RegEx:
     """Find the account API key in the https://rumble.com/account page source
     It looks like this: `var $a = new Account("AccountContent","##########");`"""
 
-    class URLType:
-        """Detect what type of Rumble URL we are working with, mainly for utils.video_id_from_url()"""
-        embed = re.compile(r"rumble\.com/embed/v([0-9a-z]+)", re.IGNORECASE)
-        watch = re.compile(
-            r"^(?:https?://)?(?:www\.)?rumble\.com/v([0-9a-z]+)(?:[-.]\S*)?$", re.IGNORECASE
-        )
-        shorts = re.compile(
-            r"^(?:https?://)?(?:www\.)?rumble\.com/shorts/v([0-9a-z]+)\S*$", re.IGNORECASE
-        )
-        slug = re.compile(r"^v([0-9a-z]+)(?:-[^\s/]*)?(?:\.html)?$", re.IGNORECASE)
+    embed_url = re.compile(r"rumble\.com/embed/v([0-9a-z]+)", re.IGNORECASE)
+    """Is this an embed URL? If so, find the video ID in it"""
 
 
 class Misc:
