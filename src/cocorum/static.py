@@ -28,11 +28,14 @@ PACKAGE_NAME = "cocorum"
 
 try:
     __version__ = version(PACKAGE_NAME)
-    HOMEPAGE = metadata(PACKAGE_NAME)["Homepage"]
+    _urls = dict(
+        entry.split(", ", 1)
+        for entry in metadata(PACKAGE_NAME).get_all("Project-URL") or []
+    )
+    HOMEPAGE = _urls.get("Homepage", "https://github.com/thelabcat/cocorum")
 except PackageNotFoundError:  # Running from a source tree without installing
     __version__ = "unknown"
-    HOMEPAGE = "https://github.com/thelabcat/cocorum"
-    """Guessed home page default"""
+    HOMEPAGE = "https://github.com/thelabcat/cocorum"  # Guessed homepage default
 
 
 class RequestHeaders:
