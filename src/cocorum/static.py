@@ -20,7 +20,8 @@ limitations under the License.
 S.D.G."""
 
 import re
-from importlib.metadata import version, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError, version
+
 from urllib3 import Timeout
 
 try:
