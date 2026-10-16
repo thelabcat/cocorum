@@ -711,7 +711,9 @@ class ServicePHP:
         """Get the list of comments under a video.
 
         Args:
-            video_id (str | SupportsInt): The numeric ID of a video in base 10 or 36.
+            video_id (str | SupportsInt): The numeric ID of a video in base 10 or 36. Note: the ID in a watch-page URL is NOT the video ID
+                (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+                Use utils.video_id_from_url() to convert a watch URL.
 
         Returns:
             Comments (list[scraping.HTMLComment]): A list of scraping.HTMLComment objects.
@@ -734,7 +736,9 @@ class ServicePHP:
         """Post a comment on a video.
 
         Args:
-            video_id (SupportsInt | str): The numeric ID of a video / stream in base 10 or 36.
+            video_id (SupportsInt | str): The numeric ID of a video / stream in base 10 or 36. Note: the ID in a watch-page URL is NOT the video ID
+                (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+                Use utils.video_id_from_url() to convert a watch URL.
             comment (str): What to say.
             reply_id (SupportsInt): The ID of the comment to reply to.
                 Defaults to zero (don't reply to anybody).
@@ -799,7 +803,11 @@ class ServicePHP:
         """Get the URL of a Rumble video.
 
         Args:
-            video_id (SupportsInt | str): The numeric ID of the video.
+            video_id (SupportsInt | str): The numeric ID of the video. Note: the ID in a watch-page URL is NOT the video ID Note: the ID in a watch-page URL is NOT the video ID
+                (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+                Use utils.video_id_from_url() to convert a watch URL.
+                (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+                Use utils.video_id_from_url() to convert a watch URL.
 
         Returns:
             URL (str): The URL of the video.
@@ -822,7 +830,9 @@ class ServicePHP:
 
         Args:
             playlist_id (str): The numeric ID of the playlist in base 64.
-            video_id (SupportsInt | str): The numeric ID of the video to add, in base 10 or 36.
+            video_id (SupportsInt | str): The numeric ID of the video to add, in base 10 or 36. Note: the ID in a watch-page URL is NOT the video ID
+                (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+                Use utils.video_id_from_url() to convert a watch URL.
         """
 
         self.sphp_request(
@@ -838,7 +848,9 @@ class ServicePHP:
 
         Args:
             playlist_id (str): The numeric ID of the playlist in base 64.
-            video_id (int, str): The numeric ID of the video to remove, in base 10 or 36.
+            video_id (int, str): The numeric ID of the video to remove, in base 10 or 36. Note: the ID in a watch-page URL is NOT the video ID
+                (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+                Use utils.video_id_from_url() to convert a watch URL.
         """
 
         self.sphp_request(

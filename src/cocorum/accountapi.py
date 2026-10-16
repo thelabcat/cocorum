@@ -96,7 +96,9 @@ class AccountAPI:
         """Get the information and settings for a video we uploaded
 
         Args:
-            video_id (int): The numeric ID of the video in base 10
+            video_id (int): The numeric ID of the video in base 10 Note: the ID in a watch-page URL is NOT the video ID
+                (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+                Use utils.video_id_from_url() to convert a watch URL.
 
         Returns:
             settings (cocorum.scraping.HTMLVideoSettings): The data"""
@@ -109,7 +111,9 @@ class AccountAPI:
     def set_video_info_settings(self, video_id, **kwargs):
         """Edit video properties
         Args:
-            video_id (int): The numeric ID of the video to edit in base 10
+            video_id (int): The numeric ID of the video to edit in base 10 Note: the ID in a watch-page URL is NOT the video ID
+                (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+                Use utils.video_id_from_url() to convert a watch URL.
             thumbnail (str): The on-server filename of the thumbnail to use.
                 Defaults to None, no change.
             title (str): The new video title.
@@ -209,7 +213,9 @@ class AccountAPI:
         """Get the closed captions for a video
 
         Args:
-            video_id (int): The numeric ID of the video in base 10.
+            video_id (int): The numeric ID of the video in base 10. Note: the ID in a watch-page URL is NOT the video ID
+                (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+                Use utils.video_id_from_url() to convert a watch URL.
             lang (str): The language of captions to check, in two-character code.
                 Defaults to "en".
 

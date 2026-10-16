@@ -97,6 +97,9 @@ class URI:
     acc_settings_page = account_page + "/settings"
     """Account settings page, where lots of user info is stored"""
 
+    oembed = rumble_base + "/api/Media/oembed.json"
+    """Rumble's oEmbed JSON endpoint, used to map a watch-page URL to the real video ID"""
+
     servicephp = rumble_base + "/service.php"
     """The Service.PHP API"""
 

@@ -298,7 +298,9 @@ class BasePlaylist:
         """Add a video to this playlist
 
     Args:
-        video_id (SupportsInt | str): The numeric ID of the video to add, in base 10 or 36.
+        video_id (SupportsInt | str): The numeric ID of the video to add, in base 10 or 36. Note: the ID in a watch-page URL is NOT the video ID
+            (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+            Use utils.video_id_from_url() to convert a watch URL.
         """
 
         return self.servicephp.playlist_add_video(self.playlist_id, video_id)
@@ -307,7 +309,9 @@ class BasePlaylist:
         """Remove a video from this playlist
 
     Args:
-        video_id (SupportsInt | str): The numeric ID of the video to remove, in base 10 or 36.
+        video_id (SupportsInt | str): The numeric ID of the video to remove, in base 10 or 36. Note: the ID in a watch-page URL is NOT the video ID
+            (https://rumble.com/v2o2oe5-... is video 157009049 = 2lh8yh).
+            Use utils.video_id_from_url() to convert a watch URL.
         """
 
         self.servicephp.playlist_delete_video(self.playlist_id, video_id)
