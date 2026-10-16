@@ -945,4 +945,4 @@ class Scraper:
             apiKey (str): Said key, meant to be passed as a parameter in requests"""
 
         soup = self.soup_request(static.URI.account_page)
-        return static.Misc.find_acc_apikey.findall(soup.prettify())[0]
+        return static.RegEx.find_acc_apikey.findall(soup.prettify())[0]

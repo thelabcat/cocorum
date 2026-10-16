@@ -97,6 +97,9 @@ class URI:
     acc_settings_page = account_page + "/settings"
     """Account settings page, where lots of user info is stored"""
 
+    oembed = rumble_base + "/api/Media/oembed.json"
+    """Rumble's oEmbed JSON endpoint, used to map a watch-page URL to the real video ID"""
+
     servicephp = rumble_base + "/service.php"
     """The Service.PHP API"""
 
@@ -177,6 +180,26 @@ class Upload:
     """Maximum upload size in bytes, is 15GB as stated by Rumble"""
 
 
+class RegEx:
+    """Regular Expression patterns"""
+    find_acc_apikey = re.compile(
+        r'(?<=var \$a = new Account\("AccountOverview",").*(?="\);)'
+    )
+    """Find the account API key in the https://rumble.com/account page source
+    It looks like this: `var $a = new Account("AccountContent","##########");`"""
+
+    class URLType:
+        """Detect what type of Rumble URL we are working with, mainly for utils.video_id_from_url()"""
+        embed = re.compile(r"rumble\.com/embed/v([0-9a-z]+)", re.IGNORECASE)
+        watch = re.compile(
+            r"^(?:https?://)?(?:www\.)?rumble\.com/v([0-9a-z]+)(?:[-.]\S*)?$", re.IGNORECASE
+        )
+        shorts = re.compile(
+            r"^(?:https?://)?(?:www\.)?rumble\.com/shorts/v([0-9a-z]+)\S*$", re.IGNORECASE
+        )
+        slug = re.compile(r"^v([0-9a-z]+)(?:-[^\s/]*)?(?:\.html)?$", re.IGNORECASE)
+
+
 class Misc:
     """No idea where else to put this data"""
 
@@ -208,12 +231,6 @@ class Misc:
 
     session_token_key = "u_s"
     """Key of the session token within the session cookie dict"""
-
-    find_acc_apikey = re.compile(
-        r'(?<=var \$a = new Account\("AccountOverview",").*(?="\);)'
-    )
-    """RegEx to find the account API key in the https://rumble.com/account page source
-    It looks like this: `var $a = new Account("AccountContent","##########");`"""
 
     tag_split = ", "
     """Characters that video tags are separated by"""

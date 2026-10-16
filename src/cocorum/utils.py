@@ -206,6 +206,63 @@ def base_36_and_10(num: SupportsInt | str, assume_10: bool = False):
     return ensure_b36(num, assume_10), ensure_b10(num, assume_10)
 
 
+def video_id_from_url(url: str) -> str:
+    """Get the real video ID (base 36) from a watch-page URL, a v-slug, or an embed URL.
+
+    The ID in a watch-page URL is NOT the video ID. For example,
+    https://rumble.com/v2o2oe5-title.html is video 157009049, which is 2lh8yh in
+    base 36, and int("2o2oe5", 36) is a different number. Embed URLs
+    (https://rumble.com/embed/v2lh8yh/) do carry the real ID and are read directly.
+    For watch URLs and slugs, this asks Rumble's oEmbed endpoint, which returns JSON
+    (no HTML page scraping).
+
+    Args:
+        url (str): https://rumble.com/v2o2oe5-title.html, https://rumble.com/v2o2oe5,
+            v2o2oe5, v2o2oe5-title.html, https://rumble.com/shorts/v5d871x,
+            or https://rumble.com/embed/v2lh8yh/ (auto detects and trims).
+
+    Returns:
+        Video ID (str): The real video ID in base 36, e.g. "2lh8yh".
+
+    Raises:
+        ValueError: The input is not a Rumble watch URL, slug, or embed URL.
+        LookupError: Rumble has no video at that watch URL, or its reply had no embed ID.
+    """
+
+    text = str(url).strip()
+
+    # Embed URLs already hold the real ID
+    m = static.RegEx.URLType.embed.search(text)
+    if m:
+        return m.group(1).lower()
+
+    m = static.RegEx.URLType.shorts.match(text)
+    if m:
+        slug = m.group(1).lower()
+        lookup = f"{static.URI.rumble_base}/shorts/v{slug}"
+    else:
+        m = static.RegEx.URLType.watch.match(text) or static.RegEx.URLType.slug.match(text)
+        if not m:
+            raise ValueError(f"Not a Rumble watch URL, v-slug, or embed URL: {text!r}")
+        slug = m.group(1).lower()
+        lookup = f"{static.URI.rumble_base}/v{slug}-.html"
+
+    r = requests.get(
+        static.URI.oembed,
+        params={"url": lookup},
+        headers=static.RequestHeaders.user_agent,
+        timeout=static.Delays.request_timeout,
+    )
+    if r.status_code == 404:
+        raise LookupError(f"Rumble has no video at the watch slug v{slug}")
+    assert r.status_code == 200, f"oEmbed request failed: {r}\n{r.text}"
+
+    m = static.RegEx.URLType.embed.search(r.json().get("html", ""))
+    if not m:
+        raise LookupError(f"Rumble's oEmbed reply for v{slug} had no embed ID")
+    return m.group(1).lower()
+
+
 def badges_to_glyph_string(badges: list[str]) -> str:
     """Convert a list of badges into a string of glyphs.
 
