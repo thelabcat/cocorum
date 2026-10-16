@@ -20,16 +20,24 @@ limitations under the License.
 S.D.G."""
 
 import re
+from importlib.metadata import version, PackageNotFoundError
 from urllib3 import Timeout
+
+try:
+    __version__ = version("cocorum")
+except PackageNotFoundError:  # Running from a source tree without installing
+    __version__ = "unknown"
 
 
 class RequestHeaders:
     """Headers for various HTTPrequests"""
 
     user_agent = {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
+        "User-Agent": f"cocorum/{__version__} (+https://github.com/thelabcat/cocorum)"
     }
-    """Header with a fake user-agent string"""
+    """Header with an honest user-agent string.
+    Cloudflare challenges browser-like user agents on service.php, while this passes.
+    Callers can replace the value, e.g. RequestHeaders.user_agent["User-Agent"] = "myapp/1.0"."""
 
 
 class StaticAPIEndpoints:

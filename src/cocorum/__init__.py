@@ -101,6 +101,7 @@ from . import (
 )
 
 from .jsonhandles import JSONObj, JSONUserAction
+from .static import __version__
 
 
 class Follower(JSONUserAction):
