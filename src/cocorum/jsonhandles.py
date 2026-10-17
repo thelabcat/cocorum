@@ -19,6 +19,7 @@ limitations under the License.
 
 S.D.G."""
 
+import copy
 from typing import Any
 import requests
 from . import static
@@ -39,6 +40,11 @@ class JSONObj():
     def __getitem__(self, key: str):
         """Get a key from the JSON"""
         return self._jsondata[key]
+
+    @property
+    def jsondata(self):
+        """A copy of the raw JSON from the API. Editing it does not change this object."""
+        return copy.deepcopy(self._jsondata)
 
     @property
     def get(self):

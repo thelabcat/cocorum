@@ -82,7 +82,7 @@ if livestream:
 S.D.G."""
 
 from __future__ import annotations
-
+import copy
 import time
 from typing import Any, Optional
 import warnings
@@ -291,6 +291,12 @@ class Livestream:
             self.api.check_refresh()
 
         return self._jsondata[key]
+
+    @property
+    def jsondata(self):
+        """A copy of the raw JSON from the API. Editing it does not change this object. Time-of-life is applied."""
+        self.api.check_refresh()
+        return copy.deepcopy(self._jsondata)
 
     @property
     def stream_id(self) -> str:
@@ -622,6 +628,11 @@ class GiftedSub(JSONObj):
     #
     #         return self._jsondata[key]
 
+    @property
+    def jsondata(self):
+        """A copy of the raw JSON from the API. Editing it does not change this object."""
+        return copy.deepcopy(self._jsondata)
+
     def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(purchased_by='{self.purchased_by}')"
@@ -750,6 +761,12 @@ class RumbleAPI:
             self.check_refresh()
 
         return self._jsondata[key]
+
+    @property
+    def jsondata(self):
+        """A copy of the raw JSON from the API. Editing it does not change this object. Time-of-life is applied."""
+        self.check_refresh()
+        return copy.deepcopy(self._jsondata)
 
     def check_refresh(self):
         """Refresh only if we are past the refresh rate"""
