@@ -747,6 +747,8 @@ class RumbleAPI:
         """
 
         self.__api_url = str(url)
+        self._rumbot_mode: bool = url.endswith(
+            static.URI.rumbot_suffix)
         self.refresh()
 
     def __getitem__(self, key: str):
