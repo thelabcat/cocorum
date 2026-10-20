@@ -746,7 +746,13 @@ class RumbleAPI:
             url (str | scraping.HTMLRLSAPIKeyInfo): The new API URL to use.
         """
 
-        self.__api_url = str(url)
+        url = str(url)
+
+        # Do nothing on a non-change
+        if url == self.api_url:
+            return
+
+        self.__api_url = url
         self._rumbot_mode: bool = url.endswith(
             static.URI.rumbot_suffix)
         self.refresh()
