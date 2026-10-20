@@ -11422,7 +11422,7 @@ agent used</p>
 <span class="sd">            apiKey (str): Said key, meant to be passed as a parameter in requests"""</span>
 
         <span class="n">soup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">soup_request</span><span class="p">(</span><span class="n">static</span><span class="o">.</span><span class="n">URI</span><span class="o">.</span><span class="n">account_page</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">static</span><span class="o">.</span><span class="n">Misc</span><span class="o">.</span><span class="n">find_acc_apikey</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">static</span><span class="o">.</span><span class="n">RegEx</span><span class="o">.</span><span class="n">find_acc_apikey</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -11655,7 +11655,7 @@ agent used</p>
 <span class="sd">        apiKey (str): Said key, meant to be passed as a parameter in requests"""</span>
 
     <span class="n">soup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">soup_request</span><span class="p">(</span><span class="n">static</span><span class="o">.</span><span class="n">URI</span><span class="o">.</span><span class="n">account_page</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">static</span><span class="o">.</span><span class="n">Misc</span><span class="o">.</span><span class="n">find_acc_apikey</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">static</span><span class="o">.</span><span class="n">RegEx</span><span class="o">.</span><span class="n">find_acc_apikey</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">prettify</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

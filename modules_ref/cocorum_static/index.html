@@ -770,17 +770,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cocorum.static.Misc.find_acc_apikey" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        find_acc_apikey
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#cocorum.static.Misc.session_token_key" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -871,6 +860,45 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cocorum.static.RegEx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegEx
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RegEx">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.RegEx.embed_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        embed_url
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.RegEx.find_acc_apikey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        find_acc_apikey
+      
+    </span>
+  </a>
   
 </li>
         
@@ -1007,6 +1035,17 @@
     <span class="md-ellipsis">
       
         mutes_page
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.URI.oembed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        oembed
       
     </span>
   </a>
@@ -1465,17 +1504,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cocorum.static.Misc.find_acc_apikey" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        find_acc_apikey
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#cocorum.static.Misc.session_token_key" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1566,6 +1594,45 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cocorum.static.RegEx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RegEx
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RegEx">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.RegEx.embed_url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        embed_url
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.RegEx.find_acc_apikey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        find_acc_apikey
+      
+    </span>
+  </a>
   
 </li>
         
@@ -1702,6 +1769,17 @@
     <span class="md-ellipsis">
       
         mutes_page
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cocorum.static.URI.oembed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        oembed
       
     </span>
   </a>
@@ -1978,10 +2056,7 @@ limitations under the License.</p>
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">128</span>
 <span class="normal">129</span>
 <span class="normal">130</span>
 <span class="normal">131</span>
@@ -2004,7 +2079,10 @@ limitations under the License.</p>
 <span class="normal">148</span>
 <span class="normal">149</span>
 <span class="normal">150</span>
-<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Delays</span><span class="p">:</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Delays</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Various times for delays and waits"""</span>
 
     <span class="n">request_timeout</span> <span class="o">=</span> <span class="n">Timeout</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
@@ -2244,17 +2322,17 @@ and HTTP 204 on that connection means the livestream chat is over.</p>
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
-<span class="normal">157</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">157</span>
 <span class="normal">158</span>
 <span class="normal">159</span>
 <span class="normal">160</span>
 <span class="normal">161</span>
 <span class="normal">162</span>
 <span class="normal">163</span>
-<span class="normal">164</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Message</span><span class="p">:</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Message</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""For chat messages"""</span>
 
     <span class="n">max_len</span> <span class="o">=</span> <span class="mi">200</span>
@@ -2384,22 +2462,7 @@ and HTTP 204 on that connection means the livestream chat is over.</p>
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span>
-<span class="normal">188</span>
-<span class="normal">189</span>
-<span class="normal">190</span>
-<span class="normal">191</span>
-<span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">195</span>
 <span class="normal">196</span>
 <span class="normal">197</span>
 <span class="normal">198</span>
@@ -2435,7 +2498,16 @@ and HTTP 204 on that connection means the livestream chat is over.</p>
 <span class="normal">228</span>
 <span class="normal">229</span>
 <span class="normal">230</span>
-<span class="normal">231</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Misc</span><span class="p">:</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Misc</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""No idea where else to put this data"""</span>
 
     <span class="n">base36</span> <span class="o">=</span> <span class="s2">"0123456789abcdefghijklmnopqrstuvwxyz"</span>
@@ -2466,12 +2538,6 @@ and HTTP 204 on that connection means the livestream chat is over.</p>
 
     <span class="n">session_token_key</span> <span class="o">=</span> <span class="s2">"u_s"</span>
 <span class="w">    </span><span class="sd">"""Key of the session token within the session cookie dict"""</span>
-
-    <span class="n">find_acc_apikey</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s1">'(?&lt;=var \$a = new Account\("AccountOverview",").*(?="\);)'</span>
-    <span class="p">)</span>
-<span class="w">    </span><span class="sd">"""RegEx to find the account API key in the https://rumble.com/account page source</span>
-<span class="sd">    It looks like this: `var $a = new Account("AccountContent","##########");`"""</span>
 
     <span class="n">tag_split</span> <span class="o">=</span> <span class="s2">", "</span>
 <span class="w">    </span><span class="sd">"""Characters that video tags are separated by"""</span>
@@ -2564,30 +2630,6 @@ and HTTP 204 on that connection means the livestream chat is over.</p>
     <div class="doc doc-contents ">
 
         <p>Digits of the numerical base 36 that Rumble uses</p>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="cocorum.static.Misc.find_acc_apikey" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">find_acc_apikey</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">'(?&lt;=var </span><span class="se">\\</span><span class="s1">$a = new Account</span><span class="se">\\</span><span class="s1">("AccountOverview",").*(?="</span><span class="se">\\</span><span class="s1">);)'</span><span class="p">)</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>RegEx to find the account API key in the https://rumble.com/account page source
-It looks like this: <code>var $a = new Account("AccountContent","##########");</code></p>
 
     </div>
 
@@ -2736,14 +2778,14 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">224</span>
-<span class="normal">225</span>
-<span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span>
-<span class="normal">229</span>
-<span class="normal">230</span>
-<span class="normal">231</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ContentTypes</span><span class="p">:</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ContentTypes</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Types of content that can be rumbled on"""</span>
 
     <span class="n">video</span> <span class="o">=</span> <span class="mi">1</span>
@@ -2820,6 +2862,122 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
     </div>
 
 </div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="cocorum.static.RegEx" class="doc doc-heading">
+            <code>RegEx</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Regular Expression patterns</p>
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>cocorum/static.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RegEx</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Regular Expression patterns"""</span>
+    <span class="n">find_acc_apikey</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s1">'(?&lt;=var \$a = new Account\("AccountOverview",").*(?="\);)'</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Find the account API key in the https://rumble.com/account page source</span>
+<span class="sd">    It looks like this: `var $a = new Account("AccountContent","##########");`"""</span>
+
+    <span class="n">embed_url</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"rumble\.com/embed/v([0-9a-z]+)"</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Is this an embed URL? If so, find the video ID in it"""</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cocorum.static.RegEx.embed_url" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">embed_url</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">'rumble</span><span class="se">\\</span><span class="s1">.com/embed/v([0-9a-z]+)'</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Is this an embed URL? If so, find the video ID in it</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cocorum.static.RegEx.find_acc_apikey" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">find_acc_apikey</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">'(?&lt;=var </span><span class="se">\\</span><span class="s1">$a = new Account</span><span class="se">\\</span><span class="s1">("AccountOverview",").*(?="</span><span class="se">\\</span><span class="s1">);)'</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Find the account API key in the https://rumble.com/account page source
+It looks like this: <code>var $a = new Account("AccountContent","##########");</code></p>
+
+    </div>
+
+</div>
+
+
 
 
 
@@ -3112,7 +3270,10 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 <span class="normal">119</span>
 <span class="normal">120</span>
 <span class="normal">121</span>
-<span class="normal">122</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">URI</span><span class="p">:</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">URI</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""URIs to various Rumble services"""</span>
 
     <span class="n">rumble_base</span> <span class="o">=</span> <span class="s2">"https://rumble.com"</span>
@@ -3138,6 +3299,9 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
     <span class="n">acc_settings_page</span> <span class="o">=</span> <span class="n">account_page</span> <span class="o">+</span> <span class="s2">"/settings"</span>
 <span class="w">    </span><span class="sd">"""Account settings page, where lots of user info is stored"""</span>
+
+    <span class="n">oembed</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/api/Media/oembed.json"</span>
+<span class="w">    </span><span class="sd">"""Rumble's oEmbed JSON endpoint, used to map a watch-page URL to the real video ID"""</span>
 
     <span class="n">servicephp</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s2">"/service.php"</span>
 <span class="w">    </span><span class="sd">"""The Service.PHP API"""</span>
@@ -3285,6 +3449,29 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
     <div class="doc doc-contents ">
 
         <p>Webpage with all the mutes on it, format with page number</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cocorum.static.URI.oembed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">oembed</span> <span class="o">=</span> <span class="n">rumble_base</span> <span class="o">+</span> <span class="s1">'/api/Media/oembed.json'</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Rumble's oEmbed JSON endpoint, used to map a watch-page URL to the real video ID</p>
 
     </div>
 
@@ -3456,10 +3643,7 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">112</span>
 <span class="normal">113</span>
 <span class="normal">114</span>
 <span class="normal">115</span>
@@ -3469,7 +3653,10 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 <span class="normal">119</span>
 <span class="normal">120</span>
 <span class="normal">121</span>
-<span class="normal">122</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatAPI</span><span class="p">:</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatAPI</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""URIs of the chat API"""</span>
 
     <span class="n">base</span> <span class="o">=</span> <span class="s2">"https://web7.rumble.com/chat/api/chat/</span><span class="si">{stream_id_b10}</span><span class="s2">"</span>
@@ -3634,17 +3821,17 @@ It looks like this: <code>var $a = new Account("AccountContent","##########");</
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>cocorum/static.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">170</span>
 <span class="normal">171</span>
 <span class="normal">172</span>
 <span class="normal">173</span>
 <span class="normal">174</span>
 <span class="normal">175</span>
 <span class="normal">176</span>
-<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Upload</span><span class="p">:</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Upload</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Data relating to uploading videos"""</span>
 
     <span class="n">chunksz</span> <span class="o">=</span> <span class="mi">10000000</span>
