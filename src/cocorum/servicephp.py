@@ -435,8 +435,9 @@ class ServicePHP:
                 "user.has_unread_notifications",
                 method="GET",
             ).json()
+            # The API suffixes the base 36 user ID with _u for some reason
             self.__user_id = utils.base_36_to_10(
-                j["user"]["id"].removeprefix("_"))
+                j["user"]["id"].removeprefix("_u"))
 
         return self.__user_id
 
