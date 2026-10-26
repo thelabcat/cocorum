@@ -310,34 +310,3 @@ def generate_request_id() -> str:
     b64_encoded = base64.b64encode(
         random_uuid).decode(static.Misc.text_encoding)
     return b64_encoded.rstrip('=')[:43]
-
-
-def options_check(url: str, method: str, origin=static.URI.rumble_base, cookies: dict = {}, params: dict = {}) -> bool:
-    """Check of we are allowed to do method on url via an options request
-
-    Args:
-        url (str): The URL to check at.
-        method (str): The HTTP method to check permission for.
-        origin (str): The origin header of the options request.
-            Defaults to static.URI.rumble_base
-        cookies (dict): Cookie dict to use in the request.
-            Defaults to no cookies.
-        params (dict): Parameters to use in the request.
-            Defaults to no parameters.
-
-    Returns:
-        Result (bool): Is the HTTP method allowed at the URL?
-    """
-
-    r = requests.options(
-        url,
-        headers={
-            'Access-Control-Request-Method': method.upper(),
-            'Access-Control-Request-Headers': 'content-type',
-            'Origin': origin,
-        },
-        cookies=cookies,
-        params=params,
-        timeout=static.Delays.request_timeout,
-    )
-    return r.status_code == 200

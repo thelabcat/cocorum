@@ -762,9 +762,16 @@ class ChatAPI():
         return not self._closed.is_set()
 
     @property
-    def session_cookie(self) -> dict | None:
-        """The session cookie we are logged in with"""
-        return self.servicephp.session_cookie if self.servicephp else None
+    def session(self) -> requests.Session | None:
+        """Our requests session, if we have one"""
+        if not self.servicephp:
+            return None
+        return self.servicephp.session
+
+    @property
+    def logged_in(self) -> bool:
+        """Are we logged in?"""
+        return bool(self.servicephp and self.session.token)
 
     @property
     def history(self) -> tuple[Message, ...]:
@@ -784,16 +791,15 @@ class ChatAPI():
         User (User): Your current chat user information.
         """
 
-        assert self.session_cookie, "Not logged in, cannot send message"
+        assert self.logged_in, "Not logged in, cannot send message"
         assert len(text) <= static.Message.max_len, "Mesage is too long"
         curtime = time.time()
         assert self.last_send_time + \
             static.Message.send_cooldown <= curtime, "Sending messages too fast"
-        assert utils.options_check(
+        assert self.servicephp.options_check(
             self.message_api_url, "POST"), "Rumble denied options request to post message"
-        r = requests.post(
+        r = self.session.post(
             self.message_api_url,
-            cookies=self.session_cookie,
             json={
                 "data": {
                     "request_id": utils.generate_request_id(),
@@ -823,17 +829,15 @@ class ChatAPI():
     Returns:
         JSON (dict): The JSON returned by the command.
         """
-
+        assert self.logged_in, "Not logged in, cannot send command"
         assert command_message.startswith(
             static.Message.command_prefix), "Not a command message"
-        r = requests.post(
+        r = self.session.post(
             static.URI.ChatAPI.command,
             data={
                 "video_id": self.stream_id_b10,
                 "message": command_message,
             },
-            cookies=self.session_cookie,
-            headers=static.RequestHeaders.user_agent,
             timeout=static.Delays.request_timeout,
         )
         assert r.status_code == 200, f"Command failed: {r}\n{r.text}"
@@ -853,14 +857,12 @@ class ChatAPI():
         assert not hasattr(
             message, "deleted") or not message.deleted, "Message was already deleted"
 
-        assert self.session_cookie, "Not logged in, cannot delete message"
-        assert utils.options_check(
+        assert self.logged_in, "Not logged in, cannot delete message"
+        assert self.servicephp.options_check(
             self.message_api_url + f"/{int(message)}", "DELETE"), "Rumble denied options request to delete message"
 
-        r = requests.delete(
+        r = self.session.delete(
             self.message_api_url + f"/{int(message)}",
-            cookies=self.session_cookie,
-            #  headers = static.RequestHeaders.user_agent,
             timeout=static.Delays.request_timeout,
         )
 
@@ -881,7 +883,7 @@ class ChatAPI():
             message (SupportsInt): Converting this to int must return a chat message ID.
         """
 
-        assert self.session_cookie, "Not logged in, cannot pin message"
+        assert self.logged_in, "Not logged in, cannot pin message"
         return self.servicephp.chat_pin(self.stream_id_b10, message)
 
     def unpin_message(self, message: Optional[SupportsInt] = None):
@@ -892,7 +894,7 @@ class ChatAPI():
                 Defaults to None, unpin known pinned message.
         """
 
-        assert self.session_cookie, "Not logged in, cannot unpin message"
+        assert self.logged_in, "Not logged in, cannot unpin message"
         if not message:
             message = self.pinned_message
         assert message, "No known pinned message and ID not provided"
@@ -909,7 +911,7 @@ class ChatAPI():
                 Defaults to False, just this video.
         """
 
-        assert self.session_cookie, "Not logged in, cannot mute user"
+        assert self.logged_in, "Not logged in, cannot mute user"
         return self.servicephp.mute_user(
             username=str(user),
             is_channel=False,
@@ -925,7 +927,7 @@ class ChatAPI():
             user (str): Username to unmute
         """
 
-        assert self.session_cookie, "Not logged in, cannot unmute user"
+        assert self.logged_in, "Not logged in, cannot unmute user"
 
         # If the user object has a username attribute, use that
         #  because most user objects will __str__ into their base 36 ID

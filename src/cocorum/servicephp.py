@@ -410,7 +410,7 @@ class ServicePHP:
 
     def __repr__(self) -> str:
         """String to represent this object"""
-        return f"{type(self).__name__}(username={self.username}, <{'not ' * bool(self.session_cookie)}logged in>)"
+        return f"{type(self).__name__}(username={self.username}, <{'not ' * bool(self.session_token)}logged in>)"
 
     @property
     def session_token(self) -> str:
@@ -523,6 +523,36 @@ class ServicePHP:
             )
 
         return r
+
+    def options_check(self, url: str, method: str, origin=static.URI.rumble_base, cookies: dict = {}, params: dict = {}) -> bool:
+        """Check of we are allowed to do method on url via an options request
+
+        Args:
+            url (str): The URL to check at.
+            method (str): The HTTP method to check permission for.
+            origin (str): The origin header of the options request.
+                Defaults to static.URI.rumble_base
+            cookies (dict): Cookie dict to use in the request.
+                Defaults to no cookies.
+            params (dict): Parameters to use in the request.
+                Defaults to no parameters.
+
+        Returns:
+            Result (bool): Is the HTTP method allowed at the URL?
+        """
+
+        r = self.session.options(
+            url,
+            headers={
+                'Access-Control-Request-Method': method.upper(),
+                'Access-Control-Request-Headers': 'content-type',
+                'Origin': origin,
+            },
+            cookies=cookies,
+            params=params,
+            timeout=static.Delays.request_timeout,
+        )
+        return r.status_code == 200
 
     def get_hashed_password(self, password: str) -> str:
         """Use Rumble's salts to hash a pasword for login
