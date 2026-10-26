@@ -710,7 +710,7 @@ class Scraper:
     @property
     def session(self):
         """Our ServicePHP session"""
-        return self.servicphp.session
+        return self.servicephp.session
 
     @property
     def username(self) -> str:
