@@ -111,9 +111,9 @@ class UploadPHP:
         self.__cur_num_chunks = None
 
     @property
-    def session_cookie(self):
-        """Our Rumble session cookie to authenticate requests"""
-        return self.servicephp.session_cookie
+    def session(self):
+        """Our logged in session"""
+        return self.servicephp.session
 
     def uphp_request(self, additional_params: dict, method: str = "PUT", data: Optional[dict] = None, timeout: int | float | Timeout = static.Delays.request_timeout) -> requests.Response:
         """Make a request to Upload.PHP with common settings.
@@ -133,13 +133,11 @@ class UploadPHP:
 
         params = {"api": static.Upload.api_ver}
         params.update(additional_params)
-        r = requests.request(
+        r = self.session.request(
             method,
             static.URI.uploadphp,
             params=params,
             data=data,
-            headers=static.RequestHeaders.user_agent,
-            cookies=self.session_cookie,
             timeout=timeout,
         )
         assert r.status_code == 200, f"Upload.PHP request failed: {r}\n{r.text}"
@@ -196,10 +194,9 @@ class UploadPHP:
                 })
 
                 # Get permission to upload the chunk
-                assert utils.options_check(
+                assert self.servicephp.options_check(
                     static.URI.uploadphp,
                     "PUT",
-                    cookies=self.session_cookie,
                     params=chunk_params,
                 ), f"Chunk {i} upload failed at OPTIONS request."
                 # Upload the chunk
@@ -235,10 +232,9 @@ class UploadPHP:
 
         with open(file_path, "rb") as f:
             # Get permission to upload the file
-            assert utils.options_check(
+            assert self.servicephp.options_check(
                 static.URI.uploadphp,
                 "POST",
-                cookies=self.session_cookie,
                 params={"api": static.Upload.api_ver},
             ), "File upload failed at OPTIONS request."
             # Upload the file

@@ -476,7 +476,6 @@ class ServicePHP:
         service_name: str,
         data: dict = {},
         additional_params: dict = {},
-        logged_in: bool = True,
         method: str = "POST",
     ) -> requests.Response:
         """
@@ -488,15 +487,12 @@ class ServicePHP:
                 Defaults to {}.
             additional_params (dict): Any additional query string parameters.
                 Defaults to {}.
-            logged_in (bool): Should the request use the session cookie?
-                Defaults to True.
             method (str): What request method to use.
                 Defaults to 'POST'.
 
         Returns:
             response (requests.Response): The response from Rumble.
         """
-        assert self.session_cookie or not logged_in, "Not logged in yet."
 
         params = {"name": service_name}
         params.update(additional_params)

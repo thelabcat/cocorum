@@ -241,7 +241,7 @@ class HTMLPlaylist(HTMLObj, BasePlaylist):
     def thumbnail(self) -> bytes:
         """The playlist thumbnail as a binary string"""
         if not self.__thumbnail:  # We never queried the thumbnail before
-            response = requests.get(
+            response = self.servicephp.session.get(
                 self.thumbnail_url, timeout=static.Delays.request_timeout
             )
             assert response.status_code == 200, "Status code " + str(
@@ -467,6 +467,7 @@ class HTMLVideo(HTMLObj):
     @property
     def thumbnail(self) -> bytes:
         """The video thumbnail as a bytestring"""
+        #TODO does not use session
         if not self.__thumbnail:  # We never queried the thumbnail before
             response = requests.get(
                 self.thumbnail_url, timeout=static.Delays.request_timeout
@@ -538,7 +539,7 @@ class HTMLVideoSettings(HTMLObj):
     def thumbnail(self) -> bytes:
         """The video thumbnail as a bytestring"""
         if not self.__thumbnail:  # We never queried the thumbnail before
-            response = requests.get(
+            response = self.servicephp.session.get(
                 self.thumbnail_url, timeout=static.Delays.request_timeout
             )
             assert response.status_code == 200, "Status code " + str(
@@ -707,9 +708,9 @@ class Scraper:
         return f"{type(self).__name__}(<{self.servicephp.username}>)"
 
     @property
-    def session_cookie(self) -> dict[str, str]:
-        """The session cookie we are logged in with"""
-        return self.servicephp.session_cookie
+    def session(self):
+        """Our ServicePHP session"""
+        return self.servicphp.session
 
     @property
     def username(self) -> str:
@@ -743,9 +744,8 @@ class Scraper:
             Soup (bs4.BeautifulSoup): The webpage at the URL, logged-in version.
         """
 
-        r = requests.get(
+        r = self.session.get(
             url,
-            cookies=self.session_cookie,
             timeout=static.Delays.request_timeout,
             headers=static.RequestHeaders.user_agent,
         )

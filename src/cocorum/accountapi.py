@@ -78,13 +78,11 @@ class AccountAPI:
         params_all = {"apiKey": self.apikey, "a": action}
         params_all.update(params)
 
-        r = requests.request(
+        r = self.servicephp.session.request(
             method,
             static.URI.rumble_base + endpoint,
             params=params_all,
             data=data,
-            headers=static.RequestHeaders.user_agent,
-            cookies=self.servicephp.session_cookie,
             timeout=static.Delays.request_timeout,
         )
 
