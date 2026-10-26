@@ -312,27 +312,6 @@ def generate_request_id() -> str:
     return b64_encoded.rstrip('=')[:43]
 
 
-def test_session_cookie(session_cookie: dict[str, str]) -> bool:
-    """Test if a session cookie dict is valid.
-
-    Args:
-        session_cookie (dict): The session cookie dict to test.
-
-    Returns:
-        Result (bool): Is the cookie dict valid?
-    """
-
-    r = requests.get(
-        static.URI.login_test,
-        cookies=session_cookie,
-        headers=static.RequestHeaders.user_agent,
-        timeout=static.Delays.request_timeout,
-    )
-
-    # If this code is 200, we still need to log in and it FAILED
-    return r.status_code == 409
-
-
 def options_check(url: str, method: str, origin=static.URI.rumble_base, cookies: dict = {}, params: dict = {}) -> bool:
     """Check of we are allowed to do method on url via an options request
 

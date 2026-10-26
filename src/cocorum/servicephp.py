@@ -369,46 +369,32 @@ class TwoFacAuth(JSONObj):
 class ServicePHP:
     """Interact with Rumble's service.php API"""
 
-    def __init__(self, username: str = None, session: str | dict = None):
+    def __init__(self, username: str = None, token: str | dict = None):
         """Interact with Rumble's service.php API.
 
         Args:
             username (str): The username we will be working under.
-                Defaults to None, refer to session.
-            session (str | dict): A pre-existing session token.
+                Defaults to None, refer to token.
+            token (str | dict): A pre-existing session token.
                 Defaults to None, await login.
         """
 
-        assert username or session, "Must pass at least one thing to log in with"
+        assert username or token, "Must pass at least one thing to log in with"
 
         # Set up initial auth data variables
         self.username: str | None = username
         """The username this ServicePHP wrapper is working under"""
 
-        self.session_cookie: dict | None = None
-        """The session token cookie we received on login. Can be reused if not logged out."""
+        self.session = requests.Session(headers=static.RequestHeaders.user_agent)
+        """requests.Session for persistent cookies and TLS context"""
 
-        # Session is the token directly
-        if isinstance(session, str):
-            self.session_cookie = {static.Misc.session_token_key: session}
+        # Must be after session
+        self.session_token = token
 
-        # Session is a cookie dict
-        elif isinstance(session, dict):
-            assert session.get(
-                static.Misc.session_token_key
-            ), f"Session cookie dict must have '{static.Misc.session_token_key}' as key."
-            self.session_cookie = session
-
-        # Session was passed but it is not anything we can use
-        elif session is not None:
-            raise ValueError(
-                f"Session must be a token str or cookie dict, got {type(session)}"
-            )
-
-        # If a session cookie was passed, test it
-        assert not self.session_cookie or utils.test_session_cookie(
-            self.session_cookie
-        ), "Session cookie is invalid."
+        # I don't know what this does exactly but it's important, something about TLS
+        a = requests.adapters.HTTPAdapter(max_retries=3)
+        self.session.mount("http://", a)
+        self.session.mount("https://", a)
 
         # Stored ID of the logged in user
         self.__user_id = None
@@ -420,11 +406,23 @@ class ServicePHP:
     @property
     def session_token(self) -> str:
         """The token stored in our session cookie, empty if if we are not logged in"""
-        return (
-            self.session_cookie[static.Misc.session_token_key]
-            if self.session_cookie
-            else ""
-        )
+        return self.session.cookies.get(static.Misc.session_token_key)
+
+    @session_token.setter
+    def session_token(self, token: str | dict | None):
+        """Set our session token (does not logout if set to None)"""
+        # Token is a cookie dict, extract to token string
+        if isinstance(token, dict):
+            token = token[static.Misc.session_token_key]
+
+        # Enforce that token is now a string or nothing
+        assert isinstance(token, str) or not token, f"Token must be a str, cookie dict, or test false, got {type(token)}"
+
+        self.session.cookies.set(static.Misc.session_token_key, token)
+
+        # If the token is something, ensure it works
+        if token:
+            assert self.test_session(), "Token is invalid"
 
     @property
     def user_id(self) -> int:
@@ -450,6 +448,19 @@ class ServicePHP:
     def user_id_b36(self) -> str:
         """The numeric ID of the logged in user in base 36"""
         return utils.base_10_to_36(self.user_id)
+
+    def test_session(self):
+        """Determine if our current session token is valid"""
+        if not self.session_token:
+            return False
+
+        r = self.session.get(
+            static.URI.login_test,
+            timeout=static.Delays.request_timeout,
+        )
+
+        # If this code is 200, we still need to log in and it FAILED
+        return r.status_code == 409
 
     def sphp_request(
         self,
@@ -480,13 +491,11 @@ class ServicePHP:
 
         params = {"name": service_name}
         params.update(additional_params)
-        r = requests.request(
+        r = self.session.request(
             method,
             static.URI.servicephp,
             params=params,
             data=data,
-            headers=static.RequestHeaders.user_agent,
-            cookies=self.session_cookie if logged_in else None,
             timeout=static.Delays.request_timeout,
         )
         assert (
@@ -520,7 +529,6 @@ class ServicePHP:
         r = self.sphp_request(
             "user.get_salts",
             data={"username": self.username},
-            logged_in=False,
             additional_params={"response_type": "session"},
         )
         salts = r.json()["data"]["salts"]
@@ -544,7 +552,6 @@ class ServicePHP:
                 "password": password_hashes,
                 "redirect_url": static.URI.rumble_base,
             },
-            logged_in=False,
         )
 
         return TwoFacAuth(r.json()["data"], self)
@@ -580,14 +587,12 @@ class ServicePHP:
                 # Hash the password using the salts
                 "password_hashes": ph,
             },
-            logged_in=False,
         )
 
         j = r.json()
-        session_token = j["data"]["session"]
-        assert session_token, f"Login failed: No token returned\n{r.json()}"
+        assert j["data"]["session"], f"Login failed: No token returned\n{r.json()}"
+        # Cookie is auto-saved to session
 
-        self.session_cookie = {static.Misc.session_token_key: session_token}
         return None
 
     def login_second_factor(self, two_fac_auth: TwoFacAuth, code: str):
@@ -606,26 +611,19 @@ class ServicePHP:
                 "totp_id": two_fac_auth.totp_id,
                 "user_key": two_fac_auth.user_key,
             },
-            logged_in=False,
         )
 
-        cookie_start = static.Misc.session_token_key + "="
-        for piece in r.headers["Set-Cookie"].split():
-            if piece.startswith(cookie_start):
-                self.session_cookie = {
-                    static.Misc.session_token_key: piece.removeprefix(
-                        cookie_start
-                    ).removesuffix(";")
-                }
-                return
-        raise ValueError(
-            "Login failed: Did not find session token in 2FA response headers."
-        )
+        assert self.test_session(), f"Second factor failed, did not save cookie\n{r.json()}"
 
     def logout(self):
         """Log out this ServicePHP instance"""
         self.sphp_request("user.logout", method="GET")
-        self.session_cookie = None
+        # TODO this is setectors for later
+        if self.session_token:
+            print("Note: token does not auto-clear on logout, clearing it")
+            self.session_token = None
+        else:
+            print("Note: token cookie auto-clears from session on logout")
 
     def chat_pin(
         self, stream_id: SupportsInt | str, message: SupportsInt, unpin: bool = False
