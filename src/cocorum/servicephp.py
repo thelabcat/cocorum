@@ -653,12 +653,7 @@ class ServicePHP:
     def logout(self):
         """Log out this ServicePHP instance"""
         self.sphp_request("user.logout", method="GET")
-        # TODO this is setectors for later
-        if self.session_token:
-            print("Note: token does not auto-clear on logout, clearing it")
-            self.session_token = None
-        else:
-            print("Note: token cookie auto-clears from session on logout")
+        # Note: token cookie auto-clears from session on logout
 
     def chat_pin(
         self, stream_id: SupportsInt | str, message: SupportsInt, unpin: bool = False
