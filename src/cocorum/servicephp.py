@@ -23,6 +23,7 @@ from __future__ import annotations
 
 from typing import Optional, SupportsInt
 import requests
+import ssl
 import bs4
 from . import scraping
 from . import static
@@ -366,6 +367,14 @@ class TwoFacAuth(JSONObj):
         )
 
 
+class SSLContextAdapter(requests.adapters.HTTPAdapter):
+    """Use Python's default TLS settings; Rumble/Cloudflare rejects urllib3's"""
+
+    def init_poolmanager(self, *args, **kwargs):
+        kwargs["ssl_context"] = ssl.create_default_context()
+        return super().init_poolmanager(*args, **kwargs)
+
+
 class ServicePHP:
     """Interact with Rumble's service.php API"""
 
@@ -385,16 +394,16 @@ class ServicePHP:
         self.username: str | None = username
         """The username this ServicePHP wrapper is working under"""
 
-        self.session = requests.Session(headers=static.RequestHeaders.user_agent)
+        self.session = requests.Session()
         """requests.Session for persistent cookies and TLS context"""
+
+        self.session.headers.update(static.RequestHeaders.user_agent)
 
         # Must be after session
         self.session_token = token
 
-        # I don't know what this does exactly but it's important, something about TLS
-        a = requests.adapters.HTTPAdapter(max_retries=3)
-        self.session.mount("http://", a)
-        self.session.mount("https://", a)
+        # Need to set the TLS settings to something CloudFlare likes
+        self.session.mount("https://", SSLContextAdapter(max_retries=3))
 
         # Stored ID of the logged in user
         self.__user_id = None
