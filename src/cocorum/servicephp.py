@@ -585,7 +585,7 @@ class ServicePHP:
                 "legacy_password": 1,  # TODO
                 "login": self.username,
                 "password": password_hashes,
-                "redirect_url": static.URI.rumble_base,
+                "redirect_uri": static.URI.rumble_base,
             },
         )
 
