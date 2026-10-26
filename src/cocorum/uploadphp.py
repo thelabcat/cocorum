@@ -24,12 +24,11 @@ from __future__ import annotations
 import mimetypes
 import os
 import random
+import re
 import time
 from typing import Optional, TYPE_CHECKING
 from urllib3 import Timeout
 import requests
-import json5 as json
-from .jsonhandles import JSONObj
 from . import scraping
 from . import static
 from . import utils
@@ -37,22 +36,51 @@ if TYPE_CHECKING:
     from .servicephp import ServicePHP
 
 
-class UploadResponse(JSONObj):
+class UploadResponse:
     """Response to a successful video upload"""
+
+    def __init__(self, jsdata: str):
+        """Response to a successful video upload
+
+        Args:
+            jsdata (str): The raw JS parameters for upload success
+        """
+        self._jsdata = jsdata
 
     def __repr__(self) -> str:
         """String to represent this object"""
         return f"{type(self).__name__}(fid={self.fid}, title=\"{self.title}\")"
 
     @property
+    def jsdata(self) -> str:
+        """The raw JS parameters for upload success"""
+        return self._jsdata
+
+    def get_str(self, key: str) -> str:
+        """Match key:"value" — non-greedy, stops at the closing unescaped quote"""
+        pattern = rf'{key}:"((?:\\.|[^"\\])*)"'
+        m = re.search(pattern, self._jsdata)
+        if not m:
+            raise KeyError(f"Missing string field: {key}")
+        # Unescape common JS string escapes
+        return m.group(1).encode().decode('unicode_escape')
+
+    def get_int(self, key: str) -> int:
+        """Match key:int"""
+        m = re.search(rf'{key}:(\d+)', self._jsdata)
+        if not m:
+            raise KeyError(f"Missing int field: {key}")
+        return int(m.group(1))
+
+    @property
     def url(self) -> str:
         """The video viewing URL"""
-        return self["url"]
+        return self.get_str("url")
 
     @property
     def fid(self) -> int:
         """The numeric ID of the uploaded video in base 10"""
-        return int(self["fid"])
+        return self.get_int("fid")
 
     @property
     def fid_b10(self) -> int:
@@ -67,17 +95,17 @@ class UploadResponse(JSONObj):
     @property
     def title(self) -> str:
         """The title of the video"""
-        return self["title"]
+        return self.get_str("title")
 
     @property
     def embed(self) -> str:
         """HTML to use for embedding the video"""
-        return self["embed"]
+        return self.get_str("embed")
 
     @property
     def embed_monetize(self) -> str:
         """HTML to use for embedding the video with monetization"""
-        return self["embedMonetize"]
+        return self.get_str("embedMonetize")
 
 
 class UploadPHP:
@@ -421,4 +449,6 @@ class UploadPHP:
         )
 
         # Extract the json from the response HTML, and return it as an JSONObj derivative
-        return UploadResponse(json.loads(r.text[r.text.find("{"): r.text.rfind("}") + 1]))
+        stage1 = r.text.split("uf.response.setSuccess({")[1].split("</script>")[0]
+        stage2 = stage1[:stage1.rfind("}")]
+        return UploadResponse(stage2)
