@@ -128,7 +128,7 @@ class URI:
 class Delays:
     """Various times for delays and waits"""
 
-    request_timeout = Timeout(5, 15)
+    request_timeout = Timeout(connect=5, read=15)
     """Timeout object for generic network requests"""
 
     sse_connect_timeout = 10
