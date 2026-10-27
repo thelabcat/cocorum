@@ -388,132 +388,132 @@ class HTMLChannel(HTMLObj):
         return self["data-title"]
 
 
-class HTMLVideo(HTMLObj):
-    """Video on a user or channel page as extracted from the page's HTML"""
-
-    def __init__(self, elem: bs4.Tag):
-        """Video on a user or channel page as extracted from the page's HTML.
-
-        Args:
-            elem (bs4.Tag): The class = "thumbnail__grid-item" video element.
-        """
-
-        super().__init__(elem)
-
-        # The binary data of our thumbnail
-        self.__thumbnail = None
-
-    def __int__(self) -> int:
-        """The video as an integer (it's numeric ID)"""
-        return self.video_id_b10
-
-    def __str__(self) -> str:
-        """The video as a string (it's ID in base 36)"""
-        return self.video_id_b36
-
-    def __repr__(self) -> str:
-        """String to represent this object"""
-        return f'{type(self).__name__}(title="{self.title}", video_id={self.video_id})'
-
-    def __eq__(self, other: Any) -> bool:
-        """Determine if this video is equal to another.
-
-        Args:
-            other (Any): Object to compare to.
-
-        Returns:
-            Comparison (bool): Did it fit the criteria?
-        """
-
-        # Check for direct matches first
-        if isinstance(other, int):
-            return self.video_id_b10 == other
-        if isinstance(other, str):
-            return str(other) == self.video_id_b36
-
-        # Check for object attributes to match to
-        if hasattr(other, "video_id"):
-            return self.video_id_b10 == utils.ensure_b10(other.video_id)
-        if hasattr(other, "stream_id"):
-            return self.video_id_b10 == utils.ensure_b10(other.stream_id)
-
-        # Check conversion to integer last, in case another ID or something
-        # happens to match
-        if hasattr(other, "__int__"):
-            return self.video_id_b10 == int(other)
-
-        return False
-
-    @property
-    def video_id(self) -> int:
-        """The numeric ID of the video in base 10"""
-        return int(self._elem.get("video-id"))
-
-    @property
-    def video_id_b10(self) -> int:
-        """The numeric ID of the video in base 10"""
-        return self.video_id
-
-    @property
-    def video_id_b36(self) -> str:
-        """The numeric ID of the video in base 36"""
-        return utils.base_10_to_36(self.video_id)
-
-    @property
-    def thumbnail_url(self) -> str:
-        """The URL of the video's thumbnail image"""
-        return self._elem.get("src")
-
-    @property
-    def thumbnail(self) -> bytes:
-        """The video thumbnail as a bytestring"""
-        #TODO does not use session
-        if not self.__thumbnail:  # We never queried the thumbnail before
-            response = requests.get(
-                self.thumbnail_url, timeout=static.Delays.request_timeout
-            )
-            assert response.status_code == 200, "Status code " + str(
-                response.status_code
-            )
-
-            self.__thumbnail = response.content
-
-        return self.__thumbnail
-
-    @property
-    def video_url(self) -> str:
-        """The URL of the video's viewing page"""
-        return self._elem.get("url")
-
-    @property
-    def title(self) -> str:
-        """The title of the video"""
-        return self._elem.get("video-title")
-
-    @property
-    def upload_date(self) -> float:
-        """The time that the video was uploaded, in seconds since epoch"""
-        return utils.parse_timestamp(self._elem.get("time"))
-
-    @property
-    def views(self) -> int:
-        """Number of views the video has, precisely"""
-        return int(self._elem.get("views"))
-
-    @property
-    def duration(self) -> int:
-        """Duration of the video in seconds (0 means incomplete or unpublished)"""
-        return int(self._elem.get("duration"))
-
-    @property
-    def is_exclusive(self) -> bool:
-        """Is this video premium viewers only?"""
-        return "premium" in self._elem.get("hints")
-
-    @property
-    def is_short(self) -> bool:
-        """Is this video a Short?"""
-        return "short" in self._elem.get("hints")
+# class HTMLVideo(HTMLObj):
+#     """Video on a user or channel page as extracted from the page's HTML"""
+#
+#     def __init__(self, elem: bs4.Tag):
+#         """Video on a user or channel page as extracted from the page's HTML.
+#
+#         Args:
+#             elem (bs4.Tag): The class = "thumbnail__grid-item" video element.
+#         """
+#
+#         super().__init__(elem)
+#
+#         # The binary data of our thumbnail
+#         self.__thumbnail = None
+#
+#     def __int__(self) -> int:
+#         """The video as an integer (it's numeric ID)"""
+#         return self.video_id_b10
+#
+#     def __str__(self) -> str:
+#         """The video as a string (it's ID in base 36)"""
+#         return self.video_id_b36
+#
+#     def __repr__(self) -> str:
+#         """String to represent this object"""
+#         return f'{type(self).__name__}(title="{self.title}", video_id={self.video_id})'
+#
+#     def __eq__(self, other: Any) -> bool:
+#         """Determine if this video is equal to another.
+#
+#         Args:
+#             other (Any): Object to compare to.
+#
+#         Returns:
+#             Comparison (bool): Did it fit the criteria?
+#         """
+#
+#         # Check for direct matches first
+#         if isinstance(other, int):
+#             return self.video_id_b10 == other
+#         if isinstance(other, str):
+#             return str(other) == self.video_id_b36
+#
+#         # Check for object attributes to match to
+#         if hasattr(other, "video_id"):
+#             return self.video_id_b10 == utils.ensure_b10(other.video_id)
+#         if hasattr(other, "stream_id"):
+#             return self.video_id_b10 == utils.ensure_b10(other.stream_id)
+#
+#         # Check conversion to integer last, in case another ID or something
+#         # happens to match
+#         if hasattr(other, "__int__"):
+#             return self.video_id_b10 == int(other)
+#
+#         return False
+#
+#     @property
+#     def video_id(self) -> int:
+#         """The numeric ID of the video in base 10"""
+#         return int(self._elem.get("video-id"))
+#
+#     @property
+#     def video_id_b10(self) -> int:
+#         """The numeric ID of the video in base 10"""
+#         return self.video_id
+#
+#     @property
+#     def video_id_b36(self) -> str:
+#         """The numeric ID of the video in base 36"""
+#         return utils.base_10_to_36(self.video_id)
+#
+#     @property
+#     def thumbnail_url(self) -> str:
+#         """The URL of the video's thumbnail image"""
+#         return self._elem.get("src")
+#
+#     @property
+#     def thumbnail(self) -> bytes:
+#         """The video thumbnail as a bytestring"""
+#         #TODO does not use session
+#         if not self.__thumbnail:  # We never queried the thumbnail before
+#             response = requests.get(
+#                 self.thumbnail_url, timeout=static.Delays.request_timeout
+#             )
+#             assert response.status_code == 200, "Status code " + str(
+#                 response.status_code
+#             )
+#
+#             self.__thumbnail = response.content
+#
+#         return self.__thumbnail
+#
+#     @property
+#     def video_url(self) -> str:
+#         """The URL of the video's viewing page"""
+#         return self._elem.get("url")
+#
+#     @property
+#     def title(self) -> str:
+#         """The title of the video"""
+#         return self._elem.get("video-title")
+#
+#     @property
+#     def upload_date(self) -> float:
+#         """The time that the video was uploaded, in seconds since epoch"""
+#         return utils.parse_timestamp(self._elem.get("time"))
+#
+#     @property
+#     def views(self) -> int:
+#         """Number of views the video has, precisely"""
+#         return int(self._elem.get("views"))
+#
+#     @property
+#     def duration(self) -> int:
+#         """Duration of the video in seconds (0 means incomplete or unpublished)"""
+#         return int(self._elem.get("duration"))
+#
+#     @property
+#     def is_exclusive(self) -> bool:
+#         """Is this video premium viewers only?"""
+#         return "premium" in self._elem.get("hints")
+#
+#     @property
+#     def is_short(self) -> bool:
+#         """Is this video a Short?"""
+#         return "short" in self._elem.get("hints")
 
 
 class HTMLVideoSettings(HTMLObj):
@@ -841,134 +841,134 @@ class Scraper:
         elems = soup.find_all("div", attrs={"data-type": "channel"})
         return [HTMLChannel(e) for e in elems]
 
-    def __get_videos(
-        self, username=None, is_channel=False, max_num=None, category="videos"
-    ) -> list[HTMLVideo]:
-        """Get the "videos" AKA uploads / livestreams under a user or channel, selected to category.
-
-        Args:
-            username (str): The name of the user or channel to search under.
-                Defaults to ourselves.
-            is_channel (bool): Is this a channel instead of a userpage?
-                Defaults to False.
-            max_num (int): The maximum number of videos to retrieve, starting from
-                the newest. WARNING: You will likely hit a 503 error if max_num is
-                None or too high.
-                Defaults to None, return all videos.
-                Note, rounded up to the nearest page.
-            category (str): The sub-page to scan for video items.
-                Defaults to "videos".
-
-        Returns:
-            Contents (list[HTMLVideo]): List of scraped videos.
-        """
-
-        raise NotImplementedError("This does not work because video thumbnails are currently added by javascript")
-
-        assert category in ("exclusive", "videos", "shorts", "livestreams"), "Invalid category to scrape"
-
-        # default to the logged-in username
-        if not username:
-            username = self.username
-
-        # If this is a channel username, we will need a slightly different URL
-        uc = ("user", "c")[is_channel]
-
-        # The base userpage URL currently has all their videos / livestreams on it
-        url_start = f"{static.URI.rumble_base}/{uc}/{username}/{category}"
-
-        # Start the loop with:
-        # no videos found yet
-        # the assumption that there will be new video elements
-        # a current page number of 1
-        videos = []
-        new_video_elems = True
-        pagenum = 1
-        while new_video_elems and (not max_num or len(videos) < max_num):
-            # Get the next page of videos
-            soup = self.soup_request(
-                f"{url_start}?page={pagenum}", allow_soft_404=True)
-
-            # Search for video listings
-            new_video_elems = soup.find_all(
-                "rum-video-thumbnail"
-            )
-
-            # We found some video listings
-            if new_video_elems:
-                videos += [HTMLVideo(e) for e in new_video_elems]
-
-            # Turn the page
-            pagenum += 1
-
-        return videos
-
-    def get_videos(self, username=None, is_channel=False, max_num_per_cat=None, longform=True, shortform=True):
-        """Get uploaded videos under a user or channel
-
-        Args:
-            username (str): The name of the user or channel to search under.
-                Defaults to ourselves.
-            is_channel (bool): Is this a channel instead of a userpage?
-                Defaults to False.
-            max_num_per_cat (int): The maximum number of videos to retrieve in each category, starting from
-                the newest. WARNING: You will likely hit a 503 error if max_num is
-                None or too high.
-                Defaults to None, return all videos.
-                Note, rounded up to the nearest page.
-            longform (bool): Include longform videos.
-                Defaults to True.
-            shortform (bool) Include Short videos.
-                Defaults to True.
-
-        Returns:
-            Videos (list[HTMLVideo]): List of scraped videos, sorted by date
-        """
-        vids = []
-        if longform:
-            vids += self.__get_videos(username, is_channel, max_num=max_num_per_cat, category="videos")
-        if shortform:
-            vids += self.__get_videos(username, is_channel, max_num=max_num_per_cat, category="shorts")
-        vids.sort(key=lambda v: v.upload_date, reverse=True)
-        return vids
-
-    def get_livestreams(self, username=None, is_channel=False, max_num=None):
-        """Get livestreams under a user or channel
-
-        Args:
-            username (str): The name of the user or channel to search under.
-                Defaults to ourselves.
-            is_channel (bool): Is this a channel instead of a userpage?
-                Defaults to False.
-            max_num (int): The maximum number of livestreams to retrieve, starting from
-                the newest. WARNING: You will likely hit a 503 error if max_num is
-                None or too high.
-                Defaults to None, return all videos.
-                Note, rounded up to the nearest page.
-
-        Returns:
-            Livestreams (list[HTMLVideo]): List of scraped livestreams
-        """
-        return self.__get_videos(username, is_channel, max_num, category="livestreams")
-
-    def get_exclusive(self, username=None, is_channel=False, max_num=None):
-        """Get Premium-only uploads under a user or channel
-
-        Args:
-            username (str): The name of the user or channel to search under.
-                Defaults to ourselves.
-            is_channel (bool): Is this a channel instead of a userpage?
-                Defaults to False.
-            max_num (int): The maximum number of uploads to retrieve, starting from
-                the newest. WARNING: You will likely hit a 503 error if max_num is
-                None or too high.
-                Defaults to None, return all videos.
-                Note, rounded up to the nearest page.
-
-        Returns:
-            Uploads (list[HTMLVideo]): List of scraped livestreams
-        """
-        return self.__get_videos(username, is_channel, max_num, category="exclusive")
+    # def __get_videos(
+    #     self, username=None, is_channel=False, max_num=None, category="videos"
+    # ) -> list[HTMLVideo]:
+    #     """Get the "videos" AKA uploads / livestreams under a user or channel, selected to category.
+    #
+    #     Args:
+    #         username (str): The name of the user or channel to search under.
+    #             Defaults to ourselves.
+    #         is_channel (bool): Is this a channel instead of a userpage?
+    #             Defaults to False.
+    #         max_num (int): The maximum number of videos to retrieve, starting from
+    #             the newest. WARNING: You will likely hit a 503 error if max_num is
+    #             None or too high.
+    #             Defaults to None, return all videos.
+    #             Note, rounded up to the nearest page.
+    #         category (str): The sub-page to scan for video items.
+    #             Defaults to "videos".
+    #
+    #     Returns:
+    #         Contents (list[HTMLVideo]): List of scraped videos.
+    #     """
+    #
+    #     raise NotImplementedError("This does not work because video thumbnails are currently added by javascript")
+    #
+    #     assert category in ("exclusive", "videos", "shorts", "livestreams"), "Invalid category to scrape"
+    #
+    #     # default to the logged-in username
+    #     if not username:
+    #         username = self.username
+    #
+    #     # If this is a channel username, we will need a slightly different URL
+    #     uc = ("user", "c")[is_channel]
+    #
+    #     # The base userpage URL currently has all their videos / livestreams on it
+    #     url_start = f"{static.URI.rumble_base}/{uc}/{username}/{category}"
+    #
+    #     # Start the loop with:
+    #     # no videos found yet
+    #     # the assumption that there will be new video elements
+    #     # a current page number of 1
+    #     videos = []
+    #     new_video_elems = True
+    #     pagenum = 1
+    #     while new_video_elems and (not max_num or len(videos) < max_num):
+    #         # Get the next page of videos
+    #         soup = self.soup_request(
+    #             f"{url_start}?page={pagenum}", allow_soft_404=True)
+    #
+    #         # Search for video listings
+    #         new_video_elems = soup.find_all(
+    #             "rum-video-thumbnail"
+    #         )
+    #
+    #         # We found some video listings
+    #         if new_video_elems:
+    #             videos += [HTMLVideo(e) for e in new_video_elems]
+    #
+    #         # Turn the page
+    #         pagenum += 1
+    #
+    #     return videos
+    #
+    # def get_videos(self, username=None, is_channel=False, max_num_per_cat=None, longform=True, shortform=True):
+    #     """Get uploaded videos under a user or channel
+    #
+    #     Args:
+    #         username (str): The name of the user or channel to search under.
+    #             Defaults to ourselves.
+    #         is_channel (bool): Is this a channel instead of a userpage?
+    #             Defaults to False.
+    #         max_num_per_cat (int): The maximum number of videos to retrieve in each category, starting from
+    #             the newest. WARNING: You will likely hit a 503 error if max_num is
+    #             None or too high.
+    #             Defaults to None, return all videos.
+    #             Note, rounded up to the nearest page.
+    #         longform (bool): Include longform videos.
+    #             Defaults to True.
+    #         shortform (bool) Include Short videos.
+    #             Defaults to True.
+    #
+    #     Returns:
+    #         Videos (list[HTMLVideo]): List of scraped videos, sorted by date
+    #     """
+    #     vids = []
+    #     if longform:
+    #         vids += self.__get_videos(username, is_channel, max_num=max_num_per_cat, category="videos")
+    #     if shortform:
+    #         vids += self.__get_videos(username, is_channel, max_num=max_num_per_cat, category="shorts")
+    #     vids.sort(key=lambda v: v.upload_date, reverse=True)
+    #     return vids
+    #
+    # def get_livestreams(self, username=None, is_channel=False, max_num=None):
+    #     """Get livestreams under a user or channel
+    #
+    #     Args:
+    #         username (str): The name of the user or channel to search under.
+    #             Defaults to ourselves.
+    #         is_channel (bool): Is this a channel instead of a userpage?
+    #             Defaults to False.
+    #         max_num (int): The maximum number of livestreams to retrieve, starting from
+    #             the newest. WARNING: You will likely hit a 503 error if max_num is
+    #             None or too high.
+    #             Defaults to None, return all videos.
+    #             Note, rounded up to the nearest page.
+    #
+    #     Returns:
+    #         Livestreams (list[HTMLVideo]): List of scraped livestreams
+    #     """
+    #     return self.__get_videos(username, is_channel, max_num, category="livestreams")
+    #
+    # def get_exclusive(self, username=None, is_channel=False, max_num=None):
+    #     """Get Premium-only uploads under a user or channel
+    #
+    #     Args:
+    #         username (str): The name of the user or channel to search under.
+    #             Defaults to ourselves.
+    #         is_channel (bool): Is this a channel instead of a userpage?
+    #             Defaults to False.
+    #         max_num (int): The maximum number of uploads to retrieve, starting from
+    #             the newest. WARNING: You will likely hit a 503 error if max_num is
+    #             None or too high.
+    #             Defaults to None, return all videos.
+    #             Note, rounded up to the nearest page.
+    #
+    #     Returns:
+    #         Uploads (list[HTMLVideo]): List of scraped livestreams
+    #     """
+    #     return self.__get_videos(username, is_channel, max_num, category="exclusive")
 
     def get_playlists(self) -> list[HTMLPlaylist]:
         """Get the playlists under the logged in user
