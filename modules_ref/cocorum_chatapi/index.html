@@ -1016,6 +1016,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cocorum.chatapi.ChatAPI.logged_in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        logged_in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cocorum.chatapi.ChatAPI.message_api_url" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1093,10 +1104,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.session_cookie" class="md-nav__link">
+  <a href="#cocorum.chatapi.ChatAPI.session" class="md-nav__link">
     <span class="md-ellipsis">
       
-        session_cookie
+        session
       
     </span>
   </a>
@@ -3075,6 +3086,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cocorum.chatapi.ChatAPI.logged_in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        logged_in
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cocorum.chatapi.ChatAPI.message_api_url" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3152,10 +3174,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.session_cookie" class="md-nav__link">
+  <a href="#cocorum.chatapi.ChatAPI.session" class="md-nav__link">
     <span class="md-ellipsis">
       
-        session_cookie
+        session
       
     </span>
   </a>
@@ -7843,7 +7865,9 @@ Defaults to False, just this video.</p>
 <span class="normal">1159</span>
 <span class="normal">1160</span>
 <span class="normal">1161</span>
-<span class="normal">1162</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatAPI</span><span class="p">():</span>
+<span class="normal">1162</span>
+<span class="normal">1163</span>
+<span class="normal">1164</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatAPI</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">"""The Rumble internal chat API</span>
 
 <span class="sd">    The live stream is read with `launchdarkly-eventsource`.</span>
@@ -8043,9 +8067,16 @@ Defaults to False, just this video.</p>
         <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span><span class="o">.</span><span class="n">is_set</span><span class="p">()</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">session_cookie</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""The session cookie we are logged in with"""</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">session_cookie</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Our requests session, if we have one"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">session</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">logged_in</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Are we logged in?"""</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">history</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Message</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
@@ -8065,16 +8096,15 @@ Defaults to False, just this video.</p>
 <span class="sd">        User (User): Your current chat user information.</span>
 <span class="sd">        """</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot send message"</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot send message"</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">max_len</span><span class="p">,</span> <span class="s2">"Mesage is too long"</span>
         <span class="n">curtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_send_time</span> <span class="o">+</span> \
             <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">send_cooldown</span> <span class="o">&lt;=</span> <span class="n">curtime</span><span class="p">,</span> <span class="s2">"Sending messages too fast"</span>
-        <span class="k">assert</span> <span class="n">utils</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span><span class="p">,</span> <span class="s2">"POST"</span><span class="p">),</span> <span class="s2">"Rumble denied options request to post message"</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span><span class="p">,</span>
-            <span class="n">cookies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span>
             <span class="n">json</span><span class="o">=</span><span class="p">{</span>
                 <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">"request_id"</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">generate_request_id</span><span class="p">(),</span>
@@ -8104,17 +8134,15 @@ Defaults to False, just this video.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        JSON (dict): The JSON returned by the command.</span>
 <span class="sd">        """</span>
-
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot send command"</span>
         <span class="k">assert</span> <span class="n">command_message</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
             <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">command_prefix</span><span class="p">),</span> <span class="s2">"Not a command message"</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
             <span class="n">static</span><span class="o">.</span><span class="n">URI</span><span class="o">.</span><span class="n">ChatAPI</span><span class="o">.</span><span class="n">command</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="p">{</span>
                 <span class="s2">"video_id"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream_id_b10</span><span class="p">,</span>
                 <span class="s2">"message"</span><span class="p">:</span> <span class="n">command_message</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="n">cookies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span>
-            <span class="n">headers</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">RequestHeaders</span><span class="o">.</span><span class="n">user_agent</span><span class="p">,</span>
             <span class="n">timeout</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">assert</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Command failed: </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span>
@@ -8134,14 +8162,12 @@ Defaults to False, just this video.</p>
         <span class="k">assert</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span>
             <span class="n">message</span><span class="p">,</span> <span class="s2">"deleted"</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">message</span><span class="o">.</span><span class="n">deleted</span><span class="p">,</span> <span class="s2">"Message was already deleted"</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot delete message"</span>
-        <span class="k">assert</span> <span class="n">utils</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot delete message"</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"/</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"DELETE"</span><span class="p">),</span> <span class="s2">"Rumble denied options request to delete message"</span>
 
-        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"/</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="n">cookies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span>
-            <span class="c1">#  headers = static.RequestHeaders.user_agent,</span>
             <span class="n">timeout</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -8162,7 +8188,7 @@ Defaults to False, just this video.</p>
 <span class="sd">            message (SupportsInt): Converting this to int must return a chat message ID.</span>
 <span class="sd">        """</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot pin message"</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot pin message"</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">chat_pin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream_id_b10</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">unpin_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
@@ -8173,7 +8199,7 @@ Defaults to False, just this video.</p>
 <span class="sd">                Defaults to None, unpin known pinned message.</span>
 <span class="sd">        """</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot unpin message"</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot unpin message"</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">message</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinned_message</span>
         <span class="k">assert</span> <span class="n">message</span><span class="p">,</span> <span class="s2">"No known pinned message and ID not provided"</span>
@@ -8190,7 +8216,7 @@ Defaults to False, just this video.</p>
 <span class="sd">                Defaults to False, just this video.</span>
 <span class="sd">        """</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot mute user"</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot mute user"</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">mute_user</span><span class="p">(</span>
             <span class="n">username</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
             <span class="n">is_channel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -8206,7 +8232,7 @@ Defaults to False, just this video.</p>
 <span class="sd">            user (str): Username to unmute</span>
 <span class="sd">        """</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot unmute user"</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot unmute user"</span>
 
         <span class="c1"># If the user object has a username attribute, use that</span>
         <span class="c1">#  because most user objects will __str__ into their base 36 ID</span>
@@ -8612,6 +8638,28 @@ Defaults to False, just this video.</p>
 
 
 
+<h3 id="cocorum.chatapi.ChatAPI.logged_in" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">logged_in</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Are we logged in?</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
 <h3 id="cocorum.chatapi.ChatAPI.message_api_url" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">message_api_url</span> <span class="o">=</span> <span class="n">static</span><span class="o">.</span><span class="n">URI</span><span class="o">.</span><span class="n">ChatAPI</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">stream_id_b10</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stream_id_b10</span><span class="p">)</span></code>
 
@@ -8766,8 +8814,8 @@ Defaults to False, just this video.</p>
 
 
 
-<h3 id="cocorum.chatapi.ChatAPI.session_cookie" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">session_cookie</span></code>
+<h3 id="cocorum.chatapi.ChatAPI.session" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">session</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
@@ -8778,7 +8826,7 @@ Defaults to False, just this video.</p>
 
     <div class="doc doc-contents ">
 
-        <p>The session cookie we are logged in with</p>
+        <p>Our requests session, if we have one</p>
 
     </div>
 
@@ -9351,9 +9399,7 @@ iterator ending, and <code>close()</code>. Defaults to None.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 939</span>
-<span class="normal"> 940</span>
-<span class="normal"> 941</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 941</span>
 <span class="normal"> 942</span>
 <span class="normal"> 943</span>
 <span class="normal"> 944</span>
@@ -9423,7 +9469,9 @@ iterator ending, and <code>close()</code>. Defaults to None.</p>
 <span class="normal">1008</span>
 <span class="normal">1009</span>
 <span class="normal">1010</span>
-<span class="normal">1011</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__next_event_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">1011</span>
+<span class="normal">1012</span>
+<span class="normal">1013</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__next_event_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Wait for the next event from the SSE and parse the JSON</span>
 
 <span class="sd">    Returns:</span>
@@ -9547,14 +9595,14 @@ does not deliver that backlog again.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1057</span>
-<span class="normal">1058</span>
-<span class="normal">1059</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1059</span>
 <span class="normal">1060</span>
 <span class="normal">1061</span>
 <span class="normal">1062</span>
 <span class="normal">1063</span>
-<span class="normal">1064</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clear_mailbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">1064</span>
+<span class="normal">1065</span>
+<span class="normal">1066</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clear_mailbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Delete anything in the mailbox</span>
 
 <span class="sd">    Message ids that were already seen stay remembered, so a reconnect</span>
@@ -9685,13 +9733,7 @@ the first time.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">817</span>
-<span class="normal">818</span>
-<span class="normal">819</span>
-<span class="normal">820</span>
-<span class="normal">821</span>
-<span class="normal">822</span>
-<span class="normal">823</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">823</span>
 <span class="normal">824</span>
 <span class="normal">825</span>
 <span class="normal">826</span>
@@ -9708,7 +9750,11 @@ the first time.</p>
 <span class="normal">837</span>
 <span class="normal">838</span>
 <span class="normal">839</span>
-<span class="normal">840</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="normal">840</span>
+<span class="normal">841</span>
+<span class="normal">842</span>
+<span class="normal">843</span>
+<span class="normal">844</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Send a native chat command</span>
 
 <span class="sd">Args:</span>
@@ -9717,17 +9763,15 @@ the first time.</p>
 <span class="sd">Returns:</span>
 <span class="sd">    JSON (dict): The JSON returned by the command.</span>
 <span class="sd">    """</span>
-
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot send command"</span>
     <span class="k">assert</span> <span class="n">command_message</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
         <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">command_prefix</span><span class="p">),</span> <span class="s2">"Not a command message"</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
         <span class="n">static</span><span class="o">.</span><span class="n">URI</span><span class="o">.</span><span class="n">ChatAPI</span><span class="o">.</span><span class="n">command</span><span class="p">,</span>
         <span class="n">data</span><span class="o">=</span><span class="p">{</span>
             <span class="s2">"video_id"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream_id_b10</span><span class="p">,</span>
             <span class="s2">"message"</span><span class="p">:</span> <span class="n">command_message</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="n">cookies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span>
-        <span class="n">headers</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">RequestHeaders</span><span class="o">.</span><span class="n">user_agent</span><span class="p">,</span>
         <span class="n">timeout</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">assert</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Command failed: </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span>
@@ -9809,11 +9853,7 @@ NOTE: Method will also print an error message if it failed.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">842</span>
-<span class="normal">843</span>
-<span class="normal">844</span>
-<span class="normal">845</span>
-<span class="normal">846</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">846</span>
 <span class="normal">847</span>
 <span class="normal">848</span>
 <span class="normal">849</span>
@@ -9842,7 +9882,9 @@ NOTE: Method will also print an error message if it failed.</p>
 <span class="normal">872</span>
 <span class="normal">873</span>
 <span class="normal">874</span>
-<span class="normal">875</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">SupportsInt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="normal">875</span>
+<span class="normal">876</span>
+<span class="normal">877</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">SupportsInt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Delete a message in chat.</span>
 
 <span class="sd">Args:</span>
@@ -9856,14 +9898,12 @@ NOTE: Method will also print an error message if it failed.</p>
     <span class="k">assert</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span>
         <span class="n">message</span><span class="p">,</span> <span class="s2">"deleted"</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">message</span><span class="o">.</span><span class="n">deleted</span><span class="p">,</span> <span class="s2">"Message was already deleted"</span>
 
-    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot delete message"</span>
-    <span class="k">assert</span> <span class="n">utils</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot delete message"</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"/</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"DELETE"</span><span class="p">),</span> <span class="s2">"Rumble denied options request to delete message"</span>
 
-    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"/</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-        <span class="n">cookies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span>
-        <span class="c1">#  headers = static.RequestHeaders.user_agent,</span>
         <span class="n">timeout</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -9922,9 +9962,7 @@ NOTE: Method will also print an error message if it failed.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1110</span>
-<span class="normal">1111</span>
-<span class="normal">1112</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1112</span>
 <span class="normal">1113</span>
 <span class="normal">1114</span>
 <span class="normal">1115</span>
@@ -9974,7 +10012,9 @@ NOTE: Method will also print an error message if it failed.</p>
 <span class="normal">1159</span>
 <span class="normal">1160</span>
 <span class="normal">1161</span>
-<span class="normal">1162</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Message</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">1162</span>
+<span class="normal">1163</span>
+<span class="normal">1164</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Message</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Return the next chat message (parsing any additional data).</span>
 
 <span class="sd">    Waits for it to come in. Rumble does not send an ended SSE event, so a read timeout reconnects and HTTP 204 on that connection means the chat is over and this returns None. Also returns None after `close()`.</span>
@@ -10080,15 +10120,15 @@ NOTE: Method will also print an error message if it failed.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1095</span>
-<span class="normal">1096</span>
-<span class="normal">1097</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1097</span>
 <span class="normal">1098</span>
 <span class="normal">1099</span>
 <span class="normal">1100</span>
 <span class="normal">1101</span>
 <span class="normal">1102</span>
-<span class="normal">1103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_badges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1103</span>
+<span class="normal">1104</span>
+<span class="normal">1105</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_badges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Create our dictionary of badges from an SSE data JSON</span>
 
 <span class="sd">Args:</span>
@@ -10184,9 +10224,7 @@ Defaults to False, just this video.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">901</span>
-<span class="normal">902</span>
-<span class="normal">903</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">903</span>
 <span class="normal">904</span>
 <span class="normal">905</span>
 <span class="normal">906</span>
@@ -10202,7 +10240,9 @@ Defaults to False, just this video.</p>
 <span class="normal">916</span>
 <span class="normal">917</span>
 <span class="normal">918</span>
-<span class="normal">919</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">mute_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="normal">919</span>
+<span class="normal">920</span>
+<span class="normal">921</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">mute_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Mute a user.</span>
 
 <span class="sd">    Args:</span>
@@ -10213,7 +10253,7 @@ Defaults to False, just this video.</p>
 <span class="sd">            Defaults to False, just this video.</span>
 <span class="sd">    """</span>
 
-    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot mute user"</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot mute user"</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">mute_user</span><span class="p">(</span>
         <span class="n">username</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
         <span class="n">is_channel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -10274,9 +10314,7 @@ Defaults to False, just this video.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1013</span>
-<span class="normal">1014</span>
-<span class="normal">1015</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1015</span>
 <span class="normal">1016</span>
 <span class="normal">1017</span>
 <span class="normal">1018</span>
@@ -10296,7 +10334,9 @@ Defaults to False, just this video.</p>
 <span class="normal">1032</span>
 <span class="normal">1033</span>
 <span class="normal">1034</span>
-<span class="normal">1035</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">parse_init_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1035</span>
+<span class="normal">1036</span>
+<span class="normal">1037</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">parse_init_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Extract initial chat data from the SSE init event JSON</span>
 
 <span class="sd">Args:</span>
@@ -10372,22 +10412,22 @@ Defaults to False, just this video.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">877</span>
-<span class="normal">878</span>
-<span class="normal">879</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">879</span>
 <span class="normal">880</span>
 <span class="normal">881</span>
 <span class="normal">882</span>
 <span class="normal">883</span>
 <span class="normal">884</span>
-<span class="normal">885</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">pin_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">SupportsInt</span><span class="p">):</span>
+<span class="normal">885</span>
+<span class="normal">886</span>
+<span class="normal">887</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">pin_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">SupportsInt</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Pin a message</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        message (SupportsInt): Converting this to int must return a chat message ID.</span>
 <span class="sd">    """</span>
 
-    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot pin message"</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot pin message"</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">chat_pin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream_id_b10</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -10492,14 +10532,7 @@ Defaults to None.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">774</span>
-<span class="normal">775</span>
-<span class="normal">776</span>
-<span class="normal">777</span>
-<span class="normal">778</span>
-<span class="normal">779</span>
-<span class="normal">780</span>
-<span class="normal">781</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">781</span>
 <span class="normal">782</span>
 <span class="normal">783</span>
 <span class="normal">784</span>
@@ -10533,7 +10566,13 @@ Defaults to None.</p>
 <span class="normal">812</span>
 <span class="normal">813</span>
 <span class="normal">814</span>
-<span class="normal">815</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">User</span><span class="p">):</span>
+<span class="normal">815</span>
+<span class="normal">816</span>
+<span class="normal">817</span>
+<span class="normal">818</span>
+<span class="normal">819</span>
+<span class="normal">820</span>
+<span class="normal">821</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">User</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Send a message in chat.</span>
 
 <span class="sd">Args:</span>
@@ -10546,16 +10585,15 @@ Defaults to None.</p>
 <span class="sd">    User (User): Your current chat user information.</span>
 <span class="sd">    """</span>
 
-    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot send message"</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot send message"</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">max_len</span><span class="p">,</span> <span class="s2">"Mesage is too long"</span>
     <span class="n">curtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_send_time</span> <span class="o">+</span> \
         <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">send_cooldown</span> <span class="o">&lt;=</span> <span class="n">curtime</span><span class="p">,</span> <span class="s2">"Sending messages too fast"</span>
-    <span class="k">assert</span> <span class="n">utils</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span><span class="p">,</span> <span class="s2">"POST"</span><span class="p">),</span> <span class="s2">"Rumble denied options request to post message"</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span><span class="p">,</span>
-        <span class="n">cookies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span>
         <span class="n">json</span><span class="o">=</span><span class="p">{</span>
             <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">"request_id"</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">generate_request_id</span><span class="p">(),</span>
@@ -10628,9 +10666,7 @@ Defaults to None.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">921</span>
-<span class="normal">922</span>
-<span class="normal">923</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">923</span>
 <span class="normal">924</span>
 <span class="normal">925</span>
 <span class="normal">926</span>
@@ -10644,14 +10680,16 @@ Defaults to None.</p>
 <span class="normal">934</span>
 <span class="normal">935</span>
 <span class="normal">936</span>
-<span class="normal">937</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unmute_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="normal">937</span>
+<span class="normal">938</span>
+<span class="normal">939</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unmute_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Unmute a user.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        user (str): Username to unmute</span>
 <span class="sd">    """</span>
 
-    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot unmute user"</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot unmute user"</span>
 
     <span class="c1"># If the user object has a username attribute, use that</span>
     <span class="c1">#  because most user objects will __str__ into their base 36 ID</span>
@@ -10715,9 +10753,7 @@ Defaults to None, unpin known pinned message.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">887</span>
-<span class="normal">888</span>
-<span class="normal">889</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">889</span>
 <span class="normal">890</span>
 <span class="normal">891</span>
 <span class="normal">892</span>
@@ -10727,7 +10763,9 @@ Defaults to None, unpin known pinned message.</p>
 <span class="normal">896</span>
 <span class="normal">897</span>
 <span class="normal">898</span>
-<span class="normal">899</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unpin_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="normal">899</span>
+<span class="normal">900</span>
+<span class="normal">901</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unpin_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Unpin the pinned message</span>
 
 <span class="sd">    Args:</span>
@@ -10735,7 +10773,7 @@ Defaults to None, unpin known pinned message.</p>
 <span class="sd">            Defaults to None, unpin known pinned message.</span>
 <span class="sd">    """</span>
 
-    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_cookie</span><span class="p">,</span> <span class="s2">"Not logged in, cannot unpin message"</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot unpin message"</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">message</span><span class="p">:</span>
         <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinned_message</span>
     <span class="k">assert</span> <span class="n">message</span><span class="p">,</span> <span class="s2">"No known pinned message and ID not provided"</span>
@@ -10793,9 +10831,7 @@ Defaults to None, unpin known pinned message.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1080</span>
-<span class="normal">1081</span>
-<span class="normal">1082</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1082</span>
 <span class="normal">1083</span>
 <span class="normal">1084</span>
 <span class="normal">1085</span>
@@ -10806,7 +10842,9 @@ Defaults to None, unpin known pinned message.</p>
 <span class="normal">1090</span>
 <span class="normal">1091</span>
 <span class="normal">1092</span>
-<span class="normal">1093</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1093</span>
+<span class="normal">1094</span>
+<span class="normal">1095</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Update our dictionary of channels from an SSE data JSON</span>
 
 <span class="sd">Args:</span>
@@ -10877,9 +10915,7 @@ already seen, so that history is not delivered again.
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1037</span>
-<span class="normal">1038</span>
-<span class="normal">1039</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1039</span>
 <span class="normal">1040</span>
 <span class="normal">1041</span>
 <span class="normal">1042</span>
@@ -10895,7 +10931,9 @@ already seen, so that history is not delivered again.
 <span class="normal">1052</span>
 <span class="normal">1053</span>
 <span class="normal">1054</span>
-<span class="normal">1055</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_mailbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1055</span>
+<span class="normal">1056</span>
+<span class="normal">1057</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_mailbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Parse chat messages from an SSE data JSON</span>
 
 <span class="sd">    Every time a chat client connects, Rumble delivers all the messages</span>
@@ -10967,9 +11005,7 @@ already seen, so that history is not delivered again.
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1066</span>
-<span class="normal">1067</span>
-<span class="normal">1068</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1068</span>
 <span class="normal">1069</span>
 <span class="normal">1070</span>
 <span class="normal">1071</span>
@@ -10979,7 +11015,9 @@ already seen, so that history is not delivered again.
 <span class="normal">1075</span>
 <span class="normal">1076</span>
 <span class="normal">1077</span>
-<span class="normal">1078</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1078</span>
+<span class="normal">1079</span>
+<span class="normal">1080</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Update our dictionary of users from an SSE data JSON</span>
 
 <span class="sd">Args:</span>
