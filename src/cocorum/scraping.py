@@ -447,7 +447,7 @@ class HTMLVideo(HTMLObj):
     @property
     def video_id(self) -> int:
         """The numeric ID of the video in base 10"""
-        return int(self._elem.get("data-video-id"))
+        return int(self._elem.get("video-id"))
 
     @property
     def video_id_b10(self) -> int:
@@ -462,7 +462,7 @@ class HTMLVideo(HTMLObj):
     @property
     def thumbnail_url(self) -> str:
         """The URL of the video's thumbnail image"""
-        return self._elem.find("img", attrs={"class": "thumbnail__image"}).get("src")
+        return self._elem.get("src")
 
     @property
     def thumbnail(self) -> bytes:
@@ -483,23 +483,37 @@ class HTMLVideo(HTMLObj):
     @property
     def video_url(self) -> str:
         """The URL of the video's viewing page"""
-        return static.URI.rumble_base + self._elem.find(
-            "a", attrs={"class": "videostream__link link"}
-        ).get("href")
+        return self._elem.get("url")
 
     @property
     def title(self) -> str:
         """The title of the video"""
-        return self._elem.find("h3", attrs={"class": "thumbnail__title"}).get("title")
+        return self._elem.get("video-title")
 
     @property
     def upload_date(self) -> float:
         """The time that the video was uploaded, in seconds since epoch"""
-        return utils.parse_timestamp(
-            self._elem.find(
-                "time", attrs={"class": "videostream__data--subitem videostream__time"}
-            ).get("datetime")
-        )
+        return utils.parse_timestamp(self._elem.get("time"))
+
+    @property
+    def views(self) -> int:
+        """Number of views the video has, precisely"""
+        return int(self._elem.get("views"))
+
+    @property
+    def duration(self) -> int:
+        """Duration of the video in seconds (0 means incomplete or unpublished)"""
+        return int(self._elem.get("duration"))
+
+    @property
+    def is_exclusive(self) -> bool:
+        """Is this video premium viewers only?"""
+        return "premium" in self._elem.get("hints")
+
+    @property
+    def is_short(self) -> bool:
+        """Is this video a Short?"""
+        return "short" in self._elem.get("hints")
 
 
 class HTMLVideoSettings(HTMLObj):
@@ -827,10 +841,10 @@ class Scraper:
         elems = soup.find_all("div", attrs={"data-type": "channel"})
         return [HTMLChannel(e) for e in elems]
 
-    def get_videos(
-        self, username=None, is_channel=False, max_num=None
+    def __get_videos(
+        self, username=None, is_channel=False, max_num=None, category="videos"
     ) -> list[HTMLVideo]:
-        """Get the videos under a user or channel.
+        """Get the "videos" AKA uploads / livestreams under a user or channel, selected to category.
 
         Args:
             username (str): The name of the user or channel to search under.
@@ -842,10 +856,16 @@ class Scraper:
                 None or too high.
                 Defaults to None, return all videos.
                 Note, rounded up to the nearest page.
+            category (str): The sub-page to scan for video items.
+                Defaults to "videos".
 
         Returns:
-            Videos (list[HTMLVideo]): List of scraped videos.
+            Contents (list[HTMLVideo]): List of scraped videos.
         """
+
+        raise NotImplementedError("This does not work because video thumbnails are currently added by javascript")
+
+        assert category in ("exclusive", "videos", "shorts", "livestreams"), "Invalid category to scrape"
 
         # default to the logged-in username
         if not username:
@@ -855,7 +875,7 @@ class Scraper:
         uc = ("user", "c")[is_channel]
 
         # The base userpage URL currently has all their videos / livestreams on it
-        url_start = f"{static.URI.rumble_base}/{uc}/{username}"
+        url_start = f"{static.URI.rumble_base}/{uc}/{username}/{category}"
 
         # Start the loop with:
         # no videos found yet
@@ -871,7 +891,7 @@ class Scraper:
 
             # Search for video listings
             new_video_elems = soup.find_all(
-                "div", attrs={"class": "videostream thumbnail__grid--item"}
+                "rum-video-thumbnail"
             )
 
             # We found some video listings
@@ -882,6 +902,73 @@ class Scraper:
             pagenum += 1
 
         return videos
+
+    def get_videos(self, username=None, is_channel=False, max_num_per_cat=None, longform=True, shortform=True):
+        """Get uploaded videos under a user or channel
+
+        Args:
+            username (str): The name of the user or channel to search under.
+                Defaults to ourselves.
+            is_channel (bool): Is this a channel instead of a userpage?
+                Defaults to False.
+            max_num_per_cat (int): The maximum number of videos to retrieve in each category, starting from
+                the newest. WARNING: You will likely hit a 503 error if max_num is
+                None or too high.
+                Defaults to None, return all videos.
+                Note, rounded up to the nearest page.
+            longform (bool): Include longform videos.
+                Defaults to True.
+            shortform (bool) Include Short videos.
+                Defaults to True.
+
+        Returns:
+            Videos (list[HTMLVideo]): List of scraped videos, sorted by date
+        """
+        vids = []
+        if longform:
+            vids += self.__get_videos(username, is_channel, max_num=max_num_per_cat, category="videos")
+        if shortform:
+            vids += self.__get_videos(username, is_channel, max_num=max_num_per_cat, category="shorts")
+        vids.sort(key=lambda v: v.upload_date, reverse=True)
+        return vids
+
+    def get_livestreams(self, username=None, is_channel=False, max_num=None):
+        """Get livestreams under a user or channel
+
+        Args:
+            username (str): The name of the user or channel to search under.
+                Defaults to ourselves.
+            is_channel (bool): Is this a channel instead of a userpage?
+                Defaults to False.
+            max_num (int): The maximum number of livestreams to retrieve, starting from
+                the newest. WARNING: You will likely hit a 503 error if max_num is
+                None or too high.
+                Defaults to None, return all videos.
+                Note, rounded up to the nearest page.
+
+        Returns:
+            Livestreams (list[HTMLVideo]): List of scraped livestreams
+        """
+        return self.__get_videos(username, is_channel, max_num, category="livestreams")
+
+    def get_exclusive(self, username=None, is_channel=False, max_num=None):
+        """Get Premium-only uploads under a user or channel
+
+        Args:
+            username (str): The name of the user or channel to search under.
+                Defaults to ourselves.
+            is_channel (bool): Is this a channel instead of a userpage?
+                Defaults to False.
+            max_num (int): The maximum number of uploads to retrieve, starting from
+                the newest. WARNING: You will likely hit a 503 error if max_num is
+                None or too high.
+                Defaults to None, return all videos.
+                Note, rounded up to the nearest page.
+
+        Returns:
+            Uploads (list[HTMLVideo]): List of scraped livestreams
+        """
+        return self.__get_videos(username, is_channel, max_num, category="exclusive")
 
     def get_playlists(self) -> list[HTMLPlaylist]:
         """Get the playlists under the logged in user
