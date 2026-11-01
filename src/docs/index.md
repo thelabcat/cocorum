@@ -6,6 +6,38 @@ A Python wrapper for the Rumble Live Stream API v1.0 (beta), with some quality o
 - All timespamps are parsed to seconds since Epoch, UTC timezone.
 - Chat has new_messages and new_rants properties that return only messages and rants since the last time they were read.
 
+## Rumble Terms of Service status
+
+Cocorum has no affiliation with Rumble. Wilbur Jaywright and Marswide BGL have no association with Rumble Corp. beyond that of a normal user and channel. Rumble has not endorsed this project.
+
+[Rumble's Terms of Service](https://rumble.com/s/terms) prohibit "any form of automated software to interact with or access the Rumble Site ... without the prior written permission of Rumble." They prohibit "systematic retrieval of data or Content ... to create or compile ... a collection, compilation, library, database or directory." They also prohibit harvesting information about chat and forum users.
+
+[Rumble's Live Stream API help page](https://rumblefaq.groovehq.com/help/how-to-use-rumble-s-live-stream-api) says that, for now, users have "full reign" on using and implementing the Rumble Live Stream API however they want. The author has requested written permission from Rumble. There has been no answer yet.
+
+### Official Live Stream API
+
+`RumbleAPI` (the main class in the `cocorum` package) calls the Live Stream API URL you pass in, the key URL from your Rumble account. Reading livestream chat through `RumbleAPI`, including `livestream.chat`, uses that same Live Stream API response.
+
+### Undocumented internal endpoints
+
+These modules use undocumented internal endpoints:
+
+- `cocorum.servicephp` — `service.php` login and actions
+- `cocorum.uploadphp` — `upload.php`
+- `cocorum.chatapi` — the chat API and its SSE stream
+- `cocorum.scraping` — HTML scraping of account and user pages
+
+`cocorum.chatapi`, `cocorum.uploadphp`, and `cocorum.scraping` take a logged-in `ServicePHP` session for actions that need one, so those calls also go through `service.php`. Looking up a mute record from chat goes through `cocorum.scraping`.
+
+`cocorum.accountapi` posts to account pages with a key read from account HTML. Treat it with the undocumented endpoints above. `cocorum.utils.video_id_from_url` calls Rumble's public oEmbed JSON endpoint to turn a watch URL into a video id. `cocorum.jsonhandles`, `cocorum.basehandles`, and `cocorum.static` hold shared types, constants, and limits. The chat send cooldown is `cocorum.static.Message.send_cooldown` (3 seconds).
+
+### How to use this library
+
+- Use it only on your own account or channel, or on streams you moderate.
+- Respect Rumble chat's 3-second send limit.
+- Do not use the scraping features for bulk collection of other users' data.
+- If Rumble asks you to stop, stop.
+
 ## Table Of Contents
 
 1. [Tutorials](tutorials.md)
