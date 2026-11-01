@@ -560,7 +560,7 @@ class LiveChat:
             if m.created_on > self.last_newmessage_time:
                 break  # i is now the index of the oldest new message
 
-        self.last_newmessage_time = time.time()
+        self.last_newmessage_time = time.monotonic()
         return rem[i:]
 
     @property
@@ -593,7 +593,7 @@ class LiveChat:
             if r.created_on > self.last_newrant_time:
                 break  # i is now the index of the oldest new rant
 
-        self.last_newrant_time = time.time()
+        self.last_newrant_time = time.monotonic()
         return rera[i:]
 
 
@@ -706,10 +706,10 @@ class RumbleAPI:
         self.last_refresh_time: float = 0
         """The last time that we refreshed the API JSON data"""
 
-        self.last_newfollower_time: float = time.time()
+        self.last_newfollower_time: float = time.monotonic()
         """The last time we were checked for "new" followers"""
 
-        self.last_newsubscriber_time = time.time()
+        self.last_newsubscriber_time = time.monotonic()
         """The last time we were checked for "new" subscribers"""
 
         self.__livestreams = {}
@@ -778,12 +778,12 @@ class RumbleAPI:
 
     def check_refresh(self):
         """Refresh only if we are past the refresh rate"""
-        if time.time() - self.last_refresh_time > self.refresh_rate:
+        if time.monotonic() - self.last_refresh_time > self.refresh_rate:
             self.refresh()
 
     def refresh(self):
         """Reload data from the API"""
-        self.last_refresh_time = time.time()
+        self.last_refresh_time = time.monotonic()
         response = requests.get(
             self.api_url,
             headers=static.RequestHeaders.user_agent,
@@ -940,7 +940,7 @@ class RumbleAPI:
         ]
         nf.sort(key=lambda x: x.followed_on)
 
-        self.last_newfollower_time = time.time()
+        self.last_newfollower_time = time.monotonic()
 
         return nf
 
@@ -979,7 +979,7 @@ class RumbleAPI:
         ]
         ns.sort(key=lambda x: x.subscribed_on)
 
-        self.last_newsubscriber_time = time.time()
+        self.last_newsubscriber_time = time.monotonic()
 
         return ns
 
