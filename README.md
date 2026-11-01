@@ -6,48 +6,17 @@ A Python wrapper for the Rumble Live Stream API v1.0 (beta), with some quality o
 - All timespamps are parsed to seconds since Epoch, UTC timezone.
 - Additional `new_followers` and `new_subscribers`, plus `chat.new_messages` and `chat.new_rants` as endpoints that automatically clear themselves when read.
 
-## Rumble Terms of Service status
+This library currently also has some far more advanced features that may or may not be removed in the future.
 
-Cocorum has no affiliation with Rumble. Wilbur Jaywright and Marswide BGL have no association with Rumble Corp. beyond that of a normal user and channel. Rumble has not endorsed this project.
+I recommend taking a gander at [the full documentation](https://thelabcat.github.io/cocorum/), but here is a basic explanation:
 
-[Rumble's Terms of Service](https://rumble.com/s/terms) prohibit "any form of automated software to interact with or access the Rumble Site ... without the prior written permission of Rumble." They prohibit "systematic retrieval of data or Content ... to create or compile ... a collection, compilation, library, database or directory." They also prohibit harvesting information about chat and forum users.
+## Official Live Stream API
 
-[Rumble's Live Stream API help page](https://rumblefaq.groovehq.com/help/how-to-use-rumble-s-live-stream-api) says that, for now, users have "full reign" on using and implementing the Rumble Live Stream API however they want. The author has requested written permission from Rumble. There has been no answer yet.
-
-### Official Live Stream API
-
-`RumbleAPI` (the main class in the `cocorum` package) calls the Live Stream API URL you pass in, the key URL from your Rumble account. Reading livestream chat through `RumbleAPI`, including `livestream.chat`, uses that same Live Stream API response.
-
-### Undocumented internal endpoints
-
-These modules use undocumented internal endpoints:
-
-- `cocorum.servicephp` — `service.php` login and actions
-- `cocorum.uploadphp` — `upload.php`
-- `cocorum.chatapi` — the chat API and its SSE stream
-- `cocorum.scraping` — HTML scraping of account and user pages
-
-`cocorum.chatapi`, `cocorum.uploadphp`, and `cocorum.scraping` take a logged-in `ServicePHP` session for actions that need one, so those calls also go through `service.php`. Looking up a mute record from chat goes through `cocorum.scraping`.
-
-`cocorum.accountapi` posts to account pages with a key read from account HTML. Treat it with the undocumented endpoints above. `cocorum.utils.video_id_from_url` calls Rumble's public oEmbed JSON endpoint to turn a watch URL into a video id. `cocorum.jsonhandles`, `cocorum.basehandles`, and `cocorum.static` hold shared types, constants, and limits. The chat send cooldown is `cocorum.static.Message.send_cooldown` (3 seconds).
-
-### How to use this library
-
-- Use it only on your own account or channel, or on streams you moderate.
-- Respect Rumble chat's 3-second send limit.
-- Do not use the scraping features for bulk collection of other users' data.
-- If Rumble asks you to stop, stop.
-
-## Installation:
-You can find [this project on PyPi.org](https://pypi.org/project/cocorum/), and install it using any PyPi-compatible method (including Pip). Alternatively, you can view and download [the source code on GitHub](https://github.com/thelabcat/cocorum).
-
-## Usage:
-
-I recommend taking a gander at [the full documentation](https://thelabcat.github.io/cocorum/), but here's a basic intro:
+`RumbleAPI` (the main class in the `cocorum` package) relies on the Rumble Live Stream API alone. [Rumble's Live Stream API help page](https://rumblefaq.groovehq.com/help/how-to-use-rumble-s-live-stream-api) says that, for now, users have "full reign" on using and implementing the Rumble Live Stream API however they want, so this part of the library is in the clear for the forseeable future.
 
 For the most part, attributes that are not added features have the same name as the direct JSON counterparts, with the exception of adding prefixes to some things that have the same name in the JSON as Python builtin functions. For example, thing/id in JSON is thing.thing_id in this Python wrapper.
 
-```
+```python
 from cocorum import RumbleAPI
 
 ## API_URL is Rumble Live Stream API URL with key
@@ -90,16 +59,23 @@ if livestream:
         time.sleep(0.1)
 ```
 
-## Rumble internal API submodules
-This part of Cocorum's wrapping is not part of the official Rumble Live Stream API. It includes the following submodules:
-- chatapi
-- servicephp
-- uploadphp
-- scraping
-- utils (very rare cases)
+## Undocumented internal endpoints
+
+These modules use undocumented internal endpoints:
+
+- `cocorum.servicephp` — `service.php` login and actions
+- `cocorum.uploadphp` — `upload.php`
+- `cocorum.chatapi` — the chat API and its SSE stream
+- `cocorum.scraping` — HTML scraping of account and user pages
+
+`cocorum.chatapi`, `cocorum.uploadphp`, and `cocorum.scraping` take a logged-in `ServicePHP` session for actions that need one, so those calls also go through `service.php`. Looking up a mute record from chat goes through `cocorum.scraping`.
+
+`cocorum.accountapi` is a work in progress and does not currently function. If experimenting, it with the undocumented endpoints above. `cocorum.utils.video_id_from_url` calls Rumble's public oEmbed JSON endpoint to turn a watch URL into a video id. `cocorum.jsonhandles`, `cocorum.basehandles`, and `cocorum.static` hold shared types, constants, and limits.
+
+[Rumble's Terms of Service](https://rumble.com/s/terms) prohibit "any form of automated software to interact with or access the Rumble Site ... without the prior written permission of Rumble." They prohibit "systematic retrieval of data or Content ... to create or compile ... a collection, compilation, library, database or directory." They also prohibit harvesting information about chat and forum users. I just discovered this recently, so shortly after publishing this update, I will be requesting said written permission, and will update the library according to their reply.
 
 Example usage of `cocorum.chatapi`:
-```
+```python
 from cocorum import chatapi
 
 # Stream ID can be base 10 int or base 36 str
@@ -112,10 +88,20 @@ with chatapi.ChatAPI(stream_id = STREAM_ID) as chat:
         print(msg.user.username, "said", msg)
 ```
 
+### Even if Rumble says yes...
+
+- Use this library only on your own account or channel, or on streams you moderate.
+- Do not try to bypass any form of rate limits that Rumble may impose. This library is not intended to be used to harm Rumble or its users.
+- Do not use any of the features for bulk collection of data.
+- If Rumble asks you to stop, do.
+
+## Installation:
+You can find [this project on PyPi.org](https://pypi.org/project/cocorum/), and install it using any PyPi-compatible method (including Pip). Alternatively, you can view and download [the source code on GitHub](https://github.com/thelabcat/cocorum).
+
 ## Conclusion
 Hope this helps!
 
-I, Wilbur Jaywright, and my brand, Marswide BGL, have no official association with Rumble Corp. beyond that of a normal user and/or channel on the Rumble Video platform. This wrapper is not officially endorsed by Rumble Corp. or its subsidiaries.
+I, Wilbur Jaywright, and my brand, Marswide BGL, have no official association with Rumble Corp. beyond that of a normal user and/or channel on the Rumble Video platform. This project is not officially endorsed by Rumble Corp. or its subsidiaries.
 
 Copyright 2026 Wilbur Jaywright d.b.a. Marswide BGL.
 
