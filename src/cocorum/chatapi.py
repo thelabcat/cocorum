@@ -23,11 +23,11 @@ from __future__ import annotations
 
 import threading
 import time
-import urllib3
 from collections import deque
 from typing import Any, Callable, Iterator, Optional, SupportsInt
-import requests
 import json5 as json  # For parsing SSE message data
+import requests
+import urllib3
 from ld_eventsource import SSEClient
 from ld_eventsource.actions import Event, Fault
 from ld_eventsource.config import ConnectStrategy, ErrorStrategy
