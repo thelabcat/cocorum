@@ -812,7 +812,6 @@ class ChatAPI():
                     "channel_id": int(channel_id) if channel_id else None,
                 }
             },
-            #  headers = static.RequestHeaders.user_agent,
             timeout=static.Delays.request_timeout,
         )
 
