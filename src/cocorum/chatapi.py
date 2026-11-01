@@ -779,7 +779,7 @@ class ChatAPI():
         return tuple(self.__history)
 
     def send_message(self, text: str, channel_id: Optional[SupportsInt] = None) -> (int, User):
-        """Send a message in chat.
+        """Send a message in chat (blocking, auto-prevents sending messages faster than Rumble allowd)
 
     Args:
         text (str): The message text.
@@ -793,9 +793,11 @@ class ChatAPI():
 
         assert self.logged_in, "Not logged in, cannot send message"
         assert len(text) <= static.Message.max_len, "Mesage is too long"
-        curtime = time.time()
-        assert self.last_send_time + \
-            static.Message.send_cooldown <= curtime, "Sending messages too fast"
+        curtime = time.monotonic()
+        time.sleep(max((  # Make sure we don't try to send messages too fast
+            curtime - self.last_send_time + static.Message.send_cooldown,
+            0,
+            )))
         assert self.servicephp.options_check(
             self.message_api_url, "POST"), "Rumble denied options request to post message"
         r = self.session.post(
@@ -817,6 +819,8 @@ class ChatAPI():
         if r.status_code != 200:
             print("Error: Sending message failed,", r, r.text)
             return
+
+        self.last_send_time = time.monotonic()
 
         return int(r.json()["data"]["id"]), User(r.json()["data"]["user"], self)
 
