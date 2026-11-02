@@ -266,14 +266,10 @@ def badges_to_glyph_string(badges: list[str]) -> str:
         Glyphs (str): The badge list as a UTF-8 glyph string, uses ? for unknown badges.
         """
 
-    out = ""
-    for badge in badges:
-        badge = str(badge)
-        if badge in static.Misc.badges_as_glyphs:
-            out += static.Misc.badges_as_glyphs[badge]
-        else:
-            out += "?"
-    return out
+    return "".join(
+        static.Misc.badges_as_glyphs.get(str(badge), "?")
+        for badge in badges
+    )
 
 
 def calc_password_hashes(password: str, salts: Sequence[str]) -> (str, str, str):
