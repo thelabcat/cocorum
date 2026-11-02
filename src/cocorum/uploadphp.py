@@ -22,10 +22,10 @@ S.D.G."""
 from __future__ import annotations
 
 import mimetypes
-import os
 import random
 import re
 import time
+from pathlib import Path
 from typing import Optional, TYPE_CHECKING
 from urllib3 import Timeout
 import requests
@@ -333,9 +333,11 @@ class UploadPHP:
             Response (UploadResponse): Data about the upload, parsed from the response.
         """
 
-        assert os.path.exists(file_path), "Video file does not exist on disk"
+        video_path = Path(file_path)
+        # pathlib treats "" as "."; a blank path is not a file.
+        assert file_path and video_path.exists(), "Video file does not exist on disk"
 
-        self.__cur_file_size = os.path.getsize(file_path)
+        self.__cur_file_size = video_path.stat().st_size
 
         assert self.__cur_file_size < static.Upload.max_filesize, "File is too big"
 
@@ -374,8 +376,7 @@ class UploadPHP:
 
         # Thumbnail is path string
         elif isinstance(thumbnail, str):
-            assert os.path.exists(
-                thumbnail), "Thumbnail was a str but is not a valid path"
+            assert thumbnail and Path(thumbnail).exists(), "Thumbnail was a str but is not a valid path"
             thumbnail = self._upload_cthumb(thumbnail)
 
         # Unknown
@@ -427,9 +428,9 @@ class UploadPHP:
             "visibility": kwargs.get("visibility", "public") if not kwargs.get("scheduled_publish") else "private",
             "availability": kwargs.get("availability", "free"),
             "file_meta": {
-                "name": os.path.basename(file_path),  # File name
+                "name": video_path.name,  # File name
                 # Timestamp file was modified, miliseconds
-                "modified": int(os.path.getmtime(file_path) * 1000),
+                "modified": int(video_path.stat().st_mtime * 1000),
                 "size": self.__cur_file_size,  # Exact length of entire MP4 file in bytes
                 "type": mimetypes.guess_file_type(file_path)[0],
                 "time_start": start_time,  # Timestamp file started uploading, miliseconds
