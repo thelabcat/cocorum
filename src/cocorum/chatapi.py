@@ -795,7 +795,7 @@ class ChatAPI():
         assert len(text) <= static.Message.max_len, "Mesage is too long"
         curtime = time.monotonic()
         time.sleep(max((  # Make sure we don't try to send messages too fast
-            curtime - self.last_send_time + static.Message.send_cooldown,
+            self.last_send_time + static.Message.send_cooldown - curtime,
             0,
             )))
         assert self.servicephp.options_check(
