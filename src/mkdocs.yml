@@ -1,7 +1,7 @@
 site_name: Cocorum Docs
 
 theme:
-  name: "material"
+  name: "mkdocs"
   logo: assets/cocorum_icon.png
 
 plugins:
