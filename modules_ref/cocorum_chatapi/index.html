@@ -1,4269 +1,192 @@
-
-<!doctype html>
-<html lang="en" class="no-js">
-  <head>
-    
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width,initial-scale=1">
-      
-      
-      
-      
-        <link rel="prev" href="../cocorum_main/">
-      
-      
-        <link rel="next" href="../cocorum_servicephp/">
-      
-      
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-      
-      
-      <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
-    
-    
-      
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>cocorum.chatapi - Cocorum Docs</title>
-      
-    
-    
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
-      
-      
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
 
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Cocorum Docs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-    
-    
-      
-    
-    
-      
-        
-        
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
-      
-    
-    
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
-    
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
-    
-      
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../tutorials/" class="nav-link">Tutorials</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../how-to-guides/" class="nav-link">How-To Guides</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Reference</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../cocorum_main/" class="dropdown-item">cocorum</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">cocorum.chatapi</a>
+</li>
+                                    
+<li>
+    <a href="../cocorum_servicephp/" class="dropdown-item">cocorum.servicephp</a>
+</li>
+                                    
+<li>
+    <a href="../cocorum_uploadphp/" class="dropdown-item">cocorum.uploadphp</a>
+</li>
+                                    
+<li>
+    <a href="../cocorum_scraping/" class="dropdown-item">cocorum.scraping</a>
+</li>
+                                    
+<li>
+    <a href="../cocorum_jsonhandles/" class="dropdown-item">cocorum.jsonhandles</a>
+</li>
+                                    
+<li>
+    <a href="../cocorum_basehandles/" class="dropdown-item">cocorum.basehandles</a>
+</li>
+                                    
+<li>
+    <a href="../cocorum_utils/" class="dropdown-item">cocorum.utils</a>
+</li>
+                                    
+<li>
+    <a href="../cocorum_static/" class="dropdown-item">cocorum.static</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../explanation/" class="nav-link">Explanation</a>
+                            </li>
+                        </ul>
 
-    
-    
-  </head>
-  
-  
-    <body dir="ltr">
-  
-    
-    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
-    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-    <label class="md-overlay" for="__drawer"></label>
-    <div data-md-component="skip">
-      
-        
-        <a href="#cocorumchatapi" class="md-skip">
-          Skip to content
-        </a>
-      
-    </div>
-    <div data-md-component="announce">
-      
-    </div>
-    
-    
-      
-
-  
-
-<header class="md-header md-header--shadow" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Cocorum Docs" class="md-header__button md-logo" aria-label="Cocorum Docs" data-md-component="logo">
-      
-  <img src="../../assets/cocorum_icon.png" alt="logo">
-
-    </a>
-    <label class="md-header__button md-icon" for="__drawer">
-      
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
-    </label>
-    <div class="md-header__title" data-md-component="header-title">
-      <div class="md-header__ellipsis">
-        <div class="md-header__topic">
-          <span class="md-ellipsis">
-            Cocorum Docs
-          </span>
-        </div>
-        <div class="md-header__topic" data-md-component="header-topic">
-          <span class="md-ellipsis">
-            
-              cocorum.chatapi
-            
-          </span>
-        </div>
-      </div>
-    </div>
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
-    
-    
-    
-    
-  </nav>
-  
-</header>
-    
-    <div class="md-container" data-md-component="container">
-      
-      
-        
-          
-        
-      
-      <main class="md-main" data-md-component="main">
-        <div class="md-main__inner md-grid">
-          
-            
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-
-
-<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
-  <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Cocorum Docs" class="md-nav__button md-logo" aria-label="Cocorum Docs" data-md-component="logo">
-      
-  <img src="../../assets/cocorum_icon.png" alt="logo">
-
-    </a>
-    Cocorum Docs
-  </label>
-  
-  <ul class="md-nav__list" data-md-scrollfix>
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Home
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../tutorials/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Tutorials
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../how-to-guides/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    How-To Guides
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cocorum_main/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum.chatapi
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum.chatapi
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        chatapi
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BaseComment
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BaseComment">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.comment_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        comment_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.comment_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        comment_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.__str__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __str__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.delete" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.pin" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pin
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.restore" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        restore
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseContentVotes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BaseContentVotes
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BaseContentVotes">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseContentVotes.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseContentVotes.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseContentVotes.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BasePlaylist
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BasePlaylist">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.playlist_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        playlist_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.playlist_id_b64" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        playlist_id_b64
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.__str__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __str__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.add_video" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        add_video
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.delete" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.delete_video" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete_video
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.edit" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        edit
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BaseUser
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BaseUser">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.user_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.user_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.mute" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mute
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.unmute" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        unmute
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BaseUserBadge
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BaseUserBadge">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge.icon" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        icon
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge.__str__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __str__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Channel
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Channel">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.channel_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.channel_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.channel_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.is_appearing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        is_appearing
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.user_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.user_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.user_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ChatAPI
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="ChatAPI">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.badges" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        badges
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.channels" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channels
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.chat_running" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        chat_running
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.client" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        client
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.history" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        history
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.history_len" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        history_len
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.last_send_time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        last_send_time
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.logged_in" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        logged_in
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.message_api_url" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message_api_url
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.on_ended" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        on_ended
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.pinned_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pinned_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.read_timeout" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        read_timeout
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.reconnect_delay" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        reconnect_delay
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.scraper" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        scraper
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.servicephp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        servicephp
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.session" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        session
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.sse_url" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        sse_url
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.stream_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        stream_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.stream_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        stream_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.users" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        users
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__enter__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __enter__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__exit__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __exit__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__next_event_json" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __next_event_json
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.clear_mailbox" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        clear_mailbox
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.close" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        close
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.command" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        command
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.delete_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.get_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.load_badges" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        load_badges
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.mute_user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mute_user
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.parse_init_data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        parse_init_data
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.pin_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pin_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.send_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        send_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.unmute_user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        unmute_user
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.unpin_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        unpin_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.update_channels" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_channels
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.update_mailbox" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_mailbox
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.update_users" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_users
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPIObj" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ChatAPIObj
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="ChatAPIObj">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPIObj.chat" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        chat
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPIObj.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatClosed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ChatClosed
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Chatter" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Chatter
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Chatter">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Chatter.link" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        link
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Chatter.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Chatter.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GiftPurchaseNotification
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="GiftPurchaseNotification">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_channel_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_channel_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_channel_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_channel_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_channel_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_channel_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_user_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_user_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_user_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_user_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_user_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_user_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.gift_type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        gift_type
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.purchased_by" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        purchased_by
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.total_gifts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        total_gifts
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.video_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        video_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.video_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        video_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.video_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        video_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Message
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Message">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.channel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.channel_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.channel_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.channel_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.deleted" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        deleted
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.gift_purchase_notification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        gift_purchase_notification
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.is_rant" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        is_rant
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.message_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.message_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.message_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.raid_notification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        raid_notification
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.rant_duration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        rant_duration
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.rant_expires_on" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        rant_expires_on
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.rant_price_cents" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        rant_price_cents
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.text" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        text
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        time
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.user_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.user_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.user_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__str__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __str__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.delete" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.pin" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pin
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.unpin" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        unpin
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        User
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="User">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.badges" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        badges
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.channel_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.channel_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.channel_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.color" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        color
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.is_follower" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        is_follower
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.previous_channel_ids" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        previous_channel_ids
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.servicephp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        servicephp
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.user_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        UserBadge
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="UserBadge">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge.icon_url" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        icon_url
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge.label" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        label
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge.slug" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        slug
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cocorum_servicephp/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum.servicephp
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cocorum_uploadphp/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum.uploadphp
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cocorum_scraping/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum.scraping
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cocorum_jsonhandles/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum.jsonhandles
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cocorum_basehandles/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum.basehandles
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cocorum_utils/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum.utils
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cocorum_static/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    cocorum.static
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../explanation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Explanation
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-  </ul>
-</nav>
-                  </div>
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../cocorum_main/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../cocorum_servicephp/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
                 </div>
-              </div>
-            
-            
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
+            </div>
+        </div>
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
     
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        chatapi
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BaseComment
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BaseComment">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.comment_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        comment_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.comment_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        comment_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.__str__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __str__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.delete" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.pin" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pin
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseComment.restore" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        restore
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseContentVotes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BaseContentVotes
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BaseContentVotes">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseContentVotes.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseContentVotes.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseContentVotes.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BasePlaylist
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BasePlaylist">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.playlist_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        playlist_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.playlist_id_b64" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        playlist_id_b64
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.__str__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __str__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.add_video" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        add_video
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.delete" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.delete_video" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete_video
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BasePlaylist.edit" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        edit
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BaseUser
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BaseUser">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.user_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.user_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.mute" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mute
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUser.unmute" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        unmute
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BaseUserBadge
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BaseUserBadge">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge.icon" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        icon
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.BaseUserBadge.__str__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __str__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Channel
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Channel">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.channel_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.channel_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.channel_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.is_appearing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        is_appearing
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.user_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.user_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.user_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Channel.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ChatAPI
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="ChatAPI">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.badges" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        badges
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.channels" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channels
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.chat_running" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        chat_running
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.client" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        client
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.history" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        history
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.history_len" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        history_len
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.last_send_time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        last_send_time
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.logged_in" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        logged_in
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.message_api_url" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message_api_url
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.on_ended" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        on_ended
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.pinned_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pinned_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.read_timeout" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        read_timeout
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.reconnect_delay" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        reconnect_delay
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.scraper" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        scraper
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.servicephp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        servicephp
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.session" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        session
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.sse_url" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        sse_url
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.stream_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        stream_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.stream_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        stream_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.users" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        users
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__enter__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __enter__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__exit__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __exit__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__next_event_json" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __next_event_json
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.clear_mailbox" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        clear_mailbox
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.close" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        close
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.command" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        command
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.delete_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.get_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.load_badges" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        load_badges
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.mute_user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mute_user
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.parse_init_data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        parse_init_data
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.pin_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pin_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.send_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        send_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.unmute_user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        unmute_user
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.unpin_message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        unpin_message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.update_channels" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_channels
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.update_mailbox" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_mailbox
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPI.update_users" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_users
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPIObj" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ChatAPIObj
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="ChatAPIObj">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPIObj.chat" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        chat
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatAPIObj.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.ChatClosed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ChatClosed
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Chatter" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Chatter
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Chatter">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Chatter.link" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        link
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Chatter.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Chatter.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GiftPurchaseNotification
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="GiftPurchaseNotification">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_channel_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_channel_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_channel_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_channel_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_channel_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_channel_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_user_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_user_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_user_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_user_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.creator_user_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        creator_user_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.gift_type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        gift_type
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.purchased_by" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        purchased_by
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.total_gifts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        total_gifts
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.video_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        video_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.video_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        video_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.video_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        video_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.GiftPurchaseNotification.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Message
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Message">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.channel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.channel_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.channel_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.channel_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.deleted" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        deleted
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.gift_purchase_notification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        gift_purchase_notification
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.is_rant" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        is_rant
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.message_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.message_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.message_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        message_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.raid_notification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        raid_notification
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.rant_duration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        rant_duration
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.rant_expires_on" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        rant_expires_on
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.rant_price_cents" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        rant_price_cents
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.text" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        text
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        time
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.user_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.user_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.user_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__eq__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __eq__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__int__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __int__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__repr__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __repr__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.__str__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __str__
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.delete" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        delete
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.pin" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pin
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.Message.unpin" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        unpin
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        User
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="User">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.badges" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        badges
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.channel_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.channel_id_b10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b10
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.channel_id_b36" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        channel_id_b36
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.color" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        color
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.is_follower" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        is_follower
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.previous_channel_ids" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        previous_channel_ids
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.servicephp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        servicephp
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.user_id" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        user_id
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.User.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        UserBadge
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="UserBadge">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge.icon_url" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        icon_url
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge.label" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        label
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge.slug" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        slug
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cocorum.chatapi.UserBadge.__init__" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        __init__
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-                  </div>
-                </div>
-              </div>
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
             
-          
-          
-            <div class="md-content" data-md-component="content">
-              
-              <article class="md-content__inner md-typeset">
-                
-                  
-
-
+            <li class="nav-item" data-bs-level="1"><a href="#cocorumchatapi" class="nav-link">cocorum.chatapi</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi" class="nav-link">chatapi</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.BaseComment" class="nav-link">BaseComment</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.BaseContentVotes" class="nav-link">BaseContentVotes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.BasePlaylist" class="nav-link">BasePlaylist</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.BaseUser" class="nav-link">BaseUser</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.BaseUserBadge" class="nav-link">BaseUserBadge</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.Channel" class="nav-link">Channel</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.ChatAPI" class="nav-link">ChatAPI</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.ChatAPIObj" class="nav-link">ChatAPIObj</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.ChatClosed" class="nav-link">ChatClosed</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.Chatter" class="nav-link">Chatter</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.GiftPurchaseNotification" class="nav-link">GiftPurchaseNotification</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.Message" class="nav-link">Message</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.User" class="nav-link">User</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#cocorum.chatapi.UserBadge" class="nav-link">UserBadge</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
 
 <h1 id="cocorumchatapi">cocorum.chatapi</h1>
 <p>The primary use from this module is the <code>ChatAPI</code> class, a wrapper for Rumble's internal chat API. This class includes links to the chat-related methods of <code>ServicePHP()</code> (muting users for example). If you wish to use any two-way chat features, you must first create an instance of <code>cocorum.servicephp.ServicePHP()</code>, and then pass it to this class upon initialization. 
@@ -7867,7 +3790,10 @@ Defaults to False, just this video.</p>
 <span class="normal">1161</span>
 <span class="normal">1162</span>
 <span class="normal">1163</span>
-<span class="normal">1164</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatAPI</span><span class="p">():</span>
+<span class="normal">1164</span>
+<span class="normal">1165</span>
+<span class="normal">1166</span>
+<span class="normal">1167</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ChatAPI</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">"""The Rumble internal chat API</span>
 
 <span class="sd">    The live stream is read with `launchdarkly-eventsource`.</span>
@@ -8076,7 +4002,7 @@ Defaults to False, just this video.</p>
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">logged_in</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Are we logged in?"""</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">session_token</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">history</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Message</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
@@ -8084,7 +4010,7 @@ Defaults to False, just this video.</p>
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">User</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Send a message in chat.</span>
+<span class="w">        </span><span class="sd">"""Send a message in chat (blocking, auto-prevents sending messages faster than Rumble allowd)</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        text (str): The message text.</span>
@@ -8098,9 +4024,11 @@ Defaults to False, just this video.</p>
 
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot send message"</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">max_len</span><span class="p">,</span> <span class="s2">"Mesage is too long"</span>
-        <span class="n">curtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_send_time</span> <span class="o">+</span> \
-            <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">send_cooldown</span> <span class="o">&lt;=</span> <span class="n">curtime</span><span class="p">,</span> <span class="s2">"Sending messages too fast"</span>
+        <span class="n">curtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">max</span><span class="p">((</span>  <span class="c1"># Make sure we don't try to send messages too fast</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_send_time</span> <span class="o">+</span> <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">send_cooldown</span> <span class="o">-</span> <span class="n">curtime</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="p">)))</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span><span class="p">,</span> <span class="s2">"POST"</span><span class="p">),</span> <span class="s2">"Rumble denied options request to post message"</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
@@ -8115,13 +4043,14 @@ Defaults to False, just this video.</p>
                     <span class="s2">"channel_id"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">channel_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">channel_id</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="c1">#  headers = static.RequestHeaders.user_agent,</span>
             <span class="n">timeout</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">"Error: Sending message failed,"</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
             <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_send_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"data"</span><span class="p">][</span><span class="s2">"id"</span><span class="p">]),</span> <span class="n">User</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"data"</span><span class="p">][</span><span class="s2">"user"</span><span class="p">],</span> <span class="bp">self</span><span class="p">)</span>
 
@@ -9399,10 +5328,7 @@ iterator ending, and <code>close()</code>. Defaults to None.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 941</span>
-<span class="normal"> 942</span>
-<span class="normal"> 943</span>
-<span class="normal"> 944</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 944</span>
 <span class="normal"> 945</span>
 <span class="normal"> 946</span>
 <span class="normal"> 947</span>
@@ -9471,7 +5397,10 @@ iterator ending, and <code>close()</code>. Defaults to None.</p>
 <span class="normal">1010</span>
 <span class="normal">1011</span>
 <span class="normal">1012</span>
-<span class="normal">1013</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__next_event_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">1013</span>
+<span class="normal">1014</span>
+<span class="normal">1015</span>
+<span class="normal">1016</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__next_event_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Wait for the next event from the SSE and parse the JSON</span>
 
 <span class="sd">    Returns:</span>
@@ -9595,14 +5524,14 @@ does not deliver that backlog again.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1059</span>
-<span class="normal">1060</span>
-<span class="normal">1061</span>
-<span class="normal">1062</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1062</span>
 <span class="normal">1063</span>
 <span class="normal">1064</span>
 <span class="normal">1065</span>
-<span class="normal">1066</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clear_mailbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">1066</span>
+<span class="normal">1067</span>
+<span class="normal">1068</span>
+<span class="normal">1069</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clear_mailbox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Delete anything in the mailbox</span>
 
 <span class="sd">    Message ids that were already seen stay remembered, so a reconnect</span>
@@ -9733,10 +5662,7 @@ the first time.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">823</span>
-<span class="normal">824</span>
-<span class="normal">825</span>
-<span class="normal">826</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">826</span>
 <span class="normal">827</span>
 <span class="normal">828</span>
 <span class="normal">829</span>
@@ -9754,7 +5680,10 @@ the first time.</p>
 <span class="normal">841</span>
 <span class="normal">842</span>
 <span class="normal">843</span>
-<span class="normal">844</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="normal">844</span>
+<span class="normal">845</span>
+<span class="normal">846</span>
+<span class="normal">847</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Send a native chat command</span>
 
 <span class="sd">Args:</span>
@@ -9853,10 +5782,7 @@ NOTE: Method will also print an error message if it failed.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">846</span>
-<span class="normal">847</span>
-<span class="normal">848</span>
-<span class="normal">849</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">849</span>
 <span class="normal">850</span>
 <span class="normal">851</span>
 <span class="normal">852</span>
@@ -9884,7 +5810,10 @@ NOTE: Method will also print an error message if it failed.</p>
 <span class="normal">874</span>
 <span class="normal">875</span>
 <span class="normal">876</span>
-<span class="normal">877</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">SupportsInt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="normal">877</span>
+<span class="normal">878</span>
+<span class="normal">879</span>
+<span class="normal">880</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">SupportsInt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Delete a message in chat.</span>
 
 <span class="sd">Args:</span>
@@ -9962,10 +5891,7 @@ NOTE: Method will also print an error message if it failed.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1112</span>
-<span class="normal">1113</span>
-<span class="normal">1114</span>
-<span class="normal">1115</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1115</span>
 <span class="normal">1116</span>
 <span class="normal">1117</span>
 <span class="normal">1118</span>
@@ -10014,7 +5940,10 @@ NOTE: Method will also print an error message if it failed.</p>
 <span class="normal">1161</span>
 <span class="normal">1162</span>
 <span class="normal">1163</span>
-<span class="normal">1164</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Message</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">1164</span>
+<span class="normal">1165</span>
+<span class="normal">1166</span>
+<span class="normal">1167</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Message</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Return the next chat message (parsing any additional data).</span>
 
 <span class="sd">    Waits for it to come in. Rumble does not send an ended SSE event, so a read timeout reconnects and HTTP 204 on that connection means the chat is over and this returns None. Also returns None after `close()`.</span>
@@ -10120,15 +6049,15 @@ NOTE: Method will also print an error message if it failed.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1097</span>
-<span class="normal">1098</span>
-<span class="normal">1099</span>
-<span class="normal">1100</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1100</span>
 <span class="normal">1101</span>
 <span class="normal">1102</span>
 <span class="normal">1103</span>
 <span class="normal">1104</span>
-<span class="normal">1105</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_badges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1105</span>
+<span class="normal">1106</span>
+<span class="normal">1107</span>
+<span class="normal">1108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_badges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Create our dictionary of badges from an SSE data JSON</span>
 
 <span class="sd">Args:</span>
@@ -10224,10 +6153,7 @@ Defaults to False, just this video.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">903</span>
-<span class="normal">904</span>
-<span class="normal">905</span>
-<span class="normal">906</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">906</span>
 <span class="normal">907</span>
 <span class="normal">908</span>
 <span class="normal">909</span>
@@ -10242,7 +6168,10 @@ Defaults to False, just this video.</p>
 <span class="normal">918</span>
 <span class="normal">919</span>
 <span class="normal">920</span>
-<span class="normal">921</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">mute_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="normal">921</span>
+<span class="normal">922</span>
+<span class="normal">923</span>
+<span class="normal">924</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">mute_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Mute a user.</span>
 
 <span class="sd">    Args:</span>
@@ -10314,10 +6243,7 @@ Defaults to False, just this video.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1015</span>
-<span class="normal">1016</span>
-<span class="normal">1017</span>
-<span class="normal">1018</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1018</span>
 <span class="normal">1019</span>
 <span class="normal">1020</span>
 <span class="normal">1021</span>
@@ -10336,7 +6262,10 @@ Defaults to False, just this video.</p>
 <span class="normal">1034</span>
 <span class="normal">1035</span>
 <span class="normal">1036</span>
-<span class="normal">1037</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">parse_init_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1037</span>
+<span class="normal">1038</span>
+<span class="normal">1039</span>
+<span class="normal">1040</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">parse_init_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Extract initial chat data from the SSE init event JSON</span>
 
 <span class="sd">Args:</span>
@@ -10412,15 +6341,15 @@ Defaults to False, just this video.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">879</span>
-<span class="normal">880</span>
-<span class="normal">881</span>
-<span class="normal">882</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">882</span>
 <span class="normal">883</span>
 <span class="normal">884</span>
 <span class="normal">885</span>
 <span class="normal">886</span>
-<span class="normal">887</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">pin_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">SupportsInt</span><span class="p">):</span>
+<span class="normal">887</span>
+<span class="normal">888</span>
+<span class="normal">889</span>
+<span class="normal">890</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">pin_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">SupportsInt</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Pin a message</span>
 
 <span class="sd">    Args:</span>
@@ -10446,7 +6375,7 @@ Defaults to False, just this video.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Send a message in chat.</p>
+        <p>Send a message in chat (blocking, auto-prevents sending messages faster than Rumble allowd)</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -10572,8 +6501,11 @@ Defaults to None.</p>
 <span class="normal">818</span>
 <span class="normal">819</span>
 <span class="normal">820</span>
-<span class="normal">821</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">User</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Send a message in chat.</span>
+<span class="normal">821</span>
+<span class="normal">822</span>
+<span class="normal">823</span>
+<span class="normal">824</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">User</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Send a message in chat (blocking, auto-prevents sending messages faster than Rumble allowd)</span>
 
 <span class="sd">Args:</span>
 <span class="sd">    text (str): The message text.</span>
@@ -10587,9 +6519,11 @@ Defaults to None.</p>
 
     <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">logged_in</span><span class="p">,</span> <span class="s2">"Not logged in, cannot send message"</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">max_len</span><span class="p">,</span> <span class="s2">"Mesage is too long"</span>
-    <span class="n">curtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_send_time</span> <span class="o">+</span> \
-        <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">send_cooldown</span> <span class="o">&lt;=</span> <span class="n">curtime</span><span class="p">,</span> <span class="s2">"Sending messages too fast"</span>
+    <span class="n">curtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">max</span><span class="p">((</span>  <span class="c1"># Make sure we don't try to send messages too fast</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_send_time</span> <span class="o">+</span> <span class="n">static</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">send_cooldown</span> <span class="o">-</span> <span class="n">curtime</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="p">)))</span>
     <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">servicephp</span><span class="o">.</span><span class="n">options_check</span><span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_api_url</span><span class="p">,</span> <span class="s2">"POST"</span><span class="p">),</span> <span class="s2">"Rumble denied options request to post message"</span>
     <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
@@ -10604,13 +6538,14 @@ Defaults to None.</p>
                 <span class="s2">"channel_id"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">channel_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">channel_id</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="c1">#  headers = static.RequestHeaders.user_agent,</span>
         <span class="n">timeout</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">"Error: Sending message failed,"</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
         <span class="k">return</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_send_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"data"</span><span class="p">][</span><span class="s2">"id"</span><span class="p">]),</span> <span class="n">User</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"data"</span><span class="p">][</span><span class="s2">"user"</span><span class="p">],</span> <span class="bp">self</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -10666,10 +6601,7 @@ Defaults to None.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">923</span>
-<span class="normal">924</span>
-<span class="normal">925</span>
-<span class="normal">926</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">926</span>
 <span class="normal">927</span>
 <span class="normal">928</span>
 <span class="normal">929</span>
@@ -10682,7 +6614,10 @@ Defaults to None.</p>
 <span class="normal">936</span>
 <span class="normal">937</span>
 <span class="normal">938</span>
-<span class="normal">939</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unmute_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="normal">939</span>
+<span class="normal">940</span>
+<span class="normal">941</span>
+<span class="normal">942</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unmute_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Unmute a user.</span>
 
 <span class="sd">    Args:</span>
@@ -10753,10 +6688,7 @@ Defaults to None, unpin known pinned message.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">889</span>
-<span class="normal">890</span>
-<span class="normal">891</span>
-<span class="normal">892</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">892</span>
 <span class="normal">893</span>
 <span class="normal">894</span>
 <span class="normal">895</span>
@@ -10765,7 +6697,10 @@ Defaults to None, unpin known pinned message.</p>
 <span class="normal">898</span>
 <span class="normal">899</span>
 <span class="normal">900</span>
-<span class="normal">901</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unpin_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="normal">901</span>
+<span class="normal">902</span>
+<span class="normal">903</span>
+<span class="normal">904</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unpin_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SupportsInt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Unpin the pinned message</span>
 
 <span class="sd">    Args:</span>
@@ -10831,10 +6766,7 @@ Defaults to None, unpin known pinned message.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1082</span>
-<span class="normal">1083</span>
-<span class="normal">1084</span>
-<span class="normal">1085</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1085</span>
 <span class="normal">1086</span>
 <span class="normal">1087</span>
 <span class="normal">1088</span>
@@ -10844,7 +6776,10 @@ Defaults to None, unpin known pinned message.</p>
 <span class="normal">1092</span>
 <span class="normal">1093</span>
 <span class="normal">1094</span>
-<span class="normal">1095</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1095</span>
+<span class="normal">1096</span>
+<span class="normal">1097</span>
+<span class="normal">1098</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Update our dictionary of channels from an SSE data JSON</span>
 
 <span class="sd">Args:</span>
@@ -10915,10 +6850,7 @@ already seen, so that history is not delivered again.
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1039</span>
-<span class="normal">1040</span>
-<span class="normal">1041</span>
-<span class="normal">1042</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1042</span>
 <span class="normal">1043</span>
 <span class="normal">1044</span>
 <span class="normal">1045</span>
@@ -10933,7 +6865,10 @@ already seen, so that history is not delivered again.
 <span class="normal">1054</span>
 <span class="normal">1055</span>
 <span class="normal">1056</span>
-<span class="normal">1057</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_mailbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1057</span>
+<span class="normal">1058</span>
+<span class="normal">1059</span>
+<span class="normal">1060</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_mailbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Parse chat messages from an SSE data JSON</span>
 
 <span class="sd">    Every time a chat client connects, Rumble delivers all the messages</span>
@@ -11005,10 +6940,7 @@ already seen, so that history is not delivered again.
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>cocorum/chatapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1068</span>
-<span class="normal">1069</span>
-<span class="normal">1070</span>
-<span class="normal">1071</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1071</span>
 <span class="normal">1072</span>
 <span class="normal">1073</span>
 <span class="normal">1074</span>
@@ -11017,7 +6949,10 @@ already seen, so that history is not delivered again.
 <span class="normal">1077</span>
 <span class="normal">1078</span>
 <span class="normal">1079</span>
-<span class="normal">1080</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="normal">1080</span>
+<span class="normal">1081</span>
+<span class="normal">1082</span>
+<span class="normal">1083</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Update our dictionary of users from an SSE data JSON</span>
 
 <span class="sd">Args:</span>
@@ -14217,61 +10152,61 @@ already seen, so that history is not delivered again.
 
     </div>
 
-</div><p>S.D.G.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-                
-              </article>
+</div><p>S.D.G.</p></div>
             </div>
-          
-          
-<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
-        
-      </main>
-      
-        <footer class="md-footer">
-  
-  <div class="md-footer-meta md-typeset">
-    <div class="md-footer-meta__inner md-grid">
-      <div class="md-copyright">
-  
-  
-    Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
-    </a>
-  
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>
-      
-    </div>
-  </div>
-</footer>
-      
-    </div>
-    <div class="md-dialog" data-md-component="dialog">
-      <div class="md-dialog__inner md-typeset"></div>
-    </div>
-    
-    
-    
-      
-      
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
-    
-    
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
-      
-    
-  </body>
+
+    </body>
 </html>
