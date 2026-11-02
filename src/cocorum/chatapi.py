@@ -21,6 +21,7 @@ S.D.G."""
 
 from __future__ import annotations
 
+import contextlib
 import threading
 import time
 from collections import deque
@@ -717,10 +718,8 @@ class ChatAPI():
             self._closed.set()
             client = self.client
         if client is not None:
-            try:
+            with contextlib.suppress(Exception):
                 client.close()
-            except Exception:
-                pass
 
     def _notify_ended(self):
         """Call on_ended once. The callback is not invoked while the lock is held."""
