@@ -244,9 +244,7 @@ class HTMLPlaylist(HTMLObj, BasePlaylist):
             response = self.servicephp.session.get(
                 self.thumbnail_url, timeout=static.Delays.request_timeout
             )
-            assert response.status_code == 200, "Status code " + str(
-                response.status_code
-            )
+            assert response.status_code == 200, f"Status code {response.status_code}"
 
             self.__thumbnail = response.content
 
@@ -556,9 +554,7 @@ class HTMLVideoSettings(HTMLObj):
             response = self.servicephp.session.get(
                 self.thumbnail_url, timeout=static.Delays.request_timeout
             )
-            assert response.status_code == 200, "Status code " + str(
-                response.status_code
-            )
+            assert response.status_code == 200, f"Status code {response.status_code}"
 
             self.__thumbnail = response.content
 

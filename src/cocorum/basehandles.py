@@ -67,8 +67,7 @@ class BaseUserBadge:
             # TODO make the timeout configurable
             response = requests.get(
                 self.icon_url, timeout=static.Delays.request_timeout)
-            assert response.status_code == 200, "Status code " + \
-                str(response.status_code)
+            assert response.status_code == 200, f"Status code {response.status_code}"
 
             self.__icon = response.content
 

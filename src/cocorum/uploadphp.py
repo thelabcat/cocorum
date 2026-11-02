@@ -288,7 +288,7 @@ class UploadPHP:
         """
 
         ext = file_path.split(".")[-1]
-        ct_server_filename = "ct-" + self.__cur_upload_id + "." + ext
+        ct_server_filename = f"ct-{self.__cur_upload_id}.{ext}"
         with open(file_path, "rb") as f:
             assert self.uphp_request(
                 {"cthumb": ct_server_filename},

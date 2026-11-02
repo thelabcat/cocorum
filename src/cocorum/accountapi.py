@@ -86,8 +86,7 @@ class AccountAPI:
             timeout=static.Delays.request_timeout,
         )
 
-        assert r.status_code == 200, f"Keyed request failed with status {r.status_code}:\n" + \
-            r.text
+        assert r.status_code == 200, f"Keyed request failed with status {r.status_code}:\n{r.text}"
         return r
 
     def get_video_info_settings(self, video_id):
