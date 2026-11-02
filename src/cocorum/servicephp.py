@@ -166,9 +166,7 @@ class APIUser(JSONObj, BaseUser):
             response = requests.get(
                 self.picture_url, timeout=static.Delays.request_timeout
             )
-            assert response.status_code == 200, "Status code " + str(
-                response.status_code
-            )
+            assert response.status_code == 200, f"Status code {response.status_code}"
 
             self.__picture = response.content
 

@@ -726,7 +726,7 @@ class RumbleAPI:
         if self.refresh_rate < static.Delays.api_refresh_minimum:
             warnings.warn(
                 f"Cocorum set to over-refresh, rate of {self.refresh_rate} seconds (less than {static.Delays.api_refresh_minimum})."
-                + "Superscript must self-limit or Rumble will reject queries!"
+                "Superscript must self-limit or Rumble will reject queries!"
             )
 
     def __repr__(self) -> str:
@@ -789,8 +789,7 @@ class RumbleAPI:
             headers=static.RequestHeaders.user_agent,
             timeout=static.Delays.request_timeout,
         )
-        assert response.status_code == 200, "Status code " + \
-            str(response.status_code)
+        assert response.status_code == 200, f"Status code {response.status_code}"
 
         self._jsondata = response.json()
 
