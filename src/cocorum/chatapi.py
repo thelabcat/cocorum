@@ -771,7 +771,7 @@ class ChatAPI():
     @property
     def logged_in(self) -> bool:
         """Are we logged in?"""
-        return bool(self.servicephp and self.session.token)
+        return bool(self.servicephp and self.servicephp.session_token)
 
     @property
     def history(self) -> tuple[Message, ...]:
