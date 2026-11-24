@@ -304,6 +304,8 @@ class UploadPHP:
             file_path (str): A valid, complete path to a video file.
             title (str): The video title.
             category1 (int, str): The primary category to upload to, by name or numeric ID.
+
+        Keyword Args:
             description (str): Describe the video.
                 Defaults to empty.
             info_who (str): Additional people appearing in the video.
@@ -322,7 +324,7 @@ class UploadPHP:
                 Defaults to user page upload.
             visibility (str): Visibility of the video, either 'public', 'unlisted', or 'private'.
                 Defaults to 'public'.
-            availability: TODO
+            availability (str): TODO
                 Defaults to free.
             scheduled_publish (int | float): When to publish the video to public later, in seconds since epoch.
                 Defaults to publish immediately.
