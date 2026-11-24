@@ -211,7 +211,7 @@ limitations under the License.</p>
 
 
               <details class="mkdocstrings-source">
-                <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+                <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
                 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span>
@@ -555,7 +555,10 @@ limitations under the License.</p>
 <span class="normal">451</span>
 <span class="normal">452</span>
 <span class="normal">453</span>
-<span class="normal">454</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">UploadPHP</span><span class="p">:</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">UploadPHP</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Upload videos to Rumble"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -735,7 +738,7 @@ limitations under the License.</p>
 <span class="sd">        """</span>
 
         <span class="n">ext</span> <span class="o">=</span> <span class="n">file_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">ct_server_filename</span> <span class="o">=</span> <span class="s2">"ct-"</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cur_upload_id</span> <span class="o">+</span> <span class="s2">"."</span> <span class="o">+</span> <span class="n">ext</span>
+        <span class="n">ct_server_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"ct-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__cur_upload_id</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">uphp_request</span><span class="p">(</span>
                 <span class="p">{</span><span class="s2">"cthumb"</span><span class="p">:</span> <span class="n">ct_server_filename</span><span class="p">},</span>
@@ -751,6 +754,8 @@ limitations under the License.</p>
 <span class="sd">            file_path (str): A valid, complete path to a video file.</span>
 <span class="sd">            title (str): The video title.</span>
 <span class="sd">            category1 (int, str): The primary category to upload to, by name or numeric ID.</span>
+
+<span class="sd">        Keyword Args:</span>
 <span class="sd">            description (str): Describe the video.</span>
 <span class="sd">                Defaults to empty.</span>
 <span class="sd">            info_who (str): Additional people appearing in the video.</span>
@@ -769,7 +774,7 @@ limitations under the License.</p>
 <span class="sd">                Defaults to user page upload.</span>
 <span class="sd">            visibility (str): Visibility of the video, either 'public', 'unlisted', or 'private'.</span>
 <span class="sd">                Defaults to 'public'.</span>
-<span class="sd">            availability: TODO</span>
+<span class="sd">            availability (str): TODO</span>
 <span class="sd">                Defaults to free.</span>
 <span class="sd">            scheduled_publish (int | float): When to publish the video to public later, in seconds since epoch.</span>
 <span class="sd">                Defaults to publish immediately.</span>
@@ -780,9 +785,11 @@ limitations under the License.</p>
 <span class="sd">            Response (UploadResponse): Data about the upload, parsed from the response.</span>
 <span class="sd">        """</span>
 
-        <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span> <span class="s2">"Video file does not exist on disk"</span>
+        <span class="n">video_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="c1"># pathlib treats "" as "."; a blank path is not a file.</span>
+        <span class="k">assert</span> <span class="n">file_path</span> <span class="ow">and</span> <span class="n">video_path</span><span class="o">.</span><span class="n">exists</span><span class="p">(),</span> <span class="s2">"Video file does not exist on disk"</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">=</span> <span class="n">video_path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
 
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">&lt;</span> <span class="n">static</span><span class="o">.</span><span class="n">Upload</span><span class="o">.</span><span class="n">max_filesize</span><span class="p">,</span> <span class="s2">"File is too big"</span>
 
@@ -821,8 +828,7 @@ limitations under the License.</p>
 
         <span class="c1"># Thumbnail is path string</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thumbnail</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span>
-                <span class="n">thumbnail</span><span class="p">),</span> <span class="s2">"Thumbnail was a str but is not a valid path"</span>
+            <span class="k">assert</span> <span class="n">thumbnail</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="n">thumbnail</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">(),</span> <span class="s2">"Thumbnail was a str but is not a valid path"</span>
             <span class="n">thumbnail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_upload_cthumb</span><span class="p">(</span><span class="n">thumbnail</span><span class="p">)</span>
 
         <span class="c1"># Unknown</span>
@@ -874,9 +880,9 @@ limitations under the License.</p>
             <span class="s2">"visibility"</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"visibility"</span><span class="p">,</span> <span class="s2">"public"</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"scheduled_publish"</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"private"</span><span class="p">,</span>
             <span class="s2">"availability"</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"availability"</span><span class="p">,</span> <span class="s2">"free"</span><span class="p">),</span>
             <span class="s2">"file_meta"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">"name"</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span>  <span class="c1"># File name</span>
+                <span class="s2">"name"</span><span class="p">:</span> <span class="n">video_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>  <span class="c1"># File name</span>
                 <span class="c1"># Timestamp file was modified, miliseconds</span>
-                <span class="s2">"modified"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span>
+                <span class="s2">"modified"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">video_path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span>
                 <span class="s2">"size"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span><span class="p">,</span>  <span class="c1"># Exact length of entire MP4 file in bytes</span>
                 <span class="s2">"type"</span><span class="p">:</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_file_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="s2">"time_start"</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span>  <span class="c1"># Timestamp file started uploading, miliseconds</span>
@@ -1049,7 +1055,7 @@ limitations under the License.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+              <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">118</span>
 <span class="normal">119</span>
 <span class="normal">120</span>
@@ -1114,7 +1120,7 @@ limitations under the License.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+              <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">114</span>
 <span class="normal">115</span>
 <span class="normal">116</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -1195,7 +1201,7 @@ limitations under the License.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+              <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">175</span>
 <span class="normal">176</span>
 <span class="normal">177</span>
@@ -1368,7 +1374,7 @@ Defaults to static.Delays.request_timeout</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+              <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">146</span>
 <span class="normal">147</span>
 <span class="normal">148</span>
@@ -1503,10 +1509,22 @@ Defaults to static.Delays.request_timeout</p>
                 <em>required</em>
             </td>
           </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Other Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
           <tr class="doc-section-item">
-            <td>
-                <code>description</code>
-            </td>
+            <td><code>description</code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -1516,14 +1534,9 @@ Defaults to static.Delays.request_timeout</p>
 Defaults to empty.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>info_who</code>
-            </td>
+            <td><code>info_who</code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -1533,14 +1546,9 @@ Defaults to empty.</p>
 Defaults to empty.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>info_when</code>
-            </td>
+            <td><code>info_when</code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -1550,14 +1558,9 @@ Defaults to empty.</p>
 Defaults to unspecified.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>info_where</code>
-            </td>
+            <td><code>info_where</code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -1567,14 +1570,9 @@ Defaults to unspecified.</p>
 Defaults to unspecified.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>info_ext_user</code>
-            </td>
+            <td><code>info_ext_user</code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -1584,14 +1582,9 @@ Defaults to unspecified.</p>
 Defaults to unspecified.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>tags</code>
-            </td>
+            <td><code>tags</code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -1601,14 +1594,9 @@ Defaults to unspecified.</p>
 Defaults to empty.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>category2</code>
-            </td>
+            <td><code>category2</code></td>
             <td>
                   <code><span title="int">int</span> | <span title="str">str</span></code>
             </td>
@@ -1618,14 +1606,9 @@ Defaults to empty.</p>
 Defaults to empty</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>channel_id</code>
-            </td>
+            <td><code>channel_id</code></td>
             <td>
                   <code><span title="int">int</span> | <span title="str">str</span></code>
             </td>
@@ -1635,14 +1618,9 @@ Defaults to empty</p>
 Defaults to user page upload.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>visibility</code>
-            </td>
+            <td><code>visibility</code></td>
             <td>
                   <code><span title="str">str</span></code>
             </td>
@@ -1652,15 +1630,11 @@ Defaults to user page upload.</p>
 Defaults to 'public'.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
+            <td><code>availability</code></td>
             <td>
-                <code>availability</code>
-            </td>
-            <td>
+                  <code><span title="str">str</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1668,14 +1642,9 @@ Defaults to 'public'.</p>
 Defaults to free.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>scheduled_publish</code>
-            </td>
+            <td><code>scheduled_publish</code></td>
             <td>
                   <code><span title="int">int</span> | <span title="float">float</span></code>
             </td>
@@ -1685,14 +1654,9 @@ Defaults to free.</p>
 Defaults to publish immediately.</p>
               </div>
             </td>
-            <td>
-                <em>required</em>
-            </td>
           </tr>
           <tr class="doc-section-item">
-            <td>
-                <code>thumbnail</code>
-            </td>
+            <td><code>thumbnail</code></td>
             <td>
                   <code><span title="int">int</span> | <span title="str">str</span></code>
             </td>
@@ -1701,9 +1665,6 @@ Defaults to publish immediately.</p>
                 <p>Thumbnail to use. Index 0-2 for an auto thumbnail, or a complete, valid local file path for custom.
 Defaults to 0, first auto thumbnail.</p>
               </div>
-            </td>
-            <td>
-                <em>required</em>
             </td>
           </tr>
       </tbody>
@@ -1734,7 +1695,7 @@ Defaults to 0, first auto thumbnail.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+              <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">300</span>
 <span class="normal">301</span>
 <span class="normal">302</span>
@@ -1889,13 +1850,18 @@ Defaults to 0, first auto thumbnail.</p>
 <span class="normal">451</span>
 <span class="normal">452</span>
 <span class="normal">453</span>
-<span class="normal">454</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">upload_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UploadResponse</span><span class="p">:</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">upload_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UploadResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Upload a video to Rumble</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        file_path (str): A valid, complete path to a video file.</span>
 <span class="sd">        title (str): The video title.</span>
 <span class="sd">        category1 (int, str): The primary category to upload to, by name or numeric ID.</span>
+
+<span class="sd">    Keyword Args:</span>
 <span class="sd">        description (str): Describe the video.</span>
 <span class="sd">            Defaults to empty.</span>
 <span class="sd">        info_who (str): Additional people appearing in the video.</span>
@@ -1914,7 +1880,7 @@ Defaults to 0, first auto thumbnail.</p>
 <span class="sd">            Defaults to user page upload.</span>
 <span class="sd">        visibility (str): Visibility of the video, either 'public', 'unlisted', or 'private'.</span>
 <span class="sd">            Defaults to 'public'.</span>
-<span class="sd">        availability: TODO</span>
+<span class="sd">        availability (str): TODO</span>
 <span class="sd">            Defaults to free.</span>
 <span class="sd">        scheduled_publish (int | float): When to publish the video to public later, in seconds since epoch.</span>
 <span class="sd">            Defaults to publish immediately.</span>
@@ -1925,9 +1891,11 @@ Defaults to 0, first auto thumbnail.</p>
 <span class="sd">        Response (UploadResponse): Data about the upload, parsed from the response.</span>
 <span class="sd">    """</span>
 
-    <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span> <span class="s2">"Video file does not exist on disk"</span>
+    <span class="n">video_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="c1"># pathlib treats "" as "."; a blank path is not a file.</span>
+    <span class="k">assert</span> <span class="n">file_path</span> <span class="ow">and</span> <span class="n">video_path</span><span class="o">.</span><span class="n">exists</span><span class="p">(),</span> <span class="s2">"Video file does not exist on disk"</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">=</span> <span class="n">video_path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
 
     <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span> <span class="o">&lt;</span> <span class="n">static</span><span class="o">.</span><span class="n">Upload</span><span class="o">.</span><span class="n">max_filesize</span><span class="p">,</span> <span class="s2">"File is too big"</span>
 
@@ -1966,8 +1934,7 @@ Defaults to 0, first auto thumbnail.</p>
 
     <span class="c1"># Thumbnail is path string</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">thumbnail</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span>
-            <span class="n">thumbnail</span><span class="p">),</span> <span class="s2">"Thumbnail was a str but is not a valid path"</span>
+        <span class="k">assert</span> <span class="n">thumbnail</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="n">thumbnail</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">(),</span> <span class="s2">"Thumbnail was a str but is not a valid path"</span>
         <span class="n">thumbnail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_upload_cthumb</span><span class="p">(</span><span class="n">thumbnail</span><span class="p">)</span>
 
     <span class="c1"># Unknown</span>
@@ -2019,9 +1986,9 @@ Defaults to 0, first auto thumbnail.</p>
         <span class="s2">"visibility"</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"visibility"</span><span class="p">,</span> <span class="s2">"public"</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"scheduled_publish"</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"private"</span><span class="p">,</span>
         <span class="s2">"availability"</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"availability"</span><span class="p">,</span> <span class="s2">"free"</span><span class="p">),</span>
         <span class="s2">"file_meta"</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">"name"</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span>  <span class="c1"># File name</span>
+            <span class="s2">"name"</span><span class="p">:</span> <span class="n">video_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>  <span class="c1"># File name</span>
             <span class="c1"># Timestamp file was modified, miliseconds</span>
-            <span class="s2">"modified"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span>
+            <span class="s2">"modified"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">video_path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span>
             <span class="s2">"size"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cur_file_size</span><span class="p">,</span>  <span class="c1"># Exact length of entire MP4 file in bytes</span>
             <span class="s2">"type"</span><span class="p">:</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_file_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
             <span class="s2">"time_start"</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span>  <span class="c1"># Timestamp file started uploading, miliseconds</span>
@@ -2083,7 +2050,7 @@ Defaults to 0, first auto thumbnail.</p>
 
 
               <details class="mkdocstrings-source">
-                <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+                <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
                 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 39</span>
 <span class="normal"> 40</span>
 <span class="normal"> 41</span>
@@ -2461,7 +2428,7 @@ Defaults to 0, first auto thumbnail.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+              <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">42</span>
 <span class="normal">43</span>
 <span class="normal">44</span>
@@ -2496,7 +2463,7 @@ Defaults to 0, first auto thumbnail.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+              <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
 <span class="normal">51</span>
 <span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -2523,7 +2490,7 @@ Defaults to 0, first auto thumbnail.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+              <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">68</span>
 <span class="normal">69</span>
 <span class="normal">70</span>
@@ -2556,7 +2523,7 @@ Defaults to 0, first auto thumbnail.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/uploadphp.py</code></summary>
+              <summary>Source code in <code>src/cocorum/uploadphp.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
 <span class="normal">60</span>
 <span class="normal">61</span>

@@ -211,7 +211,7 @@ limitations under the License.</p>
 
 
               <details class="mkdocstrings-source">
-                <summary>Source code in <code>cocorum/jsonhandles.py</code></summary>
+                <summary>Source code in <code>src/cocorum/jsonhandles.py</code></summary>
                 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
@@ -336,7 +336,7 @@ limitations under the License.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/jsonhandles.py</code></summary>
+              <summary>Source code in <code>src/cocorum/jsonhandles.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -394,7 +394,7 @@ limitations under the License.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/jsonhandles.py</code></summary>
+              <summary>Source code in <code>src/cocorum/jsonhandles.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
 <span class="normal">32</span>
 <span class="normal">33</span>
@@ -451,7 +451,7 @@ limitations under the License.</p>
 
 
               <details class="mkdocstrings-source">
-                <summary>Source code in <code>cocorum/jsonhandles.py</code></summary>
+                <summary>Source code in <code>src/cocorum/jsonhandles.py</code></summary>
                 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 55</span>
 <span class="normal"> 56</span>
 <span class="normal"> 57</span>
@@ -525,8 +525,7 @@ limitations under the License.</p>
 <span class="normal">125</span>
 <span class="normal">126</span>
 <span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">JSONUserAction</span><span class="p">(</span><span class="n">JSONObj</span><span class="p">):</span>
+<span class="normal">128</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">JSONUserAction</span><span class="p">(</span><span class="n">JSONObj</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Abstract class for Rumble JSON user actions"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
@@ -595,8 +594,7 @@ limitations under the License.</p>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profile_pic</span><span class="p">:</span>  <span class="c1"># We never queried the profile pic before</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">profile_pic_url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">static</span><span class="o">.</span><span class="n">Delays</span><span class="o">.</span><span class="n">request_timeout</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="s2">"Status code "</span> <span class="o">+</span> \
-                <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Status code </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">"</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">__profile_pic</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
 
@@ -752,7 +750,7 @@ limitations under the License.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/jsonhandles.py</code></summary>
+              <summary>Source code in <code>src/cocorum/jsonhandles.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">68</span>
 <span class="normal">69</span>
 <span class="normal">70</span>
@@ -860,7 +858,7 @@ limitations under the License.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/jsonhandles.py</code></summary>
+              <summary>Source code in <code>src/cocorum/jsonhandles.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
 <span class="normal">59</span>
 <span class="normal">60</span>
@@ -899,7 +897,7 @@ limitations under the License.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/jsonhandles.py</code></summary>
+              <summary>Source code in <code>src/cocorum/jsonhandles.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">101</span>
 <span class="normal">102</span>
 <span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -926,7 +924,7 @@ limitations under the License.</p>
 
 
             <details class="mkdocstrings-source">
-              <summary>Source code in <code>cocorum/jsonhandles.py</code></summary>
+              <summary>Source code in <code>src/cocorum/jsonhandles.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">97</span>
 <span class="normal">98</span>
 <span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
