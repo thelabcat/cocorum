@@ -87,18 +87,18 @@ def parse_timestamp(timestamp: str) -> float:
     return dt.fromisoformat(timestamp).timestamp()
 
 
-def form_timestamp(seconds: float, tz: timezone=None) -> str:
+def form_timestamp(seconds: float, tz: timezone=timezone.utc) -> str:
     """Form a Rumble timestamp.
 
     Args:
         seconds (float): Timestamp in seconds since Epoch, UTC.
         tz (timezone): Time zone to put the stamp in.
-            Defaults to local time zone.
+            Defaults to UTC.
     Returns:
         Timestamp (str): The same timestamp value, in the ISO 8601 format Rumble's API uses.
     """
 
-    return dt.fromtimestamp(seconds, tz=tz).isoformat()
+    return dt.fromtimestamp(seconds, tz=tz).isoformat(timespec="seconds")
 
 
 def base_10_to_36(b10: SupportsInt) -> str:
