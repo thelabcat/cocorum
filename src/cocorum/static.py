@@ -218,9 +218,6 @@ class Misc:
     badge_icon_size = "48"
     """Size of chat badge icons to retrieve, only valid one has long been the string 48"""
 
-    timestamp_format = "%Y-%m-%dT%H:%M:%S%z"
-    """Rumble's timestamp format in ISO 8601 designations"""
-
     session_token_key = "u_s"
     """Key of the session token within the session cookie dict"""
 

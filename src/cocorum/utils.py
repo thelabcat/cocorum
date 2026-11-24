@@ -20,9 +20,8 @@ limitations under the License.
 S.D.G."""
 
 import base64
-import calendar
+from datetime import datetime as dt, timezone
 import hashlib
-import time
 from typing import Sequence, SupportsInt
 import uuid
 import requests
@@ -79,13 +78,13 @@ def parse_timestamp(timestamp: str) -> float:
     """Parse a Rumble timestamp.
 
     Args:
-        timestamp (str): Timestamp in Rumble's API format.
+        timestamp (str): Timestamp in the ISO 8601 format Rumble's API uses.
 
     Returns:
         Timestamp (float): The same timestamp value, in seconds since Epoch, UTC.
     """
 
-    return calendar.timegm(time.strptime(timestamp, static.Misc.timestamp_format))
+    return dt.fromisoformat(timestamp).timestamp()
 
 
 def form_timestamp(seconds: float) -> str:
@@ -95,10 +94,10 @@ def form_timestamp(seconds: float) -> str:
         seconds (float): Timestamp in seconds since Epoch, UTC.
 
     Returns:
-        Timestamp (str): The same timestamp value, in Rumble's API format.
+        Timestamp (str): The same timestamp value, in the ISO 8601 format Rumble's API uses.
     """
 
-    return time.strftime(static.Misc.timestamp_format, time.gmtime(seconds))
+    return dt.fromtimestamp(seconds, tz=timezone.utc).isoformat(seconds)
 
 
 def base_10_to_36(b10: SupportsInt) -> str:
